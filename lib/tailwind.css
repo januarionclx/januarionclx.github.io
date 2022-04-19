@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
+
+.animated-forest-text { 
+  background: url('img/forest_flare.gif');
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 @tailwind utilities;
