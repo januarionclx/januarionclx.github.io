@@ -503,7 +503,7 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .animated-forest-text {
-  background: url('img/forest_flare.gif');
+  background: url('../img/forest_flare.gif');
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
