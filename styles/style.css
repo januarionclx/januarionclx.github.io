@@ -20,6 +20,7 @@
   /* 2 */
 }
 
+
 ::before,
 ::after {
   --tw-content: '';
@@ -56,6 +57,9 @@ body {
   /* 1 */
   line-height: inherit;
   /* 2 */
+
+  fill: white;
+  cursor: url('../img/cursor.svg'), pointer;
 }
 
 /*

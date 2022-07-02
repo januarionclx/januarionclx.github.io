@@ -8,4 +8,8 @@
   color: transparent;
 }
 
+* {
+  cursor: url('img/cursor.svg'), pointer;
+}
+
 @tailwind utilities;
