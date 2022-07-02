@@ -1,5 +1,5 @@
 // Includes
-const ws = new WebSocket('ws://server.januariopinto.com:8081');
+const ws = new WebSocket('wss://server.januariopinto.com:8081');
 const cursorTemplate = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg" style="position: absolute;" width="32" height="32" viewBox="0 0 24 24"><path d="M3 12.1v12.3l3.8-3.6c3.2-3.2 4.4-3.7 9.1-4l5.4-.3-9.1-8.4L3-.2v12.3zm2.2-1.8c-.9 1.8-1.1 1.4-1.1-2.8.1-4.6.1-4.8 1.1-2.2.7 2 .7 3.5 0 5z"/></svg>`;
 
 // Sate
