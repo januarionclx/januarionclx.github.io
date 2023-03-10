@@ -595,6 +595,14 @@ video {
   height: fit-content;
 }
 
+.h-\[calc\(100vh\)\] {
+  height: calc(100vh);
+}
+
+.h-\[calc\(100vh-32px\)\] {
+  height: calc(100vh - 32px);
+}
+
 .max-h-max {
   max-height: -moz-max-content;
   max-height: max-content;
