@@ -74,7 +74,7 @@ export const filesObj = {
         },
         {
           type: 'text',
-          TITLE: '/ NOW',
+          title: '/ NOW',
           name: 'now',
           content: 'now.html'
         },
