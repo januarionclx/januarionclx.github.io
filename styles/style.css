@@ -603,6 +603,18 @@ video {
   height: calc(100vh - 32px);
 }
 
+.h-\[calc\(100vh-15\%\)\] {
+  height: calc(100vh - 15%);
+}
+
+.h-\[calc\(100vh-20\%\)\] {
+  height: calc(100vh - 20%);
+}
+
+.h-\[100dvh\] {
+  height: 100dvh;
+}
+
 .max-h-max {
   max-height: -moz-max-content;
   max-height: max-content;
