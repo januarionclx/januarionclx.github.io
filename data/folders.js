@@ -4,7 +4,7 @@ export const filesObj = {
   content: [
     {
       type: 'folder',
-      name: 'Curriculum',
+      name: 'CV',
       content: [
         {
           type: 'text',
