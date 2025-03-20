@@ -74,6 +74,12 @@ export const filesObj = {
         },
         {
           type: 'text',
+          name: '2023',
+          title: '/ 22023',
+          content: '2023.html'
+        },
+        {
+          type: 'text',
           title: '/ NOW',
           name: 'now',
           content: 'now.html'
@@ -82,8 +88,8 @@ export const filesObj = {
     },
     {
       type: 'text',
-      icon: 'envelope',
-      name: 'email',
+      icon: 'suitcase',
+      name: 'contact',
       title: 'Contracting & Freelance',
       content: 'contact.html'
     },
