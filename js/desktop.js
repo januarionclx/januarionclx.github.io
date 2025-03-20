@@ -53,7 +53,7 @@ const openFolder = async (event) => {
   const file = await getFileById(event.currentTarget.id);
   const fileContent = await getFileContent(file);
 
-  window.id = `window-${file.uid}`;
+  window.id = `window-${crypto.randomUUID()}`;
   window.caller = event.target;
   window.innerHTML = `
     <div class="absolute text-gray-900 dark:text-white outline outline-2 outline-black dark:outline-white bg-white dark:bg-black" style="width: min(600px, 85%); height: auto;">
