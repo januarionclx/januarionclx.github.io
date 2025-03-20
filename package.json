@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tailwindcss -i ./src/input.css -o ./styles/style.css",
-    "build-watch": "npx tailwindcss -i ./src/input.css -o ./styles/style.css --watch"
+    "build-watch": "npx tailwindcss -i ./src/input.css -o ./styles/style.css --watch",
+    "dev": "npx live-server"
   },
   "author": "",
   "license": "ISC",
