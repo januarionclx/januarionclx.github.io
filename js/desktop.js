@@ -4,6 +4,7 @@
 let isDraggingWindow = false;
 let dragTarget = null;
 let filesObj = [];
+let openWindowsStack = []; // Stack to track windows in order of opening
 
 // aniomationFunctions
 const openAnimation = (element, options, ms = 250) => {
@@ -49,7 +50,6 @@ const getFileById = (id, folder = filesObj.content) => {
 const openFolder = async (event) => {
   // Create component
   const window = document.createElement('div');
-  console.log(`searching ${event.currentTarget.id}`);
   const file = await getFileById(event.currentTarget.id);
   const fileContent = await getFileContent(file);
 
@@ -67,6 +67,9 @@ const openFolder = async (event) => {
     </div>
       `;    
   document.body.appendChild(window);
+
+  // Add window ID to the stack
+  openWindowsStack.push(window.id);
 
   // //Animate
   const {top, left} = event.target.getBoundingClientRect();
@@ -117,6 +120,12 @@ const closeFolder = async (windowId) => {
     toY: `${top}px`
   }, 250);
   window.remove();
+
+  // Remove the window ID from the stack
+  const index = openWindowsStack.indexOf(windowId);
+  if (index !== -1) {
+    openWindowsStack.splice(index, 1);
+  }
 }
 
 // Drag handlers
@@ -198,6 +207,15 @@ const loadDesktop = async () => {
   const desktop = document.querySelector('#desktop');
   const html = await getFileContent(filesObj);
   desktop.insertAdjacentHTML('beforeend', html);
+
+  // Add global event listener for ESC key (add this to your initialization code)
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && openWindowsStack.length > 0) {
+      // Get the last window ID and close it
+      const lastWindowId = openWindowsStack[openWindowsStack.length - 1];
+      closeFolder(lastWindowId);
+    }
+  });
 }
 
 const getFileContent = async (file) => {
