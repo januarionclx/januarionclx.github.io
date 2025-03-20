@@ -66,7 +66,7 @@ const openFolder = async (event) => {
       </div>
     </div>
       `;    
-  document.getElementById("app").appendChild(window);
+  document.body.appendChild(window);
 
   // //Animate
   const {top, left} = event.target.getBoundingClientRect();
