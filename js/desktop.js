@@ -57,7 +57,7 @@ const openFolder = async (event) => {
   window.caller = event.target;
   window.innerHTML = `
     <div class="absolute text-gray-900 dark:text-white outline outline-2 outline-black dark:outline-white bg-white dark:bg-black" style="width: min(600px, 85%); height: auto;">
-      <div class="w-full inline-flex justify-between p-6 outline outline-2 outline-black dark:outline-white hover:bg-gray-900 hover:text-white dark:hover:bg-gray-800">
+      <div class="w-full inline-flex justify-between p-6 outline outline-2 outline-black dark:outline-white hover:bg-gray-900 hover:text-white hover:cursor-grab active:cursor-grabbing dark:hover:bg-gray-800">
         <h2 class="text-xl font-bold">${file.title ? file.title : file.name}</h2>
         <svg onClick="closeFolder('${window.id}')" class="w-5 h-5 cursor-pointer fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" xml:space="preserve"><path d="m62.819 47.97 32.533-32.534a2 2 0 0 0 0-2.828L83.333.586a2.002 2.002 0 0 0-2.828 0L47.97 33.121 15.435.586c-.75-.75-2.078-.75-2.828 0L.587 12.608a2 2 0 0 0 0 2.828L33.121 47.97.587 80.504a2 2 0 0 0 0 2.828l12.02 12.021a2 2 0 0 0 2.828 0L47.97 62.818l32.535 32.535a2 2 0 0 0 2.828 0l12.02-12.021a2 2 0 0 0 0-2.828L62.819 47.97z"/></svg>
       </div>
