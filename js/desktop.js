@@ -49,32 +49,32 @@ const getFileById = (id, folder = filesObj.content) => {
 
 const openFolder = async (event) => {
   // Create component
-  const window = document.createElement('div');
+  const applicationWindow = document.createElement('div');
   const file = await getFileById(event.currentTarget.id);
   const fileContent = await getFileContent(file);
 
-  window.id = `window-${crypto.randomUUID()}`;
-  window.caller = event.target;
-  window.innerHTML = `
+  applicationWindow.id = `applicationWindow-${crypto.randomUUID()}`;
+  applicationWindow.caller = event.target;
+  applicationWindow.innerHTML = `
     <div class="absolute text-gray-900 dark:text-white outline outline-2 outline-black dark:outline-white bg-white dark:bg-black" style="width: min(600px, 85%); height: auto;">
       <div class="w-full inline-flex justify-between p-6 outline outline-2 outline-black dark:outline-white hover:bg-gray-900 hover:text-white hover:cursor-grab active:cursor-grabbing dark:hover:bg-gray-800">
         <h2 class="text-xl font-bold">${file.title ? file.title : file.name}</h2>
-        <svg onClick="closeFolder('${window.id}')" class="w-5 h-5 cursor-pointer fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" xml:space="preserve"><path d="m62.819 47.97 32.533-32.534a2 2 0 0 0 0-2.828L83.333.586a2.002 2.002 0 0 0-2.828 0L47.97 33.121 15.435.586c-.75-.75-2.078-.75-2.828 0L.587 12.608a2 2 0 0 0 0 2.828L33.121 47.97.587 80.504a2 2 0 0 0 0 2.828l12.02 12.021a2 2 0 0 0 2.828 0L47.97 62.818l32.535 32.535a2 2 0 0 0 2.828 0l12.02-12.021a2 2 0 0 0 0-2.828L62.819 47.97z"/></svg>
+        <svg onClick="closeFolder('${applicationWindow.id}')" class="w-5 h-5 cursor-pointer fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" xml:space="preserve"><path d="m62.819 47.97 32.533-32.534a2 2 0 0 0 0-2.828L83.333.586a2.002 2.002 0 0 0-2.828 0L47.97 33.121 15.435.586c-.75-.75-2.078-.75-2.828 0L.587 12.608a2 2 0 0 0 0 2.828L33.121 47.97.587 80.504a2 2 0 0 0 0 2.828l12.02 12.021a2 2 0 0 0 2.828 0L47.97 62.818l32.535 32.535a2 2 0 0 0 2.828 0l12.02-12.021a2 2 0 0 0 0-2.828L62.819 47.97z"/></svg>
       </div>
       <div class="p-6">
         ${fileContent}
       </div>
     </div>
       `;    
-  document.body.appendChild(window);
+  document.body.appendChild(applicationWindow);
 
   // Add window ID to the stack
-  openWindowsStack.push(window.id);
+  openWindowsStack.push(applicationWindow.id);
 
   // //Animate
   const {top, left} = event.target.getBoundingClientRect();
 
-  const innerDiv = window.querySelector('div');
+  const innerDiv = applicationWindow.querySelector('div');
 
   innerDiv.style.transformOrigin = '0 0';
   innerDiv.style.transform = 'scale(.1)';
