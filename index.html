@@ -265,11 +265,9 @@
       }, 30);
     }
 
-    var heroTitle = document.getElementById('heroTitle');
+    // Scramble once, start to finish, after fonts load (correct width lock)
     var scrambleWord = document.getElementById('scrambleWord');
-    // Wait for fonts so the locked width is measured correctly
-    window.addEventListener('load', function () { scrambleText(scrambleWord); });
-    heroTitle.addEventListener('mouseenter', function () { scrambleText(scrambleWord); });
+    window.addEventListener('load', function () { scrambleText(scrambleWord); }, { once: true });
 
     // Theme toggle: stored preference wins, otherwise system preference
     var toggle = document.getElementById('themeToggle');
