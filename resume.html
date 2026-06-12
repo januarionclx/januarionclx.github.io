@@ -114,7 +114,11 @@
     }
 
     .timeline-year {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 5rem;
+      box-sizing: border-box;
       font-size: 1.5rem;
       color: var(--accent);
       font-weight: 700;
@@ -123,7 +127,7 @@
       line-height: 1.1;
       border: 1px solid var(--border);
       border-radius: 7px;
-      padding: 0.2rem 0.6rem;
+      padding: 0.25rem 0.6rem;
     }
 
     .timeline-content h3 {
