@@ -53,7 +53,11 @@
     <!-- Hero -->
     <header class="hero">
       <h1 class="hero-title">I build <span class="accent">living systems</span>.</h1>
-      <p class="hero-sub">Software that ships. Organizations that run themselves. And the land and food they all depend on.</p>
+      <p class="hero-sub">
+        <span>Software that ships.</span>
+        <span>Organizations that run themselves.</span>
+        <span>And the land and food they all depend on.</span>
+      </p>
     </header>
 
     <!-- Proof points -->
@@ -64,26 +68,13 @@
       </div>
       <div class="stat">
         <div class="stat-value">Dozens</div>
-        <div class="stat-label">Products &amp; ventures shipped</div>
+        <div class="stat-label">Of products &amp; ventures</div>
       </div>
       <div class="stat">
         <div class="stat-value">1000s</div>
         <div class="stat-label">Hours automated for clients</div>
       </div>
     </div>
-
-    <!-- Position -->
-    <section>
-      <div class="section-grid">
-        <h2 class="section-title">A position</h2>
-        <div class="section-body prose">
-          <p class="lede">The hard problems were never in the code. They live in the human system around it.</p>
-          <p>Twenty years of building software made that unavoidable: how decisions get made, who is allowed to act, what happens when something breaks — these determine outcomes more than any architecture does.</p>
-          <p>Frederic Laloux calls the next stage of organization <strong>Teal</strong>: the company not as a machine to be operated, but as a living organism that senses and evolves. Self-management instead of hierarchy for its own sake. Wholeness instead of the professional mask. Purpose that is listened to, not imposed.</p>
-          <p>So the practice runs in three layers: systems made of <strong>code</strong>, systems made of <strong>people</strong>, systems made of <strong>soil</strong>. Different materials, same discipline — clear interfaces, honest feedback loops, and the humility to let the thing grow.</p>
-        </div>
-      </div>
-    </section>
 
     <!-- The three layers -->
     <section>
@@ -151,8 +142,19 @@
       <div class="section-grid">
         <h2 class="section-title">Public portfolio</h2>
         <div class="section-body" style="max-width: none;">
+          <a class="featured-card" id="featuredCard" href="#" target="_blank" rel="noopener">
+            <div class="featured-meta">
+              <span class="featured-label">Featured</span>
+              <span class="featured-counter" id="featuredCounter">1 / 4</span>
+            </div>
+            <h3 class="featured-name" id="featuredName"></h3>
+            <p class="featured-desc" id="featuredDesc"></p>
+            <span class="featured-link">Visit
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </span>
+          </a>
           <div class="work-list">
-            <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="work-item">
+            <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="work-item" data-key="unit">
               <span class="work-index">01</span>
               <span class="work-name">The Unit Organization</span>
               <span class="work-desc">Development &amp; consulting firm</span>
@@ -160,7 +162,7 @@
               <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </a>
 
-            <a href="https://strangeartefacts.com" target="_blank" rel="noopener" class="work-item">
+            <a href="https://strangeartefacts.com" target="_blank" rel="noopener" class="work-item" data-key="artefacts">
               <span class="work-index">02</span>
               <span class="work-name">Strange Artefacts</span>
               <span class="work-desc">AI-powered creative tools</span>
@@ -168,7 +170,7 @@
               <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </a>
 
-            <a href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener" class="work-item">
+            <a href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener" class="work-item" data-key="holacracy">
               <span class="work-index">03</span>
               <span class="work-name">Holacracy Assistant</span>
               <span class="work-desc">AI guide to self-management</span>
@@ -176,7 +178,7 @@
               <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </a>
 
-            <a href="https://proposalswithai.com" target="_blank" rel="noopener" class="work-item">
+            <a href="https://proposalswithai.com" target="_blank" rel="noopener" class="work-item" data-key="proposals">
               <span class="work-index">04</span>
               <span class="work-name">Proposals with AI</span>
               <span class="work-desc">AI proposal generation</span>
@@ -385,6 +387,73 @@
       moveHighlight(tabsEl.querySelector('.tab[aria-selected="true"]'));
     });
     renderCapability(initialTab.dataset.key);
+
+    // ----------------------------------------------------------
+    // Featured project — spotlight rotates through active work
+    // ----------------------------------------------------------
+    var FEATURED = [
+      {
+        key: 'unit',
+        name: 'The Unit Organization',
+        desc: 'Development & consulting firm. Complex automations for clients like DataLithe and PrimeAI — systems that save thousands of operational hours.',
+        url: 'https://theunitorganization.com'
+      },
+      {
+        key: 'artefacts',
+        name: 'Strange Artefacts',
+        desc: 'AI-powered creative tools and experiments — pushing what generative AI can do in art and design.',
+        url: 'https://strangeartefacts.com'
+      },
+      {
+        key: 'holacracy',
+        name: 'Holacracy Assistant',
+        desc: 'An AI guide to self-management — roles, circles, governance and tactical meetings, learned through conversation.',
+        url: 'https://chatgpt.com/g/g-HolacracyGPT'
+      },
+      {
+        key: 'proposals',
+        name: 'Proposals with AI',
+        desc: 'Client-ready proposals in minutes instead of hours. Built, launched — and currently for sale.',
+        url: 'https://proposalswithai.com'
+      }
+    ];
+
+    var featuredIndex = 0;
+    var featuredCard = document.getElementById('featuredCard');
+    var featuredTimer = null;
+
+    function showFeatured(i) {
+      featuredIndex = i % FEATURED.length;
+      var item = FEATURED[featuredIndex];
+      var apply = function () {
+        featuredCard.href = item.url;
+        document.getElementById('featuredName').textContent = item.name;
+        document.getElementById('featuredDesc').textContent = item.desc;
+        document.getElementById('featuredCounter').textContent = (featuredIndex + 1) + ' / ' + FEATURED.length;
+        document.querySelectorAll('.work-item[data-key]').forEach(function (row) {
+          row.classList.toggle('is-featured', row.dataset.key === item.key);
+        });
+        featuredCard.classList.remove('is-switching');
+      };
+      if (reducedMotion) {
+        apply();
+      } else {
+        featuredCard.classList.add('is-switching');
+        setTimeout(apply, 200);
+      }
+    }
+
+    function startFeaturedRotation() {
+      featuredTimer = setInterval(function () {
+        showFeatured(featuredIndex + 1);
+      }, 5000);
+    }
+
+    featuredCard.addEventListener('mouseenter', function () { clearInterval(featuredTimer); });
+    featuredCard.addEventListener('mouseleave', startFeaturedRotation);
+
+    showFeatured(0);
+    startFeaturedRotation();
 
     // Theme toggle: stored preference wins, otherwise system preference
     var toggle = document.getElementById('themeToggle');
