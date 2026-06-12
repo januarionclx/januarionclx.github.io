@@ -52,7 +52,7 @@
 
     <!-- Hero -->
     <header class="hero">
-      <h1 class="hero-title">I build living systems.</h1>
+      <h1 class="hero-title">I build <span class="accent">living systems</span>.</h1>
       <p class="hero-sub">Software that ships. Organizations that run themselves. And the land and food they all depend on.</p>
     </header>
 
@@ -125,20 +125,22 @@
       <div class="section-grid">
         <h2 class="section-title">Capabilities</h2>
         <div class="section-body" style="max-width: none;">
-          <div class="tabs" role="tablist" aria-label="Capability areas" id="capTabs">
-            <div class="tab-highlight" id="tabHighlight"></div>
-            <button class="tab" role="tab" aria-selected="true" data-key="engineering">Engineering</button>
-            <button class="tab" role="tab" aria-selected="false" data-key="ai">AI &amp; Automation</button>
-            <button class="tab" role="tab" aria-selected="false" data-key="product">Product</button>
-            <button class="tab" role="tab" aria-selected="false" data-key="organizations">Organizations</button>
-          </div>
-          <div class="skills-panel" role="tabpanel">
-            <div class="panel-path">
-              <span id="panelPath">capabilities/engineering</span>
-              <span id="panelCount"></span>
+          <div class="cap-layout">
+            <div class="tabs" role="tablist" aria-label="Capability areas" id="capTabs">
+              <div class="tab-highlight" id="tabHighlight"></div>
+              <button class="tab" role="tab" aria-selected="true" data-key="engineering">Engineering</button>
+              <button class="tab" role="tab" aria-selected="false" data-key="ai">AI &amp; Automation</button>
+              <button class="tab" role="tab" aria-selected="false" data-key="product">Product</button>
+              <button class="tab" role="tab" aria-selected="false" data-key="organizations">Organizations</button>
             </div>
-            <p class="panel-statement" id="panelStatement"></p>
-            <div class="skills-grid" id="skillsGrid"></div>
+            <div class="skills-panel" role="tabpanel">
+              <div class="panel-path">
+                <span id="panelPath">capabilities/engineering</span>
+                <span id="panelCount"></span>
+              </div>
+              <p class="panel-statement" id="panelStatement"></p>
+              <div class="skills-grid" id="skillsGrid"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -274,7 +276,7 @@
         items: [
           'LLM application design', 'OpenAI & Anthropic APIs', 'AI agents & tool use', 'RAG & retrieval',
           'Prompt engineering', 'Chat assistants & GPTs', 'Workflow automation', 'Browser automation & scraping',
-          'Back-office & invoicing automation', 'Data pipelines', 'AI product development', 'Evals & reliability'
+          'Back-office automation', 'Data pipelines', 'AI product development', 'Evals & reliability'
         ]
       },
       product: {
@@ -360,8 +362,10 @@
     var highlight = document.getElementById('tabHighlight');
 
     function moveHighlight(btn) {
+      highlight.style.left = btn.offsetLeft + 'px';
+      highlight.style.top = btn.offsetTop + 'px';
       highlight.style.width = btn.offsetWidth + 'px';
-      highlight.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+      highlight.style.height = btn.offsetHeight + 'px';
     }
 
     tabsEl.querySelectorAll('.tab').forEach(function (btn) {
