@@ -476,30 +476,6 @@ a.work-item:hover .work-arrow {
 }
 
 /* ------------------------------------------------------------
-   SKILL ITEMS (used inside layers)
-   ------------------------------------------------------------ */
-.skill-item {
-  display: flex;
-  gap: 0.625rem;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-  min-width: 0;
-}
-
-.skill-item .arrow {
-  color: var(--accent);
-  flex-shrink: 0;
-}
-
-.skill-item .txt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ------------------------------------------------------------
    SERVICES (legacy class, restyled)
    ------------------------------------------------------------ */
 .services-list {
