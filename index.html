@@ -29,7 +29,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <!-- Shared Styles -->
   <link rel="stylesheet" href="styles.css">
@@ -51,8 +51,8 @@
     </nav>
 
     <!-- Hero -->
-    <header>
-      <h1 class="hero-title">I build <span class="accent">living systems</span>.</h1>
+    <header class="hero">
+      <h1 class="hero-title">I build living systems.</h1>
       <p class="hero-sub">Software that ships. Organizations that run themselves. And the land and food they all depend on.</p>
     </header>
 
@@ -63,8 +63,8 @@
         <div class="stat-label">Years writing software</div>
       </div>
       <div class="stat">
-        <div class="stat-value">8</div>
-        <div class="stat-label">Products shipped</div>
+        <div class="stat-value">Dozens</div>
+        <div class="stat-label">Products &amp; ventures shipped</div>
       </div>
       <div class="stat">
         <div class="stat-value">1000s</div>
@@ -105,6 +105,7 @@
         </div>
         <div class="layer-body">
           <p>Organizational design grounded in self-management — Teal practices, Holacracy, governance and meeting structures that put authority where the information is. I help founders and teams move from org-chart-as-machine to organization-as-organism: explicit roles, distributed decision processes, and tension-driven evolution instead of a boss in every loop.</p>
+          <p>Past work includes consulting for cowork &amp; coliving communities — organizations where the structure is something people literally live inside.</p>
         </div>
       </div>
 
@@ -119,7 +120,31 @@
       </div>
     </section>
 
-    <!-- Selected work -->
+    <!-- Capabilities -->
+    <section id="capabilities">
+      <div class="section-grid">
+        <h2 class="section-title">Capabilities</h2>
+        <div class="section-body" style="max-width: none;">
+          <div class="tabs" role="tablist" aria-label="Capability areas" id="capTabs">
+            <div class="tab-highlight" id="tabHighlight"></div>
+            <button class="tab" role="tab" aria-selected="true" data-key="engineering">Engineering</button>
+            <button class="tab" role="tab" aria-selected="false" data-key="ai">AI &amp; Automation</button>
+            <button class="tab" role="tab" aria-selected="false" data-key="product">Product</button>
+            <button class="tab" role="tab" aria-selected="false" data-key="organizations">Organizations</button>
+          </div>
+          <div class="skills-panel" role="tabpanel">
+            <div class="panel-path">
+              <span id="panelPath">capabilities/engineering</span>
+              <span id="panelCount"></span>
+            </div>
+            <p class="panel-statement" id="panelStatement"></p>
+            <div class="skills-grid" id="skillsGrid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Public portfolio -->
     <section id="work">
       <div class="section-grid">
         <h2 class="section-title">Public portfolio</h2>
@@ -231,6 +256,131 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ----------------------------------------------------------
+    // Capabilities — segmented tabs, panel rewrites with scramble
+    // ----------------------------------------------------------
+    var CAPABILITIES = {
+      engineering: {
+        statement: 'Performant, scalable systems.',
+        items: [
+          'TypeScript · JavaScript', 'React · Next.js · Vue', 'Node.js · Bun', 'Python',
+          'Lua · C · C++', 'PostgreSQL · SQL & NoSQL', 'Drizzle ORM', 'REST & GraphQL APIs',
+          'Auth & sessions', 'Monorepos · Turborepo', 'Linux · Git · CI/CD', 'Performance & accessibility'
+        ]
+      },
+      ai: {
+        statement: 'Automation that pays for itself.',
+        items: [
+          'LLM application design', 'OpenAI & Anthropic APIs', 'AI agents & tool use', 'RAG & retrieval',
+          'Prompt engineering', 'Chat assistants & GPTs', 'Workflow automation', 'Browser automation & scraping',
+          'Back-office & invoicing automation', 'Data pipelines', 'AI product development', 'Evals & reliability'
+        ]
+      },
+      product: {
+        statement: 'Products done well.',
+        items: [
+          'Product strategy', 'Roadmapping', 'UX & interface design', 'Conversion optimization',
+          'E-commerce', 'Growth & marketing', 'Pricing & positioning', 'Analytics & experimentation',
+          'MVP scoping', 'SaaS operations', 'Technical consulting', 'Proposals & sales tooling'
+        ]
+      },
+      organizations: {
+        statement: 'Human-centered organizations.',
+        items: [
+          'Organizational design', 'Self-management transitions', 'Teal practices (Laloux)', 'Holacracy',
+          'Governance design', 'Role & accountability design', 'Decision processes', 'Meeting structures',
+          'Conflict & feedback mechanisms', 'Facilitation', 'Compensation design', 'Conscious business'
+        ]
+      }
+    };
+
+    var SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789·&+';
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var scrambleTimers = [];
+
+    function scrambleInto(el, target, delay) {
+      if (reducedMotion) { el.textContent = target; return; }
+      var iteration = 0;
+      var timer = setInterval(function () {
+        el.textContent = target.split('').map(function (ch, i) {
+          if (ch === ' ') return ' ';
+          if (i < iteration) return ch;
+          return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+        }).join('');
+        if (iteration >= target.length) clearInterval(timer);
+        iteration += Math.max(1, target.length / 12);
+      }, 28);
+      scrambleTimers.push(timer);
+      // Stagger: hide until this item's turn
+      el.textContent = '';
+      setTimeout(function () { if (el.textContent === '') el.textContent = target; }, delay + 600);
+      setTimeout(function () {}, delay);
+    }
+
+    function renderCapability(key) {
+      var cap = CAPABILITIES[key];
+      if (!cap) return;
+
+      scrambleTimers.forEach(clearInterval);
+      scrambleTimers = [];
+
+      document.getElementById('panelPath').textContent = 'capabilities/' + key;
+      document.getElementById('panelCount').textContent = cap.items.length + ' items';
+
+      var statement = document.getElementById('panelStatement');
+      statement.classList.add('is-switching');
+      setTimeout(function () {
+        statement.textContent = cap.statement;
+        statement.classList.remove('is-switching');
+      }, reducedMotion ? 0 : 180);
+
+      var grid = document.getElementById('skillsGrid');
+      grid.innerHTML = '';
+      cap.items.forEach(function (item, i) {
+        var row = document.createElement('div');
+        row.className = 'skill-item';
+        var arrow = document.createElement('span');
+        arrow.className = 'arrow';
+        arrow.textContent = '→';
+        var txt = document.createElement('span');
+        txt.className = 'txt';
+        row.appendChild(arrow);
+        row.appendChild(txt);
+        grid.appendChild(row);
+        if (reducedMotion) {
+          txt.textContent = item;
+        } else {
+          setTimeout(function () { scrambleInto(txt, item, 0); }, i * 35);
+        }
+      });
+    }
+
+    var tabsEl = document.getElementById('capTabs');
+    var highlight = document.getElementById('tabHighlight');
+
+    function moveHighlight(btn) {
+      highlight.style.width = btn.offsetWidth + 'px';
+      highlight.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+    }
+
+    tabsEl.querySelectorAll('.tab').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        tabsEl.querySelectorAll('.tab').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
+        btn.setAttribute('aria-selected', 'true');
+        moveHighlight(btn);
+        renderCapability(btn.dataset.key);
+      });
+    });
+
+    var initialTab = tabsEl.querySelector('.tab[aria-selected="true"]');
+    // Position highlight after fonts/layout settle
+    window.addEventListener('load', function () { moveHighlight(initialTab); });
+    moveHighlight(initialTab);
+    window.addEventListener('resize', function () {
+      moveHighlight(tabsEl.querySelector('.tab[aria-selected="true"]'));
+    });
+    renderCapability(initialTab.dataset.key);
 
     // Theme toggle: stored preference wins, otherwise system preference
     var toggle = document.getElementById('themeToggle');
