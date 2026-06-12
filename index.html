@@ -179,12 +179,12 @@
       return new Promise(function (resolve) {
         if (reducedMotion) { el.textContent = next; resolve(); return; }
         el.style.transition = 'transform 70ms ease-in, opacity 70ms ease-in';
-        el.style.transform = 'translateY(0.4em)';
+        el.style.transform = 'translateY(0.18em)';
         el.style.opacity = '0';
         setTimeout(function () {
           el.textContent = next;
           el.style.transition = 'none';
-          el.style.transform = 'translateY(-0.45em)';
+          el.style.transform = 'translateY(-0.2em)';
           void el.offsetHeight;               // commit the jump before animating back
           el.style.transition = 'transform 120ms cubic-bezier(0.16,1,0.3,1), opacity 120ms ease';
           el.style.transform = 'translateY(0)';

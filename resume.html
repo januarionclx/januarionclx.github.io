@@ -95,24 +95,31 @@
       line-height: 1.8;
     }
 
-    /* Timeline */
+    /* Timeline — line-separated rows */
     .timeline {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
     }
 
     .timeline-item {
       display: grid;
       grid-template-columns: 120px 1fr;
       gap: 2rem;
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .timeline-item:last-child {
+      border-bottom: 1px solid var(--border);
     }
 
     .timeline-year {
-      font-size: 0.875rem;
-      color: var(--text-muted);
+      font-size: 1.375rem;
+      color: var(--accent);
       font-weight: 500;
-      padding-top: 0.25rem;
+      font-style: italic;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
     }
 
     .timeline-content h3 {

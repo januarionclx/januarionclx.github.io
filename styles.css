@@ -217,7 +217,7 @@ header {
   color: var(--accent);
   font-size: 1.15em;            /* bigger than the rest of the line */
   font-weight: 700;             /* bolder */
-  font-style: oblique 13deg;    /* more cursive slant than the title's 8deg */
+  font-style: italic;           /* fully italic */
 }
 
 /* Fixed-height box for the rotating phrase: dimensions never change,
@@ -363,18 +363,18 @@ a.text-link:hover {
 
 .layer-head {
   display: flex;
-  align-items: flex-start;     /* number and title start on the same line (tops aligned) */
+  align-items: baseline;       /* number and title share a baseline; title sits taller */
   gap: 1rem;
   margin-bottom: 1.25rem;
 }
 
 .layer-num {
   font-family: var(--font-mono);
-  font-size: clamp(1.4rem, 3.25vw, 2.1rem);   /* bigger, ~70% of the title */
+  font-size: clamp(1.25rem, 3vw, 1.85rem);   /* clearly shorter than the title */
   font-weight: 500;
   color: var(--accent);
   letter-spacing: 0;
-  line-height: 1.05;            /* matches the title so their tops align */
+  line-height: 1;
 }
 
 .layer-title {
