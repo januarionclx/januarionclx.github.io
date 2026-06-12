@@ -14,7 +14,15 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- Theme init (before paint, prevents flash) -->
+  <script>
+    (function () {
+      var stored = localStorage.getItem('theme');
+      if (stored) document.documentElement.dataset.theme = stored;
+    })();
+  </script>
 
   <!-- Shared Styles -->
   <link rel="stylesheet" href="styles.css">
@@ -26,7 +34,6 @@
     .name {
       font-size: 3rem;
       margin-bottom: 0.5rem;
-      letter-spacing: 0.05em;
     }
 
     .title {
@@ -91,19 +98,19 @@
 
     /* Status colors */
     .status-active {
-      color: #66b2f7 !important;
-    }
-
-    .status-sale {
       color: var(--accent) !important;
     }
 
+    .status-sale {
+      color: var(--amber) !important;
+    }
+
     .status-updating {
-      color: #f7b266 !important;
+      color: var(--amber) !important;
     }
 
     .status-archived {
-      color: #999 !important;
+      color: var(--text-faint) !important;
     }
 
     .timeline-content h3 {
@@ -243,16 +250,16 @@
 
     <header>
       <h1 class="name">Januario Pinto</h1>
-      <p class="title">Software Developer & Consultant</p>
+      <p class="title">Software Developer & Organizational Consultant</p>
     </header>
 
     <section>
       <h2 class="section-title">Summary</h2>
       <p class="summary">
-        Full-stack developer and consultant with nearly two decades of experience building digital products.
+        Full-stack developer and consultant with over two decades of experience building digital products.
         Started coding at 13, launched first business at 15. Specialized in web applications, AI integration,
-        and product strategy. Passionate about helping startups and established businesses navigate the
-        intersection of technology and business growth.
+        and product strategy — and, increasingly, organizational design grounded in self-management
+        (Teal practices, Holacracy). I help businesses build the technical and human systems they run on.
       </p>
     </section>
 
