@@ -52,7 +52,7 @@
 
     <!-- Hero -->
     <header class="hero">
-      <h1 class="hero-title" id="heroTitle">I build <span class="scramble-target" id="scrambleWord">living systems</span>.</h1>
+      <h1 class="hero-title" id="heroTitle">I <span class="hero-verb" id="heroVerb">build</span> <span class="hero-object" id="heroObject">living systems</span>.</h1>
       <p class="hero-sub">
         <span>Software that ships.</span>
         <span>Organizations that run themselves.</span>
@@ -158,41 +158,72 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // ----------------------------------------------------------
-    // Heading scramble — decrypts on load, replays on hover
+    // Hero — orchestrated rotation: verb resolves, then the phrase
+    // scrambles in. Three identities, looping.
     // ----------------------------------------------------------
     var SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789·&+';
     var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function scrambleText(el) {
-      if (reducedMotion) return;
-      var original = el.dataset.text || el.textContent;
-      el.dataset.text = original;
+    var HERO_LINES = [
+      { verb: 'build',   object: 'living systems' },
+      { verb: 'consult', object: 'startups' },
+      { verb: 'create',  object: 'performant, scalable systems' }
+    ];
 
-      // Lock the span's width to its final size to avoid layout shift
-      el.style.width = 'auto';
-      el.textContent = original;
-      el.style.width = el.offsetWidth + 'px';
+    var verbEl = document.getElementById('heroVerb');
+    var objectEl = document.getElementById('heroObject');
 
-      var iteration = 0;
-      clearInterval(el._scrambleTimer);
-      el._scrambleTimer = setInterval(function () {
-        el.textContent = original.split('').map(function (ch, i) {
-          if (ch === ' ') return ' ';
-          if (i < iteration) return ch;
-          return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-        }).join('');
-        if (iteration >= original.length) {
-          clearInterval(el._scrambleTimer);
-          el.textContent = original;
-          el.style.width = 'auto';
-        }
-        iteration += 1 / 2;
-      }, 30);
+    function wait(ms) {
+      return new Promise(function (resolve) { setTimeout(resolve, ms); });
     }
 
-    // Scramble once, start to finish, after fonts load (correct width lock)
-    var scrambleWord = document.getElementById('scrambleWord');
-    window.addEventListener('load', function () { scrambleText(scrambleWord); }, { once: true });
+    // Scramble el into `target`; resolves when fully decrypted.
+    function scramble(el, target, speed) {
+      return new Promise(function (resolve) {
+        if (reducedMotion) { el.textContent = target; resolve(); return; }
+
+        // Lock width to the final size so the scramble doesn't jitter
+        el.style.width = 'auto';
+        el.textContent = target;
+        el.style.width = el.offsetWidth + 'px';
+
+        var iteration = 0;
+        clearInterval(el._timer);
+        el._timer = setInterval(function () {
+          el.textContent = target.split('').map(function (ch, i) {
+            if (ch === ' ') return ' ';
+            if (i < iteration) return ch;
+            return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          }).join('');
+          if (iteration >= target.length) {
+            clearInterval(el._timer);
+            el.textContent = target;
+            el.style.width = 'auto';
+            resolve();
+          }
+          iteration += speed;
+        }, 30);
+      });
+    }
+
+    async function rotateHero() {
+      var i = 0;
+      while (true) {
+        var line = HERO_LINES[i];
+        await scramble(verbEl, line.verb, 0.7);      // verb resolves first
+        await scramble(objectEl, line.object, 0.5);  // then the phrase decrypts
+        await wait(2600);                            // hold
+        i = (i + 1) % HERO_LINES.length;
+      }
+    }
+
+    if (reducedMotion) {
+      verbEl.textContent = HERO_LINES[0].verb;
+      objectEl.textContent = HERO_LINES[0].object;
+    } else {
+      // Start after fonts load so width locks are measured correctly
+      window.addEventListener('load', rotateHero, { once: true });
+    }
 
     // Theme toggle: stored preference wins, otherwise system preference
     var toggle = document.getElementById('themeToggle');
