@@ -101,7 +101,7 @@ body::before {
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 0 2rem 5rem;
 }
@@ -259,7 +259,7 @@ section {
 
 .section-grid {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 180px 1fr;
   gap: 2rem;
   border-top: 1px solid var(--border);
   padding-top: 1.5rem;
@@ -323,7 +323,7 @@ a.text-link:hover {
    ------------------------------------------------------------ */
 .layer {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 180px 1fr;
   gap: 2rem;
   border-top: 1px solid var(--border);
   padding: 2.25rem 0;
@@ -378,7 +378,7 @@ a.text-link:hover {
 
 .work-item {
   display: grid;
-  grid-template-columns: 3rem minmax(0, 280px) 1fr auto auto;
+  grid-template-columns: 3rem minmax(0, 240px) 1fr auto auto;
   align-items: center;
   gap: 1.25rem;
   padding: 1.125rem 0.25rem;
