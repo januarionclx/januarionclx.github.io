@@ -53,12 +53,18 @@
       border-bottom: 1px solid var(--border);
     }
 
+    /* section title as a full-bleed bar (same boxing as the landing) */
     .section-title {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-bottom: 2rem;
+      padding: 0.8rem max(1.25rem, calc(50vw - 348px));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       color: var(--accent-strong);
       font-size: 0.8125rem;
       font-weight: 600;
       letter-spacing: 0.12em;
-      margin-bottom: 1.75rem;
     }
 
     .skill-category h4 {
@@ -106,11 +112,28 @@
       grid-template-columns: 120px 1fr;
       gap: 2rem;
       padding: 1.75rem 0;
-      border-top: 1px solid var(--border);
+      position: relative;
     }
 
-    .timeline-item:last-child {
-      border-bottom: 1px solid var(--border);
+    /* full-bleed horizontal rules between entries */
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(50% - 50vw);
+      width: 100vw;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item:last-child::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: calc(50% - 50vw);
+      width: 100vw;
+      height: 1px;
+      background: var(--border);
     }
 
     .timeline-year {
