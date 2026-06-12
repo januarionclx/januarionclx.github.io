@@ -360,18 +360,18 @@ a.text-link:hover {
 
 .layer-head {
   display: flex;
-  align-items: baseline;
-  gap: 1.25rem;
+  align-items: flex-start;     /* number and title start on the same line (tops aligned) */
+  gap: 1rem;
   margin-bottom: 1.25rem;
 }
 
 .layer-num {
   font-family: var(--font-mono);
-  font-size: clamp(0.95rem, 2.25vw, 1.5rem);   /* ~50% of the title */
+  font-size: clamp(1.4rem, 3.25vw, 2.1rem);   /* bigger, ~70% of the title */
   font-weight: 500;
   color: var(--accent);
   letter-spacing: 0;
-  line-height: 1;
+  line-height: 1.05;            /* matches the title so their tops align */
 }
 
 .layer-title {
