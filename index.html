@@ -42,6 +42,7 @@
       <a href="/" class="brand">Januario Pinto</a>
       <div class="topbar-right">
         <a href="#work" class="topbar-link">Work</a>
+        <a href="resume.html" class="topbar-link">Resume</a>
         <a href="#contact" class="topbar-link">Contact</a>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
           <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -52,7 +53,7 @@
 
     <!-- Hero -->
     <header class="hero">
-      <h1 class="hero-title">I build living systems.</h1>
+      <h1 class="hero-title" id="heroTitle">I build <span class="scramble-target" id="scrambleWord">living systems</span>.</h1>
       <p class="hero-sub">
         <span>Software that ships.</span>
         <span>Organizations that run themselves.</span>
@@ -64,7 +65,7 @@
     <div class="stats">
       <div class="stat">
         <div class="stat-value">Dozens</div>
-        <div class="stat-label">Of products &amp; ventures</div>
+        <div class="stat-label">Of ventures</div>
       </div>
       <div class="stat">
         <div class="stat-value">20+</div>
@@ -118,49 +119,13 @@
       </div>
     </section>
 
-    <!-- Capabilities -->
-    <section id="capabilities">
-      <div class="section-grid">
-        <h2 class="section-title">Technical capabilities</h2>
-        <div class="section-body" style="max-width: none;">
-          <div class="cap-layout">
-            <div class="tabs" role="tablist" aria-label="Capability areas" id="capTabs">
-              <div class="tab-highlight" id="tabHighlight"></div>
-              <button class="tab" role="tab" aria-selected="true" data-key="engineering">Engineering</button>
-              <button class="tab" role="tab" aria-selected="false" data-key="ai">AI &amp; Automation</button>
-              <button class="tab" role="tab" aria-selected="false" data-key="product">Product</button>
-            </div>
-            <div class="skills-panel" role="tabpanel">
-              <div class="panel-path">
-                <span id="panelPath">capabilities/engineering</span>
-                <span id="panelCount"></span>
-              </div>
-              <p class="panel-statement" id="panelStatement"></p>
-              <div class="skills-grid" id="skillsGrid"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Public portfolio -->
     <section id="work">
       <div class="section-grid">
         <h2 class="section-title">Public portfolio</h2>
         <div class="section-body" style="max-width: none;">
-          <a class="featured-card" id="featuredCard" href="#" target="_blank" rel="noopener">
-            <div class="featured-meta">
-              <span class="featured-label">Featured</span>
-              <span class="featured-counter" id="featuredCounter">1 / 4</span>
-            </div>
-            <h3 class="featured-name" id="featuredName"></h3>
-            <p class="featured-desc" id="featuredDesc"></p>
-            <span class="featured-link">Visit
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-            </span>
-          </a>
           <div class="work-list">
-            <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="work-item" data-key="unit">
+            <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="work-item">
               <span class="work-index">01</span>
               <span class="work-name">The Unit Organization</span>
               <span class="work-desc">Development &amp; consulting firm</span>
@@ -268,190 +233,43 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // ----------------------------------------------------------
-    // Capabilities — segmented tabs, panel rewrites with scramble
+    // Heading scramble — decrypts on load, replays on hover
     // ----------------------------------------------------------
-    var CAPABILITIES = {
-      engineering: {
-        statement: 'Performant, scalable systems.',
-        items: [
-          'TypeScript · JavaScript', 'React · Next.js · Vue', 'Node.js · Bun', 'Python',
-          'Lua · C · C++', 'PostgreSQL · SQL & NoSQL', 'Drizzle ORM', 'REST & GraphQL APIs',
-          'Auth & sessions', 'Monorepos · Turborepo', 'Linux · Git · CI/CD', 'Performance & accessibility'
-        ]
-      },
-      ai: {
-        statement: 'Automation that pays for itself.',
-        items: [
-          'LLM application design', 'OpenAI & Anthropic APIs', 'AI agents & tool use', 'RAG & retrieval',
-          'Prompt engineering', 'Chat assistants & GPTs', 'Workflow automation', 'Browser automation & scraping',
-          'Back-office automation', 'Data pipelines', 'AI product development', 'Evals & reliability'
-        ]
-      },
-      product: {
-        statement: 'Products done well.',
-        items: [
-          'Product strategy', 'Roadmapping', 'UX & interface design', 'Conversion optimization',
-          'E-commerce', 'Growth & marketing', 'Pricing & positioning', 'Analytics & experimentation',
-          'MVP scoping', 'SaaS operations', 'Technical consulting', 'Proposals & sales tooling'
-        ]
-      }
-    };
-
     var SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789·&+';
     var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var scrambleTimers = [];
 
-    function scrambleInto(el, target, delay) {
-      if (reducedMotion) { el.textContent = target; return; }
+    function scrambleText(el) {
+      if (reducedMotion) return;
+      var original = el.dataset.text || el.textContent;
+      el.dataset.text = original;
+
+      // Lock the span's width to its final size to avoid layout shift
+      el.style.width = 'auto';
+      el.textContent = original;
+      el.style.width = el.offsetWidth + 'px';
+
       var iteration = 0;
-      var timer = setInterval(function () {
-        el.textContent = target.split('').map(function (ch, i) {
+      clearInterval(el._scrambleTimer);
+      el._scrambleTimer = setInterval(function () {
+        el.textContent = original.split('').map(function (ch, i) {
           if (ch === ' ') return ' ';
           if (i < iteration) return ch;
           return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
         }).join('');
-        if (iteration >= target.length) clearInterval(timer);
-        iteration += Math.max(1, target.length / 12);
-      }, 28);
-      scrambleTimers.push(timer);
-      // Stagger: hide until this item's turn
-      el.textContent = '';
-      setTimeout(function () { if (el.textContent === '') el.textContent = target; }, delay + 600);
-      setTimeout(function () {}, delay);
-    }
-
-    function renderCapability(key) {
-      var cap = CAPABILITIES[key];
-      if (!cap) return;
-
-      scrambleTimers.forEach(clearInterval);
-      scrambleTimers = [];
-
-      document.getElementById('panelPath').textContent = 'capabilities/' + key;
-      document.getElementById('panelCount').textContent = cap.items.length + ' items';
-
-      var statement = document.getElementById('panelStatement');
-      statement.classList.add('is-switching');
-      setTimeout(function () {
-        statement.textContent = cap.statement;
-        statement.classList.remove('is-switching');
-      }, reducedMotion ? 0 : 180);
-
-      var grid = document.getElementById('skillsGrid');
-      grid.innerHTML = '';
-      cap.items.forEach(function (item, i) {
-        var row = document.createElement('div');
-        row.className = 'skill-item';
-        var arrow = document.createElement('span');
-        arrow.className = 'arrow';
-        arrow.textContent = '→';
-        var txt = document.createElement('span');
-        txt.className = 'txt';
-        row.appendChild(arrow);
-        row.appendChild(txt);
-        grid.appendChild(row);
-        if (reducedMotion) {
-          txt.textContent = item;
-        } else {
-          setTimeout(function () { scrambleInto(txt, item, 0); }, i * 35);
+        if (iteration >= original.length) {
+          clearInterval(el._scrambleTimer);
+          el.textContent = original;
+          el.style.width = 'auto';
         }
-      });
+        iteration += 1 / 2;
+      }, 30);
     }
 
-    var tabsEl = document.getElementById('capTabs');
-    var highlight = document.getElementById('tabHighlight');
-
-    function moveHighlight(btn) {
-      highlight.style.left = btn.offsetLeft + 'px';
-      highlight.style.top = btn.offsetTop + 'px';
-      highlight.style.width = btn.offsetWidth + 'px';
-      highlight.style.height = btn.offsetHeight + 'px';
-    }
-
-    tabsEl.querySelectorAll('.tab').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        tabsEl.querySelectorAll('.tab').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
-        btn.setAttribute('aria-selected', 'true');
-        moveHighlight(btn);
-        renderCapability(btn.dataset.key);
-      });
-    });
-
-    var initialTab = tabsEl.querySelector('.tab[aria-selected="true"]');
-    // Position highlight after fonts/layout settle
-    window.addEventListener('load', function () { moveHighlight(initialTab); });
-    moveHighlight(initialTab);
-    window.addEventListener('resize', function () {
-      moveHighlight(tabsEl.querySelector('.tab[aria-selected="true"]'));
-    });
-    renderCapability(initialTab.dataset.key);
-
-    // ----------------------------------------------------------
-    // Featured project — spotlight rotates through active work
-    // ----------------------------------------------------------
-    var FEATURED = [
-      {
-        key: 'unit',
-        name: 'The Unit Organization',
-        desc: 'Development & consulting firm. Complex automations for clients like DataLithe and PrimeAI — systems that save thousands of operational hours.',
-        url: 'https://theunitorganization.com'
-      },
-      {
-        key: 'artefacts',
-        name: 'Strange Artefacts',
-        desc: 'AI-powered creative tools and experiments — pushing what generative AI can do in art and design.',
-        url: 'https://strangeartefacts.com'
-      },
-      {
-        key: 'holacracy',
-        name: 'Holacracy Assistant',
-        desc: 'An AI guide to self-management — roles, circles, governance and tactical meetings, learned through conversation.',
-        url: 'https://chatgpt.com/g/g-HolacracyGPT'
-      },
-      {
-        key: 'proposals',
-        name: 'Proposals with AI',
-        desc: 'Client-ready proposals in minutes instead of hours. Built, launched — and currently for sale.',
-        url: 'https://proposalswithai.com'
-      }
-    ];
-
-    var featuredIndex = 0;
-    var featuredCard = document.getElementById('featuredCard');
-    var featuredTimer = null;
-
-    function showFeatured(i) {
-      featuredIndex = i % FEATURED.length;
-      var item = FEATURED[featuredIndex];
-      var apply = function () {
-        featuredCard.href = item.url;
-        document.getElementById('featuredName').textContent = item.name;
-        document.getElementById('featuredDesc').textContent = item.desc;
-        document.getElementById('featuredCounter').textContent = (featuredIndex + 1) + ' / ' + FEATURED.length;
-        document.querySelectorAll('.work-item[data-key]').forEach(function (row) {
-          row.classList.toggle('is-featured', row.dataset.key === item.key);
-        });
-        featuredCard.classList.remove('is-switching');
-      };
-      if (reducedMotion) {
-        apply();
-      } else {
-        featuredCard.classList.add('is-switching');
-        setTimeout(apply, 200);
-      }
-    }
-
-    function startFeaturedRotation() {
-      featuredTimer = setInterval(function () {
-        showFeatured(featuredIndex + 1);
-      }, 5000);
-    }
-
-    featuredCard.addEventListener('mouseenter', function () { clearInterval(featuredTimer); });
-    featuredCard.addEventListener('mouseleave', startFeaturedRotation);
-
-    showFeatured(0);
-    startFeaturedRotation();
+    var heroTitle = document.getElementById('heroTitle');
+    var scrambleWord = document.getElementById('scrambleWord');
+    // Wait for fonts so the locked width is measured correctly
+    window.addEventListener('load', function () { scrambleText(scrambleWord); });
+    heroTitle.addEventListener('mouseenter', function () { scrambleText(scrambleWord); });
 
     // Theme toggle: stored preference wins, otherwise system preference
     var toggle = document.getElementById('themeToggle');
