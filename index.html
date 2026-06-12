@@ -1,82 +1,640 @@
 <!DOCTYPE html>
-<html class="dark">
+<html lang="en">
 <head>
-  <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Meta-Data -->
-  <title>Januario Pinto | Know about me</title>
-  <meta name="description" content="Exploring where modernity, wholeness and self-managment meets.">
+  
+  <!-- Meta -->
+  <title>Januario Pinto | Software Developer & Consultant</title>
+  <meta name="description" content="Software developer, consultant and entrepreneur. I help businesses build web applications and navigate product strategy.">
   <meta name="author" content="Januario Pinto">
-  <!-- Facebook -->
+  
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Januario Pinto | Know about me">
-  <meta property="og:description" content="Exploring where modernity, wholeness and self-managment meets.">
+  <meta property="og:title" content="Januario Pinto | Software Developer & Consultant">
+  <meta property="og:description" content="Software developer, consultant and entrepreneur. I help businesses build web applications and navigate product strategy.">
   <meta property="og:image" content="https://januariopinto.com/img/thumbnail.png">
 
-  <!-- CSS + Tailwind -->
-  <link rel="stylesheet" type="text/css" href="styles/style.css">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.ico">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
-  <!-- Icon -->
-  <link rel="icon" type="image/png" href="favicon.ico" />
+  <!-- Shared Styles -->
+  <link rel="stylesheet" href="styles.css">
 
-  <!-- Scripts -->
-  <script src="js/typewriter.js"></script>
-  <script src="js/desktop.js"></script>
-  <script>
-    let isDark = true;
+  <style>
+    /* ========================================
+       MODAL - OS-STYLE WINDOW (Index page only)
+    ======================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      backdrop-filter: blur(0px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      pointer-events: none;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease;
+    }
 
-    const toggleDark = () => {
-      const darkButton = document.getElementById('themeToggler');
-      isDark = !isDark;
+    .modal-overlay.active {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      pointer-events: auto;
+    }
 
-      if (isDark) {
-        darkButton.innerText = '🌙';
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-        darkButton.innerText = '☀️';
+    .modal-window {
+      width: 100%;
+      max-width: 540px;
+      background: var(--modal-bg);
+      border-radius: 12px;
+      border: 1px solid #2a2a2a;
+      box-shadow: 
+        0 0 0 1px rgba(255,255,255,0.05),
+        0 25px 50px -12px rgba(0, 0, 0, 0.8),
+        0 0 100px rgba(196, 247, 102, 0.05);
+      overflow: hidden;
+      transform: scale(0.92) translateY(12px);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                  opacity 0.25s ease;
+    }
+
+    .modal-overlay.active .modal-window {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    /* Window Title Bar - Linux/GNOME style */
+    .modal-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 0.375rem;
+    }
+
+    .window-control {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .window-control:hover {
+      transform: scale(1.05);
+    }
+
+    .control-close {
+      background: transparent;
+    }
+
+    .control-close:hover {
+      background: #e84545;
+    }
+
+    .control-minimize {
+      background: transparent;
+    }
+
+    .control-minimize:hover {
+      background: #333;
+    }
+
+    .control-maximize {
+      background: transparent;
+    }
+
+    .control-maximize:hover {
+      background: #333;
+    }
+
+    .window-title {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Modal Content */
+    .modal-content {
+      padding: 1.5rem;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      flex-shrink: 0;
+      border: 1px solid #333;
+    }
+
+    .modal-title-group {
+      flex: 1;
+    }
+
+    .modal-project-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .modal-project-tagline {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .modal-description {
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Price Tag */
+    .price-section {
+      background: linear-gradient(135deg, rgba(196, 247, 102, 0.1) 0%, rgba(196, 247, 102, 0.05) 100%);
+      border: 1px solid rgba(196, 247, 102, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .price-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* Modal Actions */
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* Tags */
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.625rem;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .decrypt {
+      font-family: 'Courier New', monospace;
+      display: inline-block;
+      min-width: 8ch; /* Prevent layout shift */
+    }
+
+    /* Modal-specific responsive */
+    @media (max-width: 480px) {
+      .modal-window {
+        max-width: 100%;
+        border-radius: 12px;
       }
-      console.log(isDark);
+
+      .modal-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+      }
     }
-
-    window.onload = () => {
-      const TypeWriterElement = document.getElementById("typewriter");
-      const TypeWriterObject = new TypeWriter(TypeWriterElement)
-
-      TypeWriterObject
-        .typeText("A Software developer...")
-        .deleteChars(21)
-        .typeText("Consultant...")
-        .deleteChars(14)
-        .typeText("n Entrepeneur...")
-        .start();
-
-      // Desktop
-      const desktop = document.getElementById('desktop');
-      
-      loadDesktop();   
-    }
-  </script>
+  </style>
 </head>
-<body class="dark:bg-black text-gray-800 dark:text-gray-300 text-md cursor-[url('../img/cursor.svg)]">
-  <div id="app" class="relative max-w-screen-md mx-auto px-6 flex flex-col justify-between leading-relaxed max-h-full h-[100dvh]">
-    <header class="w-full mx-auto rounded max-w-screen-sm relative">
-      <h1 class="text-6xl font-bold py-5 animated-forest-text">Hey!, <br/>I'm Januario.</h1>
-      <h2 class="text-4xl dark:text-white font-bold py-5"><span id="typewriter" class="whitespace-nowrap"></span><span class="animate-pulse text-md">|</span></h2>
-      <button id="themeToggler" class="absolute w-8 h-8 top-8 right-8 border-2 border-gray-400 rounded-full animation-pulse" onclick="toggleDark()">
-        🌙
-      </button>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1 class="name">Januario Pinto</h1>
+      <p class="title">Software Developer & Consultant</p>
     </header>
-    <main class="h-full py-12">
-      <div id="desktop"></div>
-    </main>
-    <footer class="text-left text-gray-500">
-      <div class="py-6">
-        <h2 class="text-xl dark:text-white font-bold py-2 stroke-white">Anything Else</h2>
-        <p>If you want to get in touch to chat about e-commerce, AI, crypto, programming, product or anything else, flick me an <a class="font-bold dark:text-gray-400" "="" href="mailto:contact@januariopinto.com" rel="noreferrer">email</a> or send me a DM on <a class="font-bold dark:text-gray-400" "="" href="https://instagram.com/januario.xyz" target="_blank" rel="noreferrer">Instagram</a>. I'd love to hear from you!</p>
+
+    <!-- About -->
+    <section class="about">
+      <h2 class="section-title">About</h2>
+      <p>I've been coding since I was 13 and building businesses since 15. Now at 32, I help companies build <span class="highlight">web applications</span> and navigate <span class="highlight">product strategy</span>.</p>
+      <p>Currently focused on E-commerce, AI, Crypto, and SaaS. I work with startups and established businesses alike—whether you need hands-on development or strategic guidance.</p>
+    </section>
+
+    <!-- Services -->
+    <section>
+      <h2 class="section-title">How I Can Help</h2>
+      <div class="services-list">
+        <div class="service-item">Full-stack web application development</div>
+        <div class="service-item">Technical consulting & architecture</div>
+        <div class="service-item">Product strategy & roadmapping</div>
+        <div class="service-item">AI integration & automation</div>
       </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section>
+      <h2 class="section-title">Personal Portfolio</h2>
+      <div class="projects-grid">
+        <button class="project-card" onclick="openProject('proposals')" aria-label="View Proposals with AI project">
+          <div class="project-icon">📝</div>
+          <div class="project-info">
+            <div class="project-name">Proposals with AI</div>
+            <div class="project-desc">Generate professional proposals in minutes using AI</div>
+          </div>
+          <span class="project-badge badge-sale">For Sale</span>
+        </button>
+        
+        <button class="project-card" onclick="openProject('unitdev')" aria-label="View Unit Development project">
+          <div class="project-icon">⚙️</div>
+          <div class="project-info">
+            <div class="project-name">Unit Development</div>
+            <div class="project-desc">Development agency specializing in workflow automation</div>
+          </div>
+          <span class="project-badge badge-active">Active</span>
+        </button>
+
+        <button class="project-card" onclick="openProject('artefacts')" aria-label="View Strange Artefacts project">
+          <div class="project-icon">🎨</div>
+          <div class="project-info">
+            <div class="project-name">Strange Artefacts</div>
+            <div class="project-desc">AI-powered creative tools and experiments</div>
+          </div>
+          <span class="project-badge badge-active">Active</span>
+        </button>
+
+        <button class="project-card" onclick="openProject('holacracy')" aria-label="View Holacracy Assistant project">
+          <div class="project-icon">🔄</div>
+          <div class="project-info">
+            <div class="project-name">Holacracy Assistant</div>
+            <div class="project-desc">AI-powered guide to self-management and organizational design</div>
+          </div>
+          <span class="project-badge badge-active">Active</span>
+        </button>
+
+        <button class="project-card" onclick="openProject('cinema')" aria-label="View Cinema Assistant project">
+          <div class="project-icon">🎬</div>
+          <div class="project-info">
+            <div class="project-name">Cinema Assistant</div>
+            <div class="project-desc">Smart movie discovery and recommendation engine</div>
+          </div>
+          <span class="project-badge badge-dev decrypt">Updating</span>
+        </button>
+
+        <button class="project-card" onclick="openProject('empresario')" aria-label="View Empresario Conciente project">
+          <div class="project-icon">🧠</div>
+          <div class="project-info">
+            <div class="project-name">Empresario Conciente</div>
+            <div class="project-desc">Blog about conscious business and personal development</div>
+          </div>
+          <span class="project-badge badge-archived">Archived</span>
+        </button>
+
+        <button class="project-card" onclick="openProject('bekko')" aria-label="View Bekko project">
+          <div class="project-icon">🛒</div>
+          <div class="project-info">
+            <div class="project-name">Bekko</div>
+            <div class="project-desc">E-commerce dropshipping store</div>
+          </div>
+          <span class="project-badge badge-archived">Archived</span>
+        </button>
+
+        <button class="project-card" onclick="openProject('gameservers')" aria-label="View Game Servers project">
+          <div class="project-icon">⚔️</div>
+          <div class="project-info">
+            <div class="project-name">Feldora, Zeldenia & More</div>
+            <div class="project-desc">Open Tibia game servers with custom systems</div>
+          </div>
+          <span class="project-badge badge-archived">Archived</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact-section" style="margin-top: 6rem;">
+      <h2 class="section-title">Get in Touch</h2>
+      <a href="mailto:contact@januariopinto.com" class="contact-cta">Let's build something together!</a>
+      
+      <div class="social-grid">
+        <a href="mailto:contact@januariopinto.com" class="social-card">
+          <div class="social-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span class="social-name">Email</span>
+        </a>
+
+        <a href="https://x.com/januario_xyz" target="_blank" rel="noopener" class="social-card">
+          <div class="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="social-name">X / Twitter</span>
+        </a>
+
+        <a href="https://github.com/januarionclx" target="_blank" rel="noopener" class="social-card">
+          <div class="social-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </div>
+          <span class="social-name">GitHub</span>
+        </a>
+      </div>
+      
+      <div class="resume-link-container">
+        <a href="resume.html" class="text-link" style="color: var(--text-muted); font-size: 0.875rem;">View Full Resume →</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© <span id="year"></span> Januario Pinto</p>
     </footer>
   </div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-window" onclick="event.stopPropagation()">
+      <div class="modal-titlebar">
+        <div class="window-title" id="modalWindowTitle">Project</div>
+        <div class="window-controls">
+          <div class="window-control control-minimize">
+            <svg width="10" height="2" viewBox="0 0 10 2" fill="currentColor"><rect width="10" height="2" rx="1" fill="#888"/></svg>
+          </div>
+          <div class="window-control control-maximize">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#888" stroke-width="1.5"><rect x="1" y="1" width="8" height="8" rx="1"/></svg>
+          </div>
+          <div class="window-control control-close" onclick="closeModal()">
+            <svg width="10" height="10" viewBox="0 0 10 10" stroke="#fff" stroke-width="1.5" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="modal-content" id="modalContent">
+        <!-- Dynamic content injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Project data
+    const projects = {
+      unitdev: {
+        icon: '⚙️',
+        name: 'Unit Development',
+        tagline: 'Workflow automation & development agency',
+        description: 'We develop and maintain complex automations for clients like DataLithe (data entry & invoicing) and PrimeAI. Our solutions save thousands of hours and euros by streamlining internal processes—empowering employees to focus on high-value work rather than replacing them.',
+        tags: ['Automation', 'B2B', 'Agency', 'Process Optimization'],
+        url: 'https://theunitorganization.com',
+        forSale: false
+      },
+      proposals: {
+        icon: '📝',
+        name: 'Proposals with AI',
+        tagline: 'Automate your proposal workflow',
+        description: 'Generate professional, client-ready proposals in minutes instead of hours. Powered by AI to understand your services and craft compelling narratives that win deals.',
+        tags: ['AI', 'SaaS', 'Productivity', 'B2B'],
+        url: 'https://proposalswithai.com',
+        forSale: true,
+        price: '$7,500 USD'
+      },
+      artefacts: {
+        icon: '🎨',
+        name: 'Strange Artefacts',
+        tagline: 'Where creativity meets AI',
+        description: 'A collection of AI-powered creative tools and experiments. Pushing the boundaries of what\'s possible with generative AI in art and design.',
+        tags: ['AI', 'Creative Tools', 'Experimental'],
+        url: 'https://strangeartefacts.com',
+        forSale: false
+      },
+      holacracy: {
+        icon: '🔄',
+        name: 'Holacracy Assistant',
+        tagline: 'Master self-management',
+        description: 'An AI-powered personal assistant designed to help you understand and implement Holacracy principles. Learn about roles, circles, governance, and tactical meetings through conversation.',
+        tags: ['AI', 'Organizational Design', 'Self-Management', 'Learning'],
+        url: 'https://chatgpt.com/g/g-HolacracyGPT',
+        forSale: false
+      },
+      cinema: {
+        icon: '🎬',
+        name: 'Cinema Assistant',
+        tagline: 'Your personal film curator',
+        description: 'A smart movie discovery tool that helps you find your next favorite film. Currently being rebuilt with modern AI capabilities for better personalization and recommendations.',
+        tags: ['AI', 'Entertainment', 'Recommendations'],
+        url: null,
+        status: 'updating'
+      },
+      empresario: {
+        icon: '🧠',
+        name: 'Empresario Conciente',
+        tagline: 'Business meets consciousness',
+        description: 'A Spanish-language blog exploring the intersection of conscious business practices and personal development. Finding balance between entrepreneurship and wholeness.',
+        tags: ['Blog', 'Business', 'Personal Development', 'Spanish'],
+        url: null,
+        archived: true
+      },
+      bekko: {
+        icon: '🛒',
+        name: 'Bekko',
+        tagline: 'General e-commerce store',
+        description: 'A dropshipping e-commerce business selling curated products. An early exploration into online retail and supply chain optimization.',
+        tags: ['E-commerce', 'Dropshipping', 'Retail'],
+        url: null,
+        archived: true
+      },
+      gameservers: {
+        icon: '⚔️',
+        name: 'Feldora, Zeldenia & More',
+        tagline: 'Custom game servers',
+        description: 'Multiple Open Tibia game servers featuring custom systems, quests, and mechanics. Built with Lua scripting and C++ modifications. A formative experience in game development and community building.',
+        tags: ['Gaming', 'Lua', 'C++', 'Community'],
+        url: null,
+        archived: true
+      }
+    };
+
+    // Open modal with project info
+    function openProject(projectId) {
+      const project = projects[projectId];
+      if (!project) return;
+
+      const modal = document.getElementById('modalOverlay');
+      const content = document.getElementById('modalContent');
+      const title = document.getElementById('modalWindowTitle');
+
+      title.textContent = project.name;
+
+      // Build modal content
+      let html = `
+        <div class="modal-header">
+          <div class="modal-icon">${project.icon}</div>
+          <div class="modal-title-group">
+            <h3 class="modal-project-name">${project.name}</h3>
+            <p class="modal-project-tagline">${project.tagline}</p>
+          </div>
+        </div>
+        <p class="modal-description">${project.description}</p>
+        <div class="modal-tags">
+          ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </div>
+      `;
+
+      // Add price section if for sale
+      if (project.forSale) {
+        html += `
+          <div class="price-section">
+            <span class="price-label">Asking Price</span>
+            <span class="price-value">${project.price}</span>
+          </div>
+        `;
+      }
+
+      // Actions
+      html += `<div class="modal-actions">`;
+      
+      if (project.archived) {
+        html += `
+          <span class="btn btn-secondary" style="opacity: 0.6; cursor: default;">
+            Project Archived
+          </span>
+        `;
+      } else if (project.status === 'updating') {
+        html += `
+          <span class="btn btn-secondary" style="cursor: default;">
+            🚧 Currently Being Updated
+          </span>
+        `;
+      } else if (project.url) {
+        html += `
+          <a href="${project.url}" target="_blank" rel="noopener" class="btn btn-primary">
+            Visit Website
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            </svg>
+          </a>
+        `;
+      }
+      
+      if (project.forSale) {
+        html += `
+          <a href="mailto:contact@januariopinto.com?subject=Interested in ${project.name}" class="btn btn-secondary">
+            Inquire About Purchase
+          </a>
+        `;
+      }
+      
+      html += `</div>`;
+
+      content.innerHTML = html;
+      modal.classList.add('active');
+    }
+
+    // Close modal
+    function closeModal(event) {
+      // If called from overlay click, check if click was on overlay itself
+      if (event && event.target !== event.currentTarget) return;
+      
+      const modal = document.getElementById('modalOverlay');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Decrypt Animation
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&";
+    
+    class DecryptEffect {
+      constructor(el) {
+        this.el = el;
+        this.originalText = el.innerText;
+        this.animate();
+      }
+      
+      animate() {
+        let iteration = 0;
+        clearInterval(this.interval);
+        
+        this.interval = setInterval(() => {
+          this.el.innerText = this.originalText
+            .split("")
+            .map((letter, index) => {
+              if (index < iteration) {
+                return this.originalText[index];
+              }
+              return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join("");
+          
+          if (iteration >= this.originalText.length) {
+            clearInterval(this.interval);
+          }
+          
+          iteration += 1 / 3;
+        }, 30);
+      }
+    }
+
+    // Apply effect on hover for badges
+    document.querySelectorAll('.decrypt').forEach(el => {
+      el.addEventListener('mouseenter', () => new DecryptEffect(el));
+    });
+  </script>
 </body>
 </html>
+
