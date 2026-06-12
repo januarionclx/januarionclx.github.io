@@ -6,7 +6,7 @@
 
   <!-- Meta -->
   <title>Januario Pinto | Living Systems — Software, Organizations, Land</title>
-  <meta name="description" content="I work with living systems: software that ships, organizations that run themselves, and the land and food they ultimately depend on. Developer, organizational designer, investor.">
+  <meta name="description" content="I build living systems: software that ships, organizations that run themselves, and the land and food they ultimately depend on. Developer, organizational designer, investor.">
   <meta name="author" content="Januario Pinto">
 
   <!-- Open Graph -->
@@ -29,7 +29,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Shared Styles -->
   <link rel="stylesheet" href="styles.css">
@@ -40,36 +40,61 @@
     <!-- Top bar -->
     <nav class="topbar">
       <a href="/" class="brand">Januario Pinto</a>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      </button>
+      <div class="topbar-right">
+        <a href="#work" class="topbar-link">Work</a>
+        <a href="#contact" class="topbar-link">Contact</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+      </div>
     </nav>
 
     <!-- Hero -->
     <header>
-      <h1 class="hero-title">I work with <em>living systems</em>.</h1>
-      <p class="hero-sub">Software that ships, organizations that run themselves, and — increasingly — the land and food they all depend on.</p>
+      <h1 class="hero-title">I build <span class="accent">living systems</span>.</h1>
+      <p class="hero-sub">Software that ships. Organizations that run themselves. And the land and food they all depend on.</p>
     </header>
 
+    <!-- Proof points -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">20+</div>
+        <div class="stat-label">Years writing software</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">8</div>
+        <div class="stat-label">Products shipped</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Layers of practice</div>
+      </div>
+    </div>
+
     <!-- Position -->
-    <section class="prose">
-      <h2 class="section-title">A position</h2>
-      <p>I've written software for over twenty years. The longer I do it, the clearer it gets: the hard problems were never in the code. They live in the human system around it — how decisions get made, who is allowed to act, what happens when something breaks.</p>
-      <p>Frederic Laloux calls the next stage of organization <strong>Teal</strong>: the company not as a machine to be operated, but as a living organism that senses and evolves. Self-management instead of hierarchy for its own sake. Wholeness instead of the professional mask. Purpose that is listened to, not imposed.</p>
-      <p>So that's the practice now, in three layers: systems made of <strong>code</strong>, systems made of <strong>people</strong>, systems made of <strong>soil</strong>. Different materials, same discipline — clear interfaces, honest feedback loops, and the humility to let the thing grow.</p>
+    <section>
+      <div class="section-grid">
+        <h2 class="section-title">A position</h2>
+        <div class="section-body prose">
+          <p class="lede">The hard problems were never in the code. They live in the human system around it.</p>
+          <p>Twenty years of building software made that unavoidable: how decisions get made, who is allowed to act, what happens when something breaks — these determine outcomes more than any architecture does.</p>
+          <p>Frederic Laloux calls the next stage of organization <strong>Teal</strong>: the company not as a machine to be operated, but as a living organism that senses and evolves. Self-management instead of hierarchy for its own sake. Wholeness instead of the professional mask. Purpose that is listened to, not imposed.</p>
+          <p>So the practice runs in three layers: systems made of <strong>code</strong>, systems made of <strong>people</strong>, systems made of <strong>soil</strong>. Different materials, same discipline — clear interfaces, honest feedback loops, and the humility to let the thing grow.</p>
+        </div>
+      </div>
     </section>
 
     <!-- The three layers -->
     <section>
-      <h2 class="section-title">The work</h2>
-
       <div class="layer">
         <div class="layer-head">
           <span class="layer-num">01</span>
           <h3 class="layer-title">Software</h3>
         </div>
-        <p>Full-stack development, AI products and workflow automation — from game servers written in Lua and C++ at fifteen to LLM-powered products today. The commercial side lives at <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="text-link">The Unit Organization</a>, my development &amp; consulting firm: performant, scalable systems for clients who need things done well.</p>
+        <div class="layer-body">
+          <p>Full-stack development, AI products and workflow automation — from game servers written in Lua and C++ at fifteen to LLM-powered products today. The commercial side lives at <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="text-link">The Unit Organization</a>, my development &amp; consulting firm: performant, scalable systems for clients who need things done well.</p>
+        </div>
       </div>
 
       <div class="layer">
@@ -77,7 +102,9 @@
           <span class="layer-num">02</span>
           <h3 class="layer-title">Organizations</h3>
         </div>
-        <p>Organizational design grounded in self-management — Teal practices, Holacracy, governance and meeting structures that put authority where the information is. I help founders and teams move from org-chart-as-machine to organization-as-organism: explicit roles, distributed decision processes, and tension-driven evolution instead of a boss in every loop.</p>
+        <div class="layer-body">
+          <p>Organizational design grounded in self-management — Teal practices, Holacracy, governance and meeting structures that put authority where the information is. I help founders and teams move from org-chart-as-machine to organization-as-organism: explicit roles, distributed decision processes, and tension-driven evolution instead of a boss in every loop.</p>
+        </div>
       </div>
 
       <div class="layer">
@@ -85,81 +112,76 @@
           <span class="layer-num">03</span>
           <h3 class="layer-title">Ground</h3>
         </div>
-        <p>The literal living systems. I'm an investor in a vegetarian restaurant, and exploring agricultural projects in Venezuela, Madeira and elsewhere in Europe — early, patient bets on food and land. This layer keeps the other two honest.</p>
+        <div class="layer-body">
+          <p>The literal living systems. I'm an investor in a vegetarian restaurant, and exploring agricultural projects in Venezuela, Madeira and elsewhere in Europe — early, patient bets on food and land. This layer keeps the other two honest.</p>
+        </div>
       </div>
     </section>
 
     <!-- Selected work -->
-    <section>
-      <h2 class="section-title">Selected work</h2>
-      <div class="work-list">
-        <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="work-item">
-          <div class="work-info">
-            <span class="work-name">The Unit Organization</span>
-            <span class="work-desc">Development &amp; consulting firm</span>
-          </div>
-          <span class="pill pill-teal">Active</span>
-          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
+    <section id="work">
+      <div class="section-grid">
+        <h2 class="section-title">Selected work</h2>
+        <div class="section-body" style="max-width: none;">
+          <div class="work-list">
+            <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="work-item">
+              <span class="work-index">01</span>
+              <span class="work-name">The Unit Organization</span>
+              <span class="work-desc">Development &amp; consulting firm</span>
+              <span class="pill pill-teal">Active</span>
+              <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </a>
 
-        <a href="https://strangeartefacts.com" target="_blank" rel="noopener" class="work-item">
-          <div class="work-info">
-            <span class="work-name">Strange Artefacts</span>
-            <span class="work-desc">AI-powered creative tools</span>
-          </div>
-          <span class="pill pill-teal">Active</span>
-          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
+            <a href="https://strangeartefacts.com" target="_blank" rel="noopener" class="work-item">
+              <span class="work-index">02</span>
+              <span class="work-name">Strange Artefacts</span>
+              <span class="work-desc">AI-powered creative tools</span>
+              <span class="pill pill-teal">Active</span>
+              <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </a>
 
-        <a href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener" class="work-item">
-          <div class="work-info">
-            <span class="work-name">Holacracy Assistant</span>
-            <span class="work-desc">AI guide to self-management</span>
-          </div>
-          <span class="pill pill-teal">Active</span>
-          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
+            <a href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener" class="work-item">
+              <span class="work-index">03</span>
+              <span class="work-name">Holacracy Assistant</span>
+              <span class="work-desc">AI guide to self-management</span>
+              <span class="pill pill-teal">Active</span>
+              <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </a>
 
-        <a href="https://proposalswithai.com" target="_blank" rel="noopener" class="work-item">
-          <div class="work-info">
-            <span class="work-name">Proposals with AI</span>
-            <span class="work-desc">AI proposal generation</span>
-          </div>
-          <span class="pill pill-amber">For Sale</span>
-          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
+            <a href="https://proposalswithai.com" target="_blank" rel="noopener" class="work-item">
+              <span class="work-index">04</span>
+              <span class="work-name">Proposals with AI</span>
+              <span class="work-desc">AI proposal generation</span>
+              <span class="pill pill-amber">For Sale</span>
+              <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </a>
 
-        <div class="work-item">
-          <div class="work-info">
-            <span class="work-name">Cinema Assistant</span>
-            <span class="work-desc">Smart film discovery</span>
-          </div>
-          <span class="pill pill-amber">Rebuilding</span>
-        </div>
+            <div class="work-item">
+              <span class="work-index">05</span>
+              <span class="work-name">Cinema Assistant</span>
+              <span class="work-desc">Smart film discovery</span>
+              <span class="pill pill-amber">Rebuilding</span>
+              <span></span>
+            </div>
 
-        <div class="work-item">
-          <div class="work-info">
-            <span class="work-name">Earlier</span>
-            <span class="work-desc">Empresario Conciente · Bekko · Feldora &amp; Zeldenia</span>
+            <div class="work-item">
+              <span class="work-index">06</span>
+              <span class="work-name">Earlier</span>
+              <span class="work-desc">Empresario Conciente · Bekko · Feldora &amp; Zeldenia</span>
+              <span class="pill pill-muted">Archive</span>
+              <span></span>
+            </div>
           </div>
-          <span class="pill pill-muted">Archive</span>
         </div>
       </div>
     </section>
 
     <!-- Contact -->
-    <section class="contact-section">
+    <section id="contact" class="contact-section">
       <h2 class="section-title">Get in touch</h2>
-      <a href="mailto:contact@januariopinto.com" class="contact-cta">Building a product, an organization, or something that grows? Write me.</a>
+      <a href="mailto:contact@januariopinto.com" class="contact-cta">contact@januariopinto.com</a>
 
       <div class="social-grid">
-        <a href="mailto:contact@januariopinto.com" class="social-card">
-          <div class="social-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </div>
-          <span class="social-name">Email</span>
-        </a>
-
         <a href="https://x.com/januario_xyz" target="_blank" rel="noopener" class="social-card">
           <div class="social-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -173,17 +195,20 @@
           </div>
           <span class="social-name">GitHub</span>
         </a>
-      </div>
 
-      <div class="resume-link-container">
-        <a href="resume.html" class="text-link" style="font-size: 0.875rem;">View Full Resume →</a>
+        <a href="resume.html" class="social-card">
+          <div class="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <span class="social-name">Resume</span>
+        </a>
       </div>
     </section>
 
     <!-- Footer -->
     <footer>
       <p>© <span id="year"></span> Januario Pinto</p>
-      <p>The darker half lives at <a href="https://theunitorganization.com" target="_blank" rel="noopener">theunitorganization.com</a></p>
+      <p>The darker half — <a href="https://theunitorganization.com" target="_blank" rel="noopener">theunitorganization.com</a></p>
     </footer>
   </div>
 
