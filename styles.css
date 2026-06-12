@@ -215,6 +215,9 @@ header {
 .hero-verb {
   display: inline-block;
   color: var(--accent);
+  font-size: 1.15em;            /* bigger than the rest of the line */
+  font-weight: 700;             /* bolder */
+  font-style: oblique 13deg;    /* more cursive slant than the title's 8deg */
 }
 
 /* Fixed-height box for the rotating phrase: dimensions never change,
