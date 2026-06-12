@@ -87,15 +87,7 @@
           <h3 class="layer-title">Organizations</h3>
         </div>
         <div class="layer-body">
-          <p>I coach and guide founders and teams through the whole arc — creating, scaling, organizing. Past work includes consulting for cowork &amp; coliving communities — organizations where the structure is something people literally live inside.</p>
-          <div class="layer-skills">
-            <div class="skill-item"><span class="arrow">→</span><span class="txt">Coaching founders &amp; leadership teams</span></div>
-            <div class="skill-item"><span class="arrow">→</span><span class="txt">Roles people actually own</span></div>
-            <div class="skill-item"><span class="arrow">→</span><span class="txt">Decision-making without bottlenecks</span></div>
-            <div class="skill-item"><span class="arrow">→</span><span class="txt">Meetings that end in decisions</span></div>
-            <div class="skill-item"><span class="arrow">→</span><span class="txt">Scaling without layers of managers</span></div>
-            <div class="skill-item"><span class="arrow">→</span><span class="txt">Culture that survives growth</span></div>
-          </div>
+          <p>I help founders build organizations that run without them: self-managing teams where authority, roles and decisions live where the work actually happens. I've done this hands-on for cowork and coliving communities &mdash; structures people don't just work in, but live inside.</p>
         </div>
       </div>
 
@@ -105,8 +97,7 @@
           <h3 class="layer-title">Software</h3>
         </div>
         <div class="layer-body">
-          <p>Full-stack development, AI products and workflow automation — from game servers written in Lua and C++ at fifteen to LLM-powered products today. The commercial side lives at <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="text-link">The Unit Organization</a>, my development &amp; consulting firm: performant, scalable systems for clients who need things done well.</p>
-          <p>Recent client work includes DataLithe and PrimeAI — automations for invoicing and internal processes that save thousands of operational hours a year.</p>
+          <p>I build AI-native applications, software architecture and complete end-to-end products. SaaS, marketplaces and internal tools. Games, engines and network parsers. The commercial side runs through <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="text-link">The Unit Organization</a>, my development and consulting firm.</p>
         </div>
       </div>
 
@@ -182,23 +173,24 @@
       return new Promise(function (resolve) { setTimeout(resolve, ms); });
     }
 
-    // Verb swap: old word lifts up and fades, new word rises from below.
+    // Verb swap, up→down: old word drops out the bottom, new word
+    // falls in from the top. Fast.
     function slideVerb(el, next) {
       return new Promise(function (resolve) {
         if (reducedMotion) { el.textContent = next; resolve(); return; }
-        el.style.transition = 'transform 150ms ease, opacity 150ms ease';
-        el.style.transform = 'translateY(-0.35em)';
+        el.style.transition = 'transform 70ms ease-in, opacity 70ms ease-in';
+        el.style.transform = 'translateY(0.4em)';
         el.style.opacity = '0';
         setTimeout(function () {
           el.textContent = next;
           el.style.transition = 'none';
-          el.style.transform = 'translateY(0.4em)';
+          el.style.transform = 'translateY(-0.45em)';
           void el.offsetHeight;               // commit the jump before animating back
-          el.style.transition = 'transform 220ms cubic-bezier(0.16,1,0.3,1), opacity 220ms ease';
+          el.style.transition = 'transform 120ms cubic-bezier(0.16,1,0.3,1), opacity 120ms ease';
           el.style.transform = 'translateY(0)';
           el.style.opacity = '1';
-          setTimeout(resolve, 220);
-        }, 150);
+          setTimeout(resolve, 120);
+        }, 70);
       });
     }
 
@@ -220,19 +212,19 @@
             resolve();
           }
           iteration += speed;
-        }, 28);
+        }, 22);
       });
     }
 
     async function rotateHero() {
       // First identity: verb already set, just decrypt the phrase in.
-      await scramble(objectEl, HERO_LINES[0].object, 0.6);
+      await scramble(objectEl, HERO_LINES[0].object, 0.9);
       await wait(HOLD);
       var i = 0;
       while (true) {
         i = (i + 1) % HERO_LINES.length;
         await slideVerb(verbEl, HERO_LINES[i].verb);
-        await scramble(objectEl, HERO_LINES[i].object, 0.6);
+        await scramble(objectEl, HERO_LINES[i].object, 0.9);
         await wait(HOLD);
       }
     }

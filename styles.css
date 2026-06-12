@@ -217,6 +217,7 @@ header {
 
 .hero-verb {
   display: inline-block;
+  color: var(--accent);
 }
 
 .hero-object {
@@ -353,31 +354,20 @@ a.text-link:hover {
   margin-bottom: 1.25rem;
 }
 
-.layer-skills {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem 1.5rem;
-  margin-top: 1.125rem;
-}
-
-@media (max-width: 600px) {
-  .layer-skills {
-    grid-template-columns: 1fr;
-  }
-}
-
 .layer-num {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 500;
   color: var(--accent);
-  letter-spacing: 0.12em;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
 .layer-title {
-  font-size: clamp(1.875rem, 4.5vw, 2.75rem);
+  font-size: clamp(1.875rem, 4.5vw, 3rem);
   font-weight: 600;
   letter-spacing: -0.03em;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .layer-body {
@@ -385,9 +375,9 @@ a.text-link:hover {
 }
 
 .layer-body p {
-  color: var(--text-secondary);
-  font-size: 1.0625rem;
-  line-height: 1.7;
+  color: var(--text);
+  font-size: 1.1875rem;
+  line-height: 1.65;
   margin-bottom: 0.875rem;
 }
 
