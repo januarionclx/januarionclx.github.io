@@ -202,17 +202,25 @@ header {
 .hero-title {
   font-style: italic;
   font-weight: 600;
-  font-size: clamp(2.625rem, 7vw, 4.75rem);
-  line-height: 1.05;
-  letter-spacing: -0.045em;
+  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
   margin: 0 0 1.75rem;
-  min-height: 2.2em;
+  /* Reserve 3 lines (1 for "I verb" + up to 2 for the phrase) so the
+     content below never moves — zero layout shift across rotations. */
+  min-height: 3.3em;
 }
 
-.hero-title .hero-verb,
-.hero-title .hero-object {
+.hero-line {
+  display: block;
+}
+
+.hero-verb {
   display: inline-block;
-  white-space: nowrap;
+}
+
+.hero-object {
+  display: block;
 }
 
 .hero-sub {
