@@ -200,15 +200,12 @@ header {
 }
 
 .hero-title {
-  font-style: italic;
+  font-style: oblique 8deg;       /* slanted, but less than full italic */
   font-weight: 600;
-  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
-  line-height: 1.1;
+  font-size: clamp(2.75rem, 7vw, 5rem);
+  line-height: 1.08;
   letter-spacing: -0.04em;
   margin: 0 0 1.75rem;
-  /* Reserve 3 lines (1 for "I verb" + up to 2 for the phrase) so the
-     content below never moves — zero layout shift across rotations. */
-  min-height: 3.3em;
 }
 
 .hero-line {
@@ -220,8 +217,22 @@ header {
   color: var(--accent);
 }
 
-.hero-object {
+/* Fixed-height box for the rotating phrase: dimensions never change,
+   so the page below cannot shift. Overflow clips any transient rewrap. */
+.hero-phrase {
   display: block;
+  height: 2.16em;                 /* 2 lines at line-height 1.08 */
+  overflow: hidden;
+}
+
+.hero-object {
+  display: inline;
+}
+
+@media (max-width: 600px) {
+  .hero-phrase {
+    height: 3.24em;               /* up to 3 lines on narrow screens */
+  }
 }
 
 .hero-sub {
@@ -356,10 +367,10 @@ a.text-link:hover {
 
 .layer-num {
   font-family: var(--font-mono);
-  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-size: clamp(0.95rem, 2.25vw, 1.5rem);   /* ~50% of the title */
   font-weight: 500;
   color: var(--accent);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   line-height: 1;
 }
 
