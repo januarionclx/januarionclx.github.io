@@ -121,14 +121,20 @@ body::before {
   margin-bottom: clamp(4rem, 10vh, 7rem);
 }
 
+/* nav items as full-height boxed cells */
 .topbar .bar-inner {
   justify-content: space-between;
-  align-items: center;
-  padding-top: 1.1rem;
-  padding-bottom: 1.1rem;
+  align-items: stretch;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  padding: 0.95rem 1.25rem;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -140,11 +146,15 @@ body::before {
 
 .topbar-right {
   display: flex;
-  align-items: center;
-  gap: 1.75rem;
+  align-items: stretch;
+  gap: 0;
 }
 
 .topbar-link {
+  display: flex;
+  align-items: center;
+  padding: 0.95rem 1.1rem;
+  border-left: 1px solid var(--border);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   text-transform: uppercase;
@@ -162,18 +172,17 @@ body::before {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  padding: 0 1rem;
   background: transparent;
-  border: 1px solid var(--border);
+  border: none;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   color: var(--text-muted);
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: color 0.2s;
 }
 
 .theme-toggle:hover {
-  border-color: var(--border-hover);
   color: var(--text);
 }
 
@@ -282,14 +291,14 @@ header {
 /* "What I do" — big label, vertically centered in the band between
    the stats bar and the first layer bar (symmetric padding). */
 .do-title {
-  font-family: var(--font-mono);
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-family: var(--font-sans);
+  font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+  font-style: italic;
   font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--text-muted);
   margin: 0;
-  padding: clamp(2.5rem, 6vh, 4rem) 0;
+  padding: clamp(2rem, 5vh, 3.5rem) 0;
 }
 
 /* full-bleed horizontal rule (section closer) */
@@ -607,7 +616,7 @@ a.work-item:hover .work-arrow {
    CONTACT — big type
    ------------------------------------------------------------ */
 .contact-section {
-  padding-top: 1.5rem;
+  padding-top: 0;
 }
 
 .contact-cta {
@@ -626,6 +635,11 @@ a.work-item:hover .work-arrow {
 
 .contact-cta:hover {
   color: var(--accent);
+}
+
+.email-user {
+  color: var(--accent);
+  font-style: italic;
 }
 
 .social-grid {
