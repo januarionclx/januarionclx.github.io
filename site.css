@@ -67,11 +67,15 @@ button { font: inherit; color: inherit; }
 }
 .hero.in .name { animation: sheen 4.8s cubic-bezier(.4, 0, .2, 1) 1.3s infinite; }
 @keyframes sheen { 0% { background-position: 100% 0; } 34%, 100% { background-position: 0% 0; } }
+/* with WebGL the letters are windows onto a lighter copy of the smoke (the shine above is the fallback) */
+.hero .name { position: relative; }
+.name-fx { position: absolute; display: block; pointer-events: none; }
+.namefx .hero .name, .namefx .hero.in .name { background: none; color: transparent; -webkit-text-fill-color: transparent; animation: none; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
-.thesis { margin: clamp(28px, 5vh, 56px) 0 0; font-size: clamp(1.1rem, 5.6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); }
+.thesis { margin: clamp(28px, 5vh, 56px) 0 0; font-size: clamp(1.1rem, 6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); }
 .thesis p { margin: 0; white-space: nowrap; }
-.thesis p + p { margin-top: clamp(4px, 2vh, 20px); }
+.thesis p + p { margin-top: clamp(2px, .8vh, 10px); }
 .thesis em { font-style: normal; white-space: nowrap; color: var(--fg); }
 /* the switching word: the next one rises out of a blur as the last one lifts away */
 .swap { display: inline-grid; }
@@ -88,10 +92,11 @@ button { font: inherit; color: inherit; }
 .svc p .l, .lead .l, .thesis .l, .nm-d { text-wrap: balance; }
 
 .doing { list-style: none; margin: clamp(20px, 3vh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 4vh, 44px); }
-.doing li { font-size: clamp(1.55rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
+.js .doing { margin-block: auto; } /* centred in the room under the title */
+.doing li { font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
 
 .names { list-style: none; margin: clamp(20px, 3vh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 2.2vh, 26px); }
-.nm { display: block; font-size: clamp(2.7rem, 5.2vw, 4.2rem); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
+.nm { display: block; font-size: clamp(2.7rem, 12.5vw, 4.2rem); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
 .nm-d { display: block; margin-top: .5em; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; letter-spacing: -.01em; color: var(--muted); }
 .more .nm { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
 .go { display: block; width: fit-content; margin-top: .45em; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 650; letter-spacing: -.01em; text-decoration: none; color: var(--fg); }
@@ -184,7 +189,7 @@ button { font: inherit; color: inherit; }
 @media (min-width: 900px) {
   /* each service is a row: the names right-aligned on one axis, each beside its description */
   .svc { grid-template-columns: max-content minmax(0, 50ch); column-gap: clamp(28px, 3.4vw, 56px); row-gap: clamp(22px, 3.2vh, 34px); }
-  .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: baseline; }
+  .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: start; }
   .svc p { margin-top: 0; max-width: none; }
   .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); text-align: right; }
   .names li { display: flex; align-items: baseline; gap: 22px; }
@@ -196,16 +201,18 @@ button { font: inherit; color: inherit; }
 }
 /* tall phone screens have room to spare: the intro and the 'doing now' list spread further down */
 @media (max-aspect-ratio: 3/4) {
-  .doing { gap: clamp(14px, 6.4vh, 64px); }
+  .doing { gap: clamp(14px, 4.6vh, 48px); }
   .svc { gap: clamp(22px, 4.6vh, 48px); }
-  .thesis { margin-top: clamp(32px, 9vh, 88px); }
-  .thesis p + p { margin-top: clamp(8px, 4vh, 40px); }
+  .names { gap: clamp(14px, 4.6vh, 48px); }
+  .thesis { margin-top: clamp(28px, 6vh, 64px); }
+  .thesis p + p { margin-top: clamp(4px, 1.2vh, 12px); }
 }
 @media (max-height: 720px) {
   .svc { gap: 16px; }
   .doing { gap: clamp(12px, 4vh, 28px); }
+  .names { gap: 12px; }
 }
-@media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: min(1.75rem, 8.4vw); } }
+@media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: min(1.75rem, 8.4vw); } .nm { font-size: min(2.5rem, 11vw); } }
 
 @media (prefers-reduced-motion: reduce) {
   .hero.in .name { animation: none; }

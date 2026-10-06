@@ -53,7 +53,7 @@
 
 <main>
   <section class="stage" id="services" data-look="ink" aria-labelledby="services-title">
-    <h2 class="title" id="services-title"><span class="l">Services</span></h2>
+    <h2 class="title" id="services-title"><span class="l">My</span> <span class="l acc">services</span></h2>
     <div class="svc">
       <article class="grp">
         <h3 class="l">Software development</h3>
@@ -136,13 +136,14 @@
     });
   });
 
-  var sky = Sky(document.getElementById('sky'));
+  var sky = Sky(document.getElementById('sky')), nameFx = NameFx(document.querySelector('.hero .name'));
   var themeColor = document.querySelector('meta[name="theme-color"]');
   function setLook(name, instant) {
     if (root.dataset.look === name) return;
     root.dataset.look = name; lookBtn.dataset.look = name;
     if (themeColor) themeColor.content = getComputedStyle(root).getPropertyValue('--bg').trim();
     if (sky) sky.tint(instant);
+    if (nameFx) nameFx.tint(instant);
     tint(name, false, instant);
   }
   lookBtn.addEventListener('click', function () { setLook(LOOKS[(LOOKS.indexOf(root.dataset.look) + 1) % LOOKS.length]); });
@@ -266,6 +267,7 @@
     if (!started) return;
     var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
     if (cur === 0) swapStart(); else swapReset();
+    if (nameFx) { nameFx.show(cur === 0); if (cur === 0) setTimeout(nameFx.locate, 950); }
   }
   // Leaving fades everything at once; the next screen starts as soon as the old one is gone.
   function go(i, now) {
@@ -289,7 +291,9 @@
   // The first screen starts once the fonts are in (at most a second), so nothing rises in a fallback face.
   function begin() {
     if (started) return;
-    started = true; root.classList.add('ready'); show();
+    started = true; root.classList.add('ready');
+    if (nameFx) nameFx.build();
+    show();
     setTimeout(function () { shine(0); }, 1700); // a first glint once the bar has arrived
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
@@ -306,37 +310,58 @@
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(addr.textContent).then(done, select); else select();
   });
 
-  // The smoke: GIPX's shader (from Artist OS). Colours blend over 1.4s when the look changes;
-  // the smoke leans toward the cursor or finger and lets go slowly.
-  function Sky(canvas) {
-    var gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
-    if (!gl) return null;
-    var VERT = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
-    var FRAG = 'precision highp float;uniform vec2 u_res;uniform float u_time;uniform vec3 u_c1,u_c2,u_c3;uniform vec2 u_mouse;uniform float u_act;' +
+  // The smoke: GIPX's shader (from Artist OS), written once for both canvases. smoke(fc) colours a point
+  // of the screen, fc in background-canvas pixels; the smoke leans toward the cursor or finger.
+  function smokeShader(head, main) {
+    return 'precision highp float;uniform vec2 u_res;uniform float u_time;uniform vec3 u_c1,u_c2,u_c3;uniform vec2 u_mouse;uniform float u_act;uniform vec2 u_band;' + head +
       'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}' +
       'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);}' +
       'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<4;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}' +
-      'void main(){float px=length(u_res)/900.;vec2 frag=floor(gl_FragCoord.xy/px)*px;vec2 uv=(frag-.5*u_res)/u_res.y;' +
+      'vec3 smoke(vec2 fc){float px=length(u_res)/900.;vec2 frag=floor(fc/px)*px;vec2 uv=(frag-.5*u_res)/u_res.y;' +
       'float t=u_time*.12;vec2 p=uv*2.4;p.y-=t*.55;' +
       'vec2 m=((u_mouse-.5)*vec2(u_res.x/u_res.y,1.))*2.4;float md=length(uv*2.4-m);p+=u_act*(m-uv*2.4)*.3*exp(-md*2.);' +
       'vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)+t*.35));' +
       'vec2 r=vec2(fbm(p+3.3*q+vec2(1.7,9.2)),fbm(p+3.3*q+vec2(8.3,2.8)-t*.25));float f=fbm(p+3.*r);' +
-      'float body=smoothstep(.365,.915,f);float vein=pow(1.-abs(2.*f-1.),8.);float spark=step(.986,noise(p*22.+r*6.+t*3.))*body;' +
-      'vec3 col=mix(u_c3,u_c1,body*.85);col+=u_c2*vein*.412*(.25+.75*body);col+=u_c2*spark*.5;gl_FragColor=vec4(col,1.);}';
-    function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+      'float body=smoothstep(u_band.x,u_band.y,f);float vein=pow(1.-abs(2.*f-1.),8.);float spark=step(.986,noise(p*22.+r*6.+t*3.))*body;' +
+      'vec3 col=mix(u_c3,u_c1,body*.85);col+=u_c2*vein*.412*(.25+.75*body);col+=u_c2*spark*.5;return col;}' +
+      'void main(){' + main + '}';
+  }
+  function program(gl, frag, names) {
+    function sh(type, src) { var x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; }
     var pr = gl.createProgram();
-    gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FRAG)); gl.linkProgram(pr);
+    gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+    gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, frag)); gl.linkProgram(pr);
     if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
     gl.useProgram(pr);
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_mouse', 'u_act'].forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
+    var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_mouse', 'u_act', 'u_band'].concat(names).forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
+    return U;
+  }
+  function hex(v) { var n = parseInt(v.trim().slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
+  // three colours read from CSS (or given), blended over 1.4s when the look changes
+  function Palette(keys) {
+    function read() { var c = getComputedStyle(root); return keys.map(function (k) { return hex(k.charAt(0) === '#' ? k : c.getPropertyValue(k)); }); }
+    var shown = read(), from = shown, to = shown, at = 0;
+    return {
+      set: function (instant) { to = read(); if (reduce || instant) shown = from = to; else { from = shown; at = performance.now(); } },
+      step: function (now) {
+        if (from === to) return shown;
+        var b = Math.min(1, (now - at) / 1400), e = b * b * (3 - 2 * b);
+        shown = b >= 1 ? to : from.map(function (c, i) { return c.map(function (v, j) { return v + (to[i][j] - v) * e; }); });
+        if (b >= 1) from = to;
+        return shown;
+      }
+    };
+  }
 
-    function hex(v) { var n = parseInt(v.trim().slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
-    function read() { var cs = getComputedStyle(root); return ['--s1', '--s2', '--s3'].map(function (k) { return hex(cs.getPropertyValue(k)); }); }
-    var shown = read(), from = shown, to = shown, blendAt = 0;
-    function tint(instant) { to = read(); if (reduce || instant) shown = from = to; else { from = shown; blendAt = performance.now(); } kick(); }
+  function Sky(canvas) {
+    var gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
+    if (!gl) return null;
+    var U = program(gl, smokeShader('', 'gl_FragColor=vec4(smoke(gl_FragCoord.xy),1.);'), []);
+    if (!U) return null;
+    var pal = Palette(['--s1', '--s2', '--s3']), api = { after: null };
 
     var mouse = [0.5, 0.5], aim = [0.5, 0.5], act = 0, actAim = 0, moved = 0;
     function point(e) {
@@ -356,34 +381,31 @@
     }
 
     // touch screens draw at 1.5x (the smoke is soft, the phone stays cool); big retina screens are capped near 2.4 million pixels
+    var d = 1;
     function size() {
-      var d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
+      d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
       canvas.width = Math.max(1, Math.round(canvas.clientWidth * d)); canvas.height = Math.max(1, Math.round(canvas.clientHeight * d));
       gl.viewport(0, 0, canvas.width, canvas.height);
     }
     var seed = Math.random() * 40, t0 = performance.now(), last = 0, raf = 0;
     function draw(now) {
-      gl.uniform2f(U.u_res, canvas.width, canvas.height);
-      gl.uniform1f(U.u_time, (seed + (reduce ? 0 : (now - t0) / 1000)) * 0.4);
-      gl.uniform3fv(U.u_c1, shown[0]); gl.uniform3fv(U.u_c2, shown[1]); gl.uniform3fv(U.u_c3, shown[2]);
-      gl.uniform2f(U.u_mouse, mouse[0], mouse[1]); gl.uniform1f(U.u_act, act);
+      var t = (seed + (reduce ? 0 : (now - t0) / 1000)) * 0.4, c = pal.step(now);
+      gl.uniform2f(U.u_res, canvas.width, canvas.height); gl.uniform1f(U.u_time, t);
+      gl.uniform3fv(U.u_c1, c[0]); gl.uniform3fv(U.u_c2, c[1]); gl.uniform3fv(U.u_c3, c[2]);
+      gl.uniform2f(U.u_mouse, mouse[0], mouse[1]); gl.uniform1f(U.u_act, act); gl.uniform2f(U.u_band, 0.365, 0.915);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       if (!canvas.classList.contains('on')) canvas.classList.add('on');
+      if (api.after) api.after(now, t, mouse, act, canvas.width, canvas.height, d);
     }
-    // 30 frames a second while calm, every frame while the colours blend or the smoke follows a pointer
+    // 30 frames a second while calm (colour blends included), every frame while the smoke follows a pointer
     function frame(now) {
       raf = 0;
       if (document.hidden) return;
-      var busy = Math.abs(actAim - act) > 0.002 || now - moved < 600; // colour blends run at 30 frames, pointer play at 60
+      var busy = Math.abs(actAim - act) > 0.002 || now - moved < 600;
       if (now - last >= (busy ? 15 : 32)) {
         var dt = last ? Math.min((now - last) / 1000, 0.1) : 0.016; last = now;
         var k = 1 - Math.pow(0.92, dt * 60), ka = 1 - Math.pow(0.96, dt * 60);
         mouse[0] += (aim[0] - mouse[0]) * k; mouse[1] += (aim[1] - mouse[1]) * k; act += (actAim - act) * ka;
-        if (from !== to) {
-          var b = Math.min(1, (now - blendAt) / 1400), e = b * b * (3 - 2 * b);
-          shown = b >= 1 ? to : from.map(function (c, i) { return c.map(function (v, j) { return v + (to[i][j] - v) * e; }); });
-          if (b >= 1) from = to;
-        }
         draw(now);
       }
       raf = requestAnimationFrame(frame);
@@ -393,7 +415,77 @@
     document.addEventListener('visibilitychange', kick);
     canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); canvas.classList.remove('on'); });
     size(); kick();
-    return { tint: tint };
+    api.tint = function (instant) { pal.set(instant); kick(); };
+    api.kick = kick;
+    return api;
+  }
+
+  // "Januario." filled with the same smoke in a lighter teal and white: a small canvas inside the name draws
+  // the smoke only through the letters, at the same time and place as the background, so it runs on through
+  // them. Without WebGL the silver shine stays.
+  function NameFx(el) {
+    if (!el || !sky) return null;
+    var canvas = document.createElement('canvas'); canvas.className = 'name-fx'; canvas.setAttribute('aria-hidden', 'true');
+    var gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
+    if (!gl) return null;
+    var U = program(gl, smokeShader('uniform sampler2D u_mask;uniform vec2 u_size,u_org;uniform float u_dpr,u_bgd;',
+      'float a=texture2D(u_mask,gl_FragCoord.xy/u_size).a;if(a<.004){gl_FragColor=vec4(0.);return;}' +
+      'vec3 c=smoke((gl_FragCoord.xy/u_dpr+u_org)*u_bgd);gl_FragColor=vec4(min(c,1.)*a,a);'), ['u_mask', 'u_size', 'u_org', 'u_dpr', 'u_bgd']);
+    if (!U) return null;
+    el.appendChild(canvas);
+    var pal = Palette(['--fg', '#ffffff', '--name']);
+    var tex = gl.createTexture(), mask = document.createElement('canvas'), mx = mask.getContext('2d');
+    var dpr = Math.min(devicePixelRatio || 1, 2), w = 1, h = 1, org = [0, 0], ok = false, on = false;
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    // the letters, drawn exactly where the page set them, become the mask (once their own font is in, so
+    // the mask never uses a fallback face)
+    function build() {
+      var cs = getComputedStyle(el), face = cs.fontStyle + ' ' + cs.fontWeight + ' 100px ' + cs.fontFamily;
+      if (document.fonts && document.fonts.load) document.fonts.load(face).then(draw, draw); else draw();
+    }
+    function draw() {
+      var text = el.firstChild; if (!text || text.nodeType !== 3) return;
+      var cs = getComputedStyle(el), fs = parseFloat(cs.fontSize), box = el.getBoundingClientRect();
+      var rg = document.createRange(); rg.setStart(text, 0); rg.setEnd(text, text.length);
+      var tr = rg.getBoundingClientRect(), pad = fs * 0.1, left = tr.left - box.left - pad, top = -fs * 0.3;
+      var cw = tr.width + pad * 2, ch = box.height + fs * 0.6;
+      canvas.style.left = left.toFixed(1) + 'px'; canvas.style.top = top.toFixed(1) + 'px';
+      canvas.style.width = cw.toFixed(1) + 'px'; canvas.style.height = ch.toFixed(1) + 'px';
+      w = mask.width = canvas.width = Math.max(1, Math.round(cw * dpr)); h = mask.height = canvas.height = Math.max(1, Math.round(ch * dpr));
+      gl.viewport(0, 0, w, h);
+      mx.clearRect(0, 0, w, h); mx.fillStyle = '#fff'; mx.textBaseline = 'alphabetic';
+      mx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + (fs * dpr) + 'px ' + cs.fontFamily;
+      var asc = mx.measureText(text.data).fontBoundingBoxAscent;
+      if (!(asc > 0)) asc = fs * dpr * 0.93;
+      var ox = box.left + left, oy = box.top + top;
+      for (var i = 0; i < text.length; i++) {
+        rg.setStart(text, i); rg.setEnd(text, i + 1); var r = rg.getBoundingClientRect();
+        mx.fillText(text.data.charAt(i), (r.left - ox) * dpr, (r.top - oy) * dpr + asc);
+      }
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
+      locate(); ok = true; sky.kick();
+    }
+    // where the canvas sits on the screen (bottom-left origin), so its smoke lines up with the background
+    function locate() { var r = canvas.getBoundingClientRect(); org = [r.left, innerHeight - r.bottom]; }
+    sky.after = function (now, t, mouse, act, rw, rh, bgd) {
+      if (!ok || !on) return;
+      var c = pal.step(now), deep = c[2].map(function (v) { return v * 0.74; });
+      gl.uniform2f(U.u_res, rw, rh); gl.uniform1f(U.u_time, t); gl.uniform2f(U.u_band, 0.22, 0.74);
+      gl.uniform3fv(U.u_c1, c[0]); gl.uniform3fv(U.u_c2, c[1]); gl.uniform3fv(U.u_c3, deep);
+      gl.uniform2f(U.u_mouse, mouse[0], mouse[1]); gl.uniform1f(U.u_act, act);
+      gl.uniform1i(U.u_mask, 0); gl.uniform2f(U.u_size, w, h); gl.uniform2f(U.u_org, org[0], org[1]);
+      gl.uniform1f(U.u_dpr, dpr); gl.uniform1f(U.u_bgd, bgd);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (!root.classList.contains('namefx')) root.classList.add('namefx');
+    };
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); ok = false; root.classList.remove('namefx'); });
+    addEventListener('resize', function () { if (ok) build(); });
+    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', function () { if (ok) build(); });
+    return { build: build, locate: locate, tint: function (instant) { pal.set(instant); }, show: function (v) { on = v; if (v) sky.kick(); } };
   }
 })();
 </script>
