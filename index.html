@@ -93,7 +93,7 @@
     <div class="bar head">
       <div class="inner">
         <div class="cells">
-          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>What I&rsquo;m doing <span class="accent sheen">now</span><span class="dots" aria-hidden="true"></span></h2></div>
+          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>What I&rsquo;m doing <span class="accent sheen">now</span><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span></h2></div>
         </div>
       </div>
     </div>
@@ -258,7 +258,7 @@
 
   // scroll flow: everything eases toward its scroll position, nearer content leads, deeper content trails
   var flow = [].slice.call(document.querySelectorAll('[data-depth]')).map(function (el) {
-    return { el: el, box: el.closest('.ex li, .panel, section, header, footer'), k: parseFloat(el.dataset.depth), scale: el.hasAttribute('data-scale'), p: null };
+    return { el: el, box: el.closest('.panel, section, header, footer'), k: parseFloat(el.dataset.depth), scale: el.hasAttribute('data-scale'), p: null };
   });
   var flowRaf = 0;
   function flowStep() {
@@ -312,7 +312,7 @@
   var splitEls = [].slice.call(document.querySelectorAll('[data-split]'));
   splitEls.forEach(split);
   var stages = [];
-  splitEls.forEach(function (el) { var st = el.closest('.ex li, .panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
+  splitEls.forEach(function (el) { var st = el.closest('.panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
   // a stage is "in" while it crosses the middle band of the screen. Measured on scroll, not with
   // IntersectionObserver margins, which browsers ignore inside embedded frames (the preview).
   var stageRaf = 0;
