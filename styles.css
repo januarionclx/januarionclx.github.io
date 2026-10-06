@@ -285,6 +285,7 @@ html.gated .themes { opacity: 0; pointer-events: none; }
 
 
 
-/* theme reveal: the new theme is uncovered over the old one */
-::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-::view-transition-new(root) { z-index: 2; }
+
+/* theme switch: colours follow the front outward from the centre */
+html.morphing *, html.morphing *::before, html.morphing *::after { transition-property: color, background-color, border-color, -webkit-text-fill-color !important; transition-duration: 1s !important; transition-timing-function: ease !important; transition-delay: var(--md, 0s) !important; }
+html.morphing .sheen .w > span { transition-property: color !important; }
