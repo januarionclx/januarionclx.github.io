@@ -272,15 +272,13 @@ html.gated .themes { opacity: 0; pointer-events: none; }
 
 /* ---------- two themes; the palette drifts slowly between two related tones ---------- */
 .svc { --hi: var(--teal); color: var(--ink); }
-:root[data-theme="dark"] { --tt1: #0e1917; --tt2: #b2dcf7; --tint1: #dbe9e3; --tint2: #24577a; --acc2: #7cc6e6; --sh3-body: #142b3a; --sh3-vein: #74c2e4; --sh3-field: #0a0f14; --sh3-warm: #2b5f6e; }
-:root[data-theme="gold"] { --tt1: #19130a; --tt2: #f6bd99; --tint1: #f1e6cd; --tint2: #6e3524; --acc2: #f0c674; --sh3-body: #2b2210; --sh3-vein: #d9a24c; --sh3-field: #0e0c08; --sh3-warm: #f3e9d2; }
+:root[data-theme="dark"] { --xray: #e4efeb; --tint1: #dbe9e3; --tint2: #24577a; --acc2: #7cc6e6; --sh3-body: #142b3a; --sh3-vein: #74c2e4; --sh3-field: #0a0f14; --sh3-warm: #2b5f6e; }
+:root[data-theme="gold"] { --xray: #f2e8d4; --tint1: #f1e6cd; --tint2: #6e3524; --acc2: #f0c674; --sh3-body: #2b2210; --sh3-vein: #d9a24c; --sh3-field: #0e0c08; --sh3-warm: #f3e9d2; }
 /* sheen: a couple of big words carry both tones */
 .sheen .w > span, .sheen.w > span { background: linear-gradient(100deg, var(--teal) 0%, var(--acc2, var(--teal)) 45%, var(--teal) 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 9s ease-in-out infinite alternate; }
 @keyframes sheen { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 @media (prefers-reduced-motion: reduce) { .sheen .w > span { animation: none; } }
 
-/* words ease into a passing colour patch and back out */
-[data-split] .w > span, .products h3, .work .t { transition-property: transform, color; transition-duration: inherit, 1.2s; transition-timing-function: cubic-bezier(.16, 1, .3, 1), ease; }
-.tw { transition: color 1.2s ease; }
-/* inside a light patch the gradient words drop their sheen and take the contrast colour */
-.sheen .w > span.tinted { background: none; -webkit-text-fill-color: currentColor; }
+
+/* manchas: an x-ray layer, difference-blended over the whole page */
+.blobs { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 48; pointer-events: none; mix-blend-mode: difference; }

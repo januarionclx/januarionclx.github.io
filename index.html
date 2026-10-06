@@ -32,6 +32,7 @@
   <span class="gate-hint">Press play</span>
 </div>
 <canvas id="bgShader" class="page-shader" aria-hidden="true"></canvas>
+<canvas id="blobs" class="blobs" aria-hidden="true"></canvas>
 
 
 <header class="hero" id="top">
@@ -189,7 +190,7 @@
     b.addEventListener('click', function () {
       root.dataset.theme = b.dataset.setTheme;
       try { localStorage.setItem('theme', b.dataset.setTheme); } catch (e) {}
-      markTheme(); tt = null; if (tintEls) tintEls.forEach(function (el) { el._base = null; el.style.color = ''; }); shaders.forEach(function (s) { s.recolor(); });
+      markTheme(); shaders.forEach(function (s) { s.recolor(); });
     });
   });
   markTheme();
@@ -416,9 +417,7 @@
   var NOISE = 'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}' +
     'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);}' +
     'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<5;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}';
-  var WAVES = 'vec2 waves(vec2 uv){float wt=u_time*.034;vec2 wp=uv*.8+vec2(wt*.9,-wt*.55);float w1=fbm(wp+vec2(3.1,1.7));float w2=fbm(wp*1.25+vec2(7.3,2.2)-vec2(wt*.4,wt*.7));float b1=smoothstep(.57,.7,w1);float b2=smoothstep(.62,.78,w2)*(1.-b1);return vec2(b1,b2);}';
-  // mask: where the colour patches are, read back so the words can follow them
-  var MASK = 'precision highp float;uniform vec2 u_res;uniform float u_time;' + NOISE + WAVES + 'void main(){vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;gl_FragColor=vec4(waves(uv),0.,1.);}';
+  var WAVES = 'vec2 waves(vec2 uv){float wt=u_time*.034;vec2 wp=uv*.8+vec2(wt*.9,-wt*.55);float w1=fbm(wp+vec2(3.1,1.7));float w2=fbm(wp*1.25+vec2(7.3,2.2)-vec2(wt*.4,wt*.7));float b1=0.;float b2=smoothstep(.55,.85,w2)*.75;return vec2(b1,b2);}';
   // hero: slow smoke with teal veins, pulled toward the cursor
   var SMOKE = HEAD + NOISE + WAVES +
     'void main(){vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;float t=u_time*.045;vec2 p=uv*1.9;p.x+=t*.4;p.y-=t*.3;' +
@@ -428,8 +427,8 @@
     'float body=smoothstep(.38,.92,f);float vein=pow(1.-abs(2.*f-1.),10.);float warm=smoothstep(.55,1.,r.x)*body;' +
     'vec3 col=mix(u_c3,u_c1,body*.9);col=mix(col,u_c4,warm*.22);' +
     'vec2 bw=waves(uv);float b1=bw.x;float b2=bw.y;' +
-    'col=mix(col,u_t2,b2*.55*(.6+.4*body));col+=(u_c2-col)*vein*.6*(1.-b1*.75);col+=(u_c2-col)*clamp(glow,0.,1.)*.28;' +
-    'float vig=smoothstep(1.35,.2,length(uv*vec2(.8,1.)));col=mix(u_c3,col,(.5+.5*vig)*u_amt);col=mix(col,u_t1+(u_c2-u_t1)*vein*.18,b1*.92);' +
+    'col=mix(col,u_t2,b2*.55*(.6+.4*body));col+=(u_c2-col)*vein*.6;col+=(u_c2-col)*clamp(glow,0.,1.)*.28;' +
+    'float vig=smoothstep(1.35,.2,length(uv*vec2(.8,1.)));col=mix(u_c3,col,(.5+.5*vig)*u_amt);' +
     'vec2 o=(vec2(.3,.56)-.5)*vec2(asp,1.);float R=u_intro*2.4;float edge=fbm(uv*3.+u_clock*.2)*.35;col=mix(u_c3,col,smoothstep(R,R-.4,length(uv-o)+edge));gl_FragColor=vec4(col,1.);}';
 
   function rgb(v) {
@@ -439,44 +438,6 @@
   }
 
   var shaders = [];
-  // words take on the colour of the patch passing behind them, and ease back after it
-  var tintEls = null, tt = null;
-  function wrapWords(el) {
-    (function walk(node) {
-      [].slice.call(node.childNodes).forEach(function (n) {
-        if (n.nodeType === 3) {
-          var frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(function (part) {
-            if (!part) return;
-            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-            var w = document.createElement('span'); w.className = 'tw'; w.textContent = part; frag.appendChild(w);
-          });
-          n.parentNode.replaceChild(frag, n);
-        } else if (n.nodeType === 1 && !n.classList.contains('tw')) walk(n);
-      });
-    })(el);
-  }
-  function tintWords(buf, w, h) {
-    if (!tintEls) {
-      document.querySelectorAll('.where, .thesis, .panel p:not(.lead), .now .big + p, .products p, .work .d, .coda .lead, .work .yr').forEach(wrapWords);
-      tintEls = [].slice.call(document.querySelectorAll('[data-split] .w > span, .tw, .products h3, .work .t'));
-    }
-    if (!tt) { var cs = getComputedStyle(document.documentElement); tt = [rgb(cs.getPropertyValue('--tt1') || '#ffffff'), rgb(cs.getPropertyValue('--tt2') || '#ffffff')]; }
-    var vw = innerWidth, vh = innerHeight;
-    tintEls.forEach(function (el) {
-      var r = el.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > vh || !r.width) return;
-      var x = Math.min(w - 1, Math.max(0, Math.floor((r.left + r.width / 2) / vw * w)));
-      var y = Math.min(h - 1, Math.max(0, Math.floor((1 - (r.top + r.height / 2) / vh) * h)));
-      var i = (y * w + x) * 4, b1 = buf[i] / 255, b2 = buf[i + 1] / 255;
-      if (b1 + b2 < 0.03) { if (el.style.color) { el.style.color = ''; el.classList.remove('tinted'); } return; }
-      if (!el._base) { el.style.color = ''; el._base = rgb(getComputedStyle(el).color); }
-      var c = el._base.map(function (v, k) { v = v + (tt[0][k] - v) * Math.min(1, b1 * 1.15); return v + (tt[1][k] - v) * b2 * 0.7; });
-      el.classList.toggle('tinted', b1 > 0.35);
-      el.style.color = 'rgb(' + c.map(function (v) { return Math.round(v * 255); }).join(',') + ')';
-    });
-  }
-
   function Shader(canvas, frag, scale) {
     var gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
     if (!gl) return null;
@@ -489,29 +450,6 @@
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_c4', 'u_mouse', 'u_act', 'u_amt', 'u_clock', 'u_intro', 'u_t1', 'u_t2'].forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
-    var mp = null, fb = null, mw = 48, mh = 27, mbuf = null, lastMask = 0, MU = {};
-    if (canvas.classList.contains('page-shader')) {
-      mp = gl.createProgram();
-      gl.attachShader(mp, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(mp, sh(gl.FRAGMENT_SHADER, MASK)); gl.linkProgram(mp);
-      if (gl.getProgramParameter(mp, gl.LINK_STATUS)) {
-        MU.res = gl.getUniformLocation(mp, 'u_res'); MU.time = gl.getUniformLocation(mp, 'u_time');
-        var tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 64, 64, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null); mbuf = new Uint8Array(64 * 64 * 4);
-      } else mp = null;
-    }
-    function maskPass(t) {
-      mh = Math.max(4, Math.min(64, Math.round(mw * canvas.height / canvas.width)));
-      gl.bindFramebuffer(gl.FRAMEBUFFER, fb); gl.viewport(0, 0, mw, mh);
-      gl.useProgram(mp); gl.uniform2f(MU.res, mw, mh); gl.uniform1f(MU.time, t);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      gl.readPixels(0, 0, mw, mh, gl.RGBA, gl.UNSIGNED_BYTE, mbuf);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.useProgram(pr); gl.viewport(0, 0, canvas.width, canvas.height);
-      tintWords(mbuf, mw, mh);
-    }
     var base = [], alt = [], tone = 0, svcEl = document.querySelector('.svc'), lastAcc = 0, accA = null, accB = null;
     // text accent follows the drift, so highlights breathe with the background
     function accent(k) {
@@ -569,7 +507,6 @@
       var flat = []; rips.forEach(function (rp) { flat.push(rp[0], rp[1], rp[2]); }); gl.uniform3fv(uRip, flat);
       gl.uniform2f(U.u_mouse, mouse[0], mouse[1]);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      if (mp && !reduce && now - lastMask > 150) { lastMask = now; maskPass(sim); }
     }
     function loop(now) { if (visible) draw(now); requestAnimationFrame(loop); }
     var host = canvas.classList.contains('page-shader') ? document.documentElement : canvas.parentElement;
@@ -596,6 +533,39 @@
   [['bgShader', SMOKE, 0.6]].forEach(function (d) {
     var s = Shader(document.getElementById(d[0]), d[1], d[2]); if (s) shaders.push(s);
   });
+
+  // manchas: small fluid blobs drift over the page; inside them everything shows inverted, x-ray style
+  (function blobs() {
+    var cv = document.getElementById('blobs');
+    var gl = cv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false });
+    if (!gl || reduce) { cv.remove(); return; }
+    var FS = 'precision highp float;uniform vec2 u_res;uniform float u_time;uniform vec3 u_col;uniform float u_on;' + NOISE +
+      'void main(){vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;float asp=u_res.x/u_res.y;float t=u_time;' +
+      'vec2 w=uv*2.2;uv+=.075*vec2(fbm(w+vec2(t*.07,0.))-.5,fbm(w+vec2(5.2,t*.06))-.5)+.02*vec2(noise(uv*9.+t*.4)-.5,noise(uv*9.-t*.37+3.)-.5);float f=0.;' +
+      'for(int i=0;i<7;i++){float k=float(i);vec2 c=vec2(sin(t*(.045+.012*k)+k*1.9)*.46*asp,cos(t*(.037+.01*k)+k*2.7)*.4);' +
+      'float r=.05+.026*sin(k*3.1+t*.21);vec2 d=(uv-c)*vec2(1.+.25*sin(t*.3+k),1.+.25*cos(t*.27+k*1.3));f+=r*r/(dot(d,d)+.0001);}' +
+      'float a=smoothstep(.92,1.02,f)*u_on;gl_FragColor=vec4(u_col*a,a);}';
+    function sh(type, src) { var x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; }
+    var pr = gl.createProgram();
+    gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { cv.remove(); return; }
+    gl.useProgram(pr);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    var uRes = gl.getUniformLocation(pr, 'u_res'), uTime = gl.getUniformLocation(pr, 'u_time'), uCol = gl.getUniformLocation(pr, 'u_col'), uOn = gl.getUniformLocation(pr, 'u_on');
+    var on = 0, t0 = performance.now() - 40000, col = null, lastCol = 0;
+    function size() { var d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(innerWidth * d); cv.height = Math.round(innerHeight * d); gl.viewport(0, 0, cv.width, cv.height); }
+    function frame(now) {
+      if (playAt !== null) on += (1 - on) * 0.02;
+      if (!col || now - lastCol > 500) { lastCol = now; col = rgb(getComputedStyle(document.documentElement).getPropertyValue('--xray') || '#ffffff'); }
+      gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform2f(uRes, cv.width, cv.height); gl.uniform1f(uTime, (now - t0) / 1000); gl.uniform3fv(uCol, col); gl.uniform1f(uOn, on);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      requestAnimationFrame(frame);
+    }
+    size(); addEventListener('resize', size); requestAnimationFrame(frame);
+  })();
 })();
 </script>
 </body>
