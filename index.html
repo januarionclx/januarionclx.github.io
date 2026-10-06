@@ -25,7 +25,8 @@
 </head>
 <body>
 <div class="themes">
-  <a class="cta" href="#contact"><span class="long">Let&rsquo;s work together</span><span class="short">Work with me</span></a>
+  <a class="cta cta-glass" id="ctaGlass" href="#contact"><span class="long">Let&rsquo;s work together</span><span class="short">Work with me</span></a>
+  <a class="cta cta-ice" href="#contact"><span class="long">Let&rsquo;s work together</span><span class="short">Work with me</span></a>
   <button type="button" id="themeBtn" aria-label="Switch to light">
     <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
       <mask id="moon-cut"><rect x="-4" y="-4" width="32" height="32" fill="white"/><circle class="cut" cx="26" cy="4" r="7.2" fill="black"/></mask>
@@ -564,9 +565,221 @@
     return { recolor: recolor, morph: function () { if (shown.length) { old = shown.slice().concat([shownT2 || shown[0]]); frontT0 = performance.now(); } }, ms: FRONT_MS };
   }
 
+  // ---- the owner's glass component: liquid-glass lens (glass-dom.ts, Aave pipeline) ----
+  let uid = 0;
+  const erf = (x) => Math.tanh(1.7724538509 * x); // Aave's erf approximation
+
+  const DEFAULTS = {
+    // shape (px)
+    width: 140,
+    height: 120,
+    radius: 28,
+    // optics - defaults are Aave's rectangle demo (scales 0.104/0.102/0.1 live)
+    depth: 14, // bezel width in px (erf falloff band)
+    scale: 0.1, // refraction strength, relative to lens size
+    chroma: 0.2, // 0..1 -> R/G/B scale split of +20%/+10%/+0% of chroma
+    blur: 0, // frost, px
+    // finish (baked into the map's blue channel)
+    glow: 0.5,
+    glowSpread: 1,
+    glowExponent: 1.5,
+    edge: 0.5,
+    edgeWidth: 3,
+    edgeExponent: 1.5,
+    specularRotation: 45,
+    specularStrength: 1,
+    mapSize: 256,
+    onMap: null,
+  };
+
+  function createGlass(content, options) {
+    const opts = Object.assign({}, DEFAULTS, options);
+    const id = 'glass-' + (++uid);
+
+    if (getComputedStyle(content).overflow === 'visible')
+      console.warn('[glass] the filtered element should clip its content ' +
+        '(overflow:hidden) - ink overflow skews the filter’s bounding box.');
+
+    // ---- filter markup: exact production chain ----
+    const host = document.createElement('div');
+    host.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+    host.innerHTML =
+  `<svg width="0" height="0" aria-hidden="true"><filter id="${id}"
+    filterUnits="objectBoundingBox" primitiveUnits="objectBoundingBox"
+    color-interpolation-filters="sRGB" x="0" y="0" width="1" height="1">
+    <feFlood flood-color="rgb(128,128,128)" flood-opacity="1" result="mapBg"/>
+    <feImage data-g="lens map" href="" preserveAspectRatio="none" result="rawMap"/>
+    <feComposite in="rawMap" in2="mapBg" operator="over" result="map"/>
+    <feGaussianBlur data-g="blur" in="SourceGraphic" stdDeviation="0 0" result="blurred"/>
+    <feDisplacementMap data-g="lens d0" in="blurred" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+    <feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="dispR"/>
+    <feDisplacementMap data-g="lens d1" in="blurred" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="dispG"/>
+    <feDisplacementMap data-g="lens d2" in="blurred" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="dispB"/>
+    <feComposite in="dispR" in2="dispG" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+    <feComposite in2="dispB" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="lensResult"/>
+    <feColorMatrix in="map" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 1 0 -0.5019607843137255" result="specMask"/>
+    <feComposite data-g="spec" in="specMask" in2="lensResult" operator="arithmetic" k1="0" k2="0" k3="1" k4="0" result="lensResult"/>
+    <feFlood data-g="lens" flood-color="black" flood-opacity="1" result="lensMask"/>
+    <feComposite in="SourceGraphic" in2="lensMask" operator="out" result="holedSG"/>
+    <feComposite in="lensResult" in2="holedSG" operator="over"/>
+  </filter></svg>`;
+    document.body.appendChild(host);
+
+    const lensEls = host.querySelectorAll('[data-g~="lens"]');
+    const mapEl = host.querySelector('[data-g~="map"]');
+    const blurEl = host.querySelector('[data-g~="blur"]');
+    const dispEls = ['d0', 'd1', 'd2'].map(k => host.querySelector(`[data-g~="${k}"]`));
+    const specEl = host.querySelector('[data-g~="spec"]');
+
+    content.style.filter = `url(#${id})`;
+    content.style.willChange = 'filter';
+
+    // ---- displacement map generation ----
+    const cv = document.createElement('canvas');
+    cv.width = cv.height = opts.mapSize;
+    const ctx = cv.getContext('2d');
+    const img = ctx.createImageData(opts.mapSize, opts.mapSize);
+    let mapUrl = null;
+
+    function genMap(w, h, r) {
+      const SZ = opts.mapSize, d = img.data;
+      const n = w / 2, l = h / 2;
+      const S = Math.min(r, Math.min(n, l));
+      const insetW = Math.max(0, n - opts.depth), insetH = Math.max(0, l - opts.depth);
+      const insetR = Math.max(0, Math.min(r, Math.min(insetW, insetH)));
+      const E = opts.depth > 0 ? 1 / (opts.depth * Math.SQRT2) : 1e6;
+      const hasSpec = opts.glow > 0 || opts.edge > 0;
+      const th = opts.specularRotation * Math.PI / 180, cs = Math.cos(th), sn = Math.sin(th);
+      const gI = (1 - opts.glowSpread) * Math.SQRT2, gT = opts.glowSpread * Math.SQRT2;
+
+      for (let iy = 0; iy < SZ; iy++) {
+        const fy = ((iy + .5) / SZ) * h - l, ay = Math.abs(fy);
+        for (let ix = 0; ix < SZ; ix++) {
+          const t = (iy * SZ + ix) * 4;
+          const fx = ((ix + .5) / SZ) * w - n, ax = Math.abs(fx);
+          // rounded-rect SDF of the lens
+          const qx = ax - n + S, qy = ay - l + S;
+          const ox = Math.max(qx, 0), oy = Math.max(qy, 0);
+          const o2 = ox * ox + oy * oy;
+          const sdf = (o2 > 0 ? Math.sqrt(o2) : 0) + Math.min(Math.max(qx, qy), 0) - S;
+          if (sdf >= 0) { d[t] = 128; d[t + 1] = 128; d[t + 2] = 128; d[t + 3] = 255; continue; }
+
+          const u = Math.max(-1, Math.min(1, fx / n));
+          const v = Math.max(-1, Math.min(1, fy / l));
+          // erf falloff over the depth-inset SDF
+          const eIn = ax - insetW + insetR, tIn = ay - insetH + insetR;
+          const rIn = Math.sqrt(Math.max(eIn, 0) ** 2 + Math.max(tIn, 0) ** 2)
+            + Math.min(Math.max(eIn, tIn), 0) - insetR;
+          const fall = .5 * (1 + erf(rIn * E));
+
+          d[t] = Math.round((.5 - .5 * u * fall) * 255);
+          d[t + 1] = Math.round((.5 - .5 * v * fall) * 255);
+
+          if (hasSpec) {
+            const diag = Math.abs(u * cs + v * sn);
+            let spec = 0;
+            if (opts.glow > 0) {
+              const g = gT > .001 ? Math.min(1, Math.max(0, diag - gI) / gT) : 0;
+              spec += opts.glow * Math.pow(g, opts.glowExponent) * fall;
+            }
+            if (opts.edge > 0) {
+              const em = Math.max(0, 1 + sdf / opts.edgeWidth);
+              spec += opts.edge * em * Math.pow(diag, opts.edgeExponent);
+            }
+            d[t + 2] = Math.round(127 * Math.min(1, spec) + 128);
+          } else d[t + 2] = 128;
+          d[t + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+      return new Promise(res => cv.toBlob(b => {
+        if (mapUrl) URL.revokeObjectURL(mapUrl);
+        mapUrl = URL.createObjectURL(b);
+        res(mapUrl);
+      }, 'image/png'));
+    }
+
+    // ---- runtime updates: cached attribute writes, rAF-batched ----
+    const set = (el, k, v) => { const s = String(v); if (el.getAttribute(k) !== s) el.setAttribute(k, s); };
+    const pos = { x: 0, y: 0 };
+    let lastShapeKey = '', raf = 0, destroyed = false;
+
+    function schedule() {
+      if (!raf && !destroyed) raf = requestAnimationFrame(() => { raf = 0; update(); });
+    }
+
+    function update() {
+      const w = opts.width, h = opts.height;
+      const r = Math.min(opts.radius, w / 2, h / 2);
+      const cw = content.clientWidth || 1, ch = content.clientHeight || 1;
+
+      const shapeKey = [w, h, r, opts.depth, opts.glow, opts.glowSpread, opts.glowExponent,
+        opts.edge, opts.edgeWidth, opts.edgeExponent, opts.specularRotation].join('|');
+      if (shapeKey !== lastShapeKey) {
+        lastShapeKey = shapeKey;
+        genMap(w, h, r).then(url => { if (!destroyed) { set(mapEl, 'href', url); opts.onMap?.(url); } });
+      }
+
+      // lens region as objectBoundingBox fractions on every region primitive
+      const fx = pos.x / cw, fy = pos.y / ch, fw = w / cw, fh = h / ch;
+      for (const el of lensEls) {
+        set(el, 'x', fx); set(el, 'y', fy);
+        set(el, 'width', fw); set(el, 'height', fh);
+      }
+
+      // displacement scales, normalized to the filtered element
+      const tL = opts.scale * Math.max(w, h) / Math.max(cw, ch);
+      set(dispEls[0], 'scale', tL * (1 + .2 * opts.chroma));
+      set(dispEls[1], 'scale', tL * (1 + .1 * opts.chroma));
+      set(dispEls[2], 'scale', tL);
+
+      set(blurEl, 'stdDeviation', `${opts.blur / cw} ${opts.blur / ch}`);
+      set(specEl, 'k2', (opts.glow > 0 || opts.edge > 0) ? opts.specularStrength : 0);
+    }
+
+    const ro = new ResizeObserver(schedule);
+    ro.observe(content);
+    schedule();
+
+    return {
+      filterId: id,
+      setPosition(x, y) { pos.x = x; pos.y = y; schedule(); },
+      getPosition() { return { x: pos.x, y: pos.y }; },
+      setOptions(patch) { Object.assign(opts, patch); schedule(); },
+      getOptions() { return Object.assign({}, opts); },
+      destroy() {
+        destroyed = true;
+        if (raf) cancelAnimationFrame(raf);
+        ro.disconnect();
+        content.style.filter = '';
+        content.style.willChange = '';
+        if (mapUrl) URL.revokeObjectURL(mapUrl);
+        host.remove();
+      },
+    };
+  }
+
   [['bgShader', SMOKE, 0.6]].forEach(function (d) {
     var s = Shader(document.getElementById(d[0]), d[1], d[2]); if (s) shaders.push(s);
   });
+
+  // glass button: refract the live smoke under it (Chromium; others get a frosted fallback)
+  (function glassButton() {
+    var btn = document.getElementById('ctaGlass'), cv = document.getElementById('bgShader');
+    if (!btn || !cv || !window.chrome || !shaders.length) { if (btn) btn.classList.add('no-lens'); return; }
+    var g;
+    try { g = createGlass(cv, { radius: 999, depth: 12, scale: 0.16, chroma: 0.35, blur: 0, glow: 0.55, edge: 0.7, edgeWidth: 2.5, specularRotation: 35 }); }
+    catch (e) { btn.classList.add('no-lens'); return; }
+    function place() {
+      var r = btn.getBoundingClientRect(), c = cv.getBoundingClientRect();
+      var sx = cv.clientWidth / c.width, sy = cv.clientHeight / c.height;
+      g.setOptions({ width: Math.round(r.width * sx), height: Math.round(r.height * sy), radius: Math.round(r.height * sy / 2) });
+      g.setPosition((r.left - c.left) * sx, (r.top - c.top) * sy);
+    }
+    place(); addEventListener('resize', place); setTimeout(place, 900);
+  })();
 
 })();
 </script>

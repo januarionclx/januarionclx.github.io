@@ -380,32 +380,43 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display:
 @keyframes wave { to { stroke-dashoffset: 6; } }
 @media (prefers-reduced-motion: reduce) { .ic, .ic * { animation: none !important; } }
 
-/* Let's work together: frozen ice - cold tint, frost grain, light caught at the edges, no border */
-.cta {
-  position: relative; isolation: isolate; overflow: hidden;
-  color: var(--ink);
+/* comparison: glass (owner's lens over the smoke) and frozen ice */
+.cta { position: relative; isolation: isolate; border: 0; }
+
+/* 1. glass: the lens does the refraction; the button only carries the type */
+.cta-glass { color: var(--ink); background: transparent; box-shadow: none; text-shadow: 0 1px 12px color-mix(in srgb, var(--bg) 70%, transparent); }
+.cta-glass:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); transform: translateY(-1px); }
+.cta-glass.no-lens { background: color-mix(in srgb, var(--bg) 30%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+/* 2. frozen: a chiselled block of ice - facets, frost at the corners, icicles, etched type */
+.cta-ice {
+  overflow: visible;
+  color: rgba(244, 252, 255, 0.96);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35), 0 -1px 0 rgba(0, 40, 56, 0.45), 0 0 14px rgba(170, 230, 245, 0.35);
+  border-radius: 14px 22px 12px 20px / 18px 12px 22px 14px;
   background:
-    radial-gradient(120% 140% at 20% 0%, rgba(235, 250, 255, 0.34), rgba(200, 235, 245, 0.10) 55%, rgba(190, 228, 240, 0.16)),
-    color-mix(in srgb, var(--bg) 22%, transparent);
-  backdrop-filter: blur(18px) brightness(1.18) contrast(.92);
-  -webkit-backdrop-filter: blur(18px) brightness(1.18) contrast(.92);
-  border: 0;
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.55),
-    inset 0 -6px 14px rgba(170, 225, 240, 0.18),
-    inset 0 0 18px rgba(255, 255, 255, 0.16),
-    0 10px 30px -14px rgba(120, 200, 220, 0.45);
+    radial-gradient(60% 90% at 0% 0%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(50% 80% at 100% 100%, rgba(225, 248, 255, 0.45), transparent 65%),
+    linear-gradient(118deg, transparent 0 22%, rgba(255, 255, 255, 0.22) 22.5% 30%, transparent 30.5% 56%, rgba(255, 255, 255, 0.14) 56.5% 61%, transparent 61.5%),
+    linear-gradient(160deg, rgba(196, 236, 248, 0.42), rgba(120, 190, 215, 0.28) 55%, rgba(170, 225, 242, 0.4));
+  backdrop-filter: blur(6px) brightness(1.3); -webkit-backdrop-filter: blur(6px) brightness(1.3);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 2px 3px rgba(255, 255, 255, 0.6), inset 0 -8px 14px rgba(90, 170, 200, 0.28), 0 14px 30px -16px rgba(110, 200, 230, 0.7);
 }
-.cta::before {
-  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: .55; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1 0.35' numOctaves='3' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-  background-size: 160px 60px;
+.cta-ice::after {
+  content: ''; position: absolute; left: 10%; right: 12%; top: calc(100% - 1px); height: 12px; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(220, 246, 255, 0.85), rgba(160, 220, 240, 0.25));
+  clip-path: polygon(0 0, 100% 0, 97% 30%, 93% 0, 86% 70%, 80% 0, 71% 45%, 63% 0, 55% 100%, 47% 0, 38% 55%, 30% 0, 21% 80%, 13% 0, 6% 40%, 0 0);
+  filter: drop-shadow(0 2px 2px rgba(120, 200, 230, 0.35));
+  transform-origin: top; transition: transform .6s cubic-bezier(.34, 1.5, .5, 1);
 }
-.cta::after {
-  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
-  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.28) 46%, transparent 54%);
-  transform: translateX(-120%); transition: transform .9s cubic-bezier(.16, 1, .3, 1);
+.cta-ice::before {
+  content: ''; position: absolute; inset: -2px; z-index: -1; pointer-events: none; border-radius: inherit;
+  background:
+    radial-gradient(10px 8px at 6% 18%, rgba(255, 255, 255, 0.9), transparent 70%),
+    radial-gradient(14px 10px at 94% 82%, rgba(255, 255, 255, 0.75), transparent 70%),
+    radial-gradient(6px 6px at 78% 12%, rgba(255, 255, 255, 0.8), transparent 70%);
+  opacity: .8;
 }
-.cta:hover { color: var(--ink); background: radial-gradient(120% 140% at 20% 0%, rgba(240, 252, 255, 0.42), rgba(205, 238, 248, 0.14) 55%, rgba(195, 230, 242, 0.2)), color-mix(in srgb, var(--bg) 22%, transparent); transform: translateY(-1px); }
-.cta:hover::after { transform: translateX(120%); }
-:root[data-theme="light"] .cta { background: radial-gradient(120% 140% at 20% 0%, rgba(255, 255, 255, 0.7), rgba(215, 240, 248, 0.35) 55%, rgba(200, 232, 244, 0.45)), color-mix(in srgb, var(--bg) 20%, transparent); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), inset 0 -6px 14px rgba(150, 210, 230, 0.3), 0 10px 26px -14px rgba(60, 140, 160, 0.4); }
+.cta-ice:hover { color: #fff; transform: translateY(-1px); }
+.cta-ice:hover::after { transform: scaleY(1.35); }
+:root[data-theme="light"] .cta-ice { color: #0d3a46; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8), 0 -1px 0 rgba(0, 60, 80, 0.15); background: radial-gradient(60% 90% at 0% 0%, rgba(255, 255, 255, 0.9), transparent 60%), linear-gradient(118deg, transparent 0 22%, rgba(255, 255, 255, 0.5) 22.5% 30%, transparent 30.5%), linear-gradient(160deg, rgba(214, 242, 250, 0.85), rgba(170, 222, 238, 0.7) 55%, rgba(205, 238, 248, 0.85)); }
