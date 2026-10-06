@@ -78,12 +78,12 @@
         <article class="panel" id="svc-consult" style="--c: var(--ochre)">
           <h3>Consulting</h3>
           <p class="lead" data-depth="0.5" data-split>Strategy, technology and organization, <em>for the decisions you can&rsquo;t get wrong.</em></p>
-          <p data-depth="0.8" data-split data-letters class="soft" style="--base: .5s">A fractional CTO, without the cost of a full-time hire.<br>Clear roles and systems people can run without you.</p>
+          <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.7s">A fractional CTO, without the cost of a full-time hire.<br>Clear roles and systems people can run without you.</p>
         </article>
         <article class="panel" id="svc-ventures" style="--c: var(--clay)">
           <h3>Ventures</h3>
           <p class="lead" data-depth="0.5" data-split>Companies built <em>from the ground up.</em></p>
-          <p data-depth="0.8" data-split data-letters class="soft" style="--base: .5s">Incubation and investment through The Unit.</p>
+          <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.3s">Incubation and investment through The Unit.</p>
         </article>
       </div>
     </div>
@@ -230,7 +230,8 @@
     items.forEach(function (li, i) {
       var d = i - wheelPos, a = Math.min(Math.abs(d), 1.6);
       li.style.transform = 'perspective(800px) rotateX(' + (-Math.max(-1.2, Math.min(1.2, d)) * 24) + 'deg) scale(' + (1 - Math.min(a, 1) * 0.5) + ')';
-      li.style.opacity = String(1 - a * 0.5);
+      li.style.opacity = String(1 - a * 0.42);
+      li.style.filter = a > 0.02 ? 'blur(' + (Math.min(a, 1.4) * 5).toFixed(2) + 'px)' : 'none';
       li.classList.toggle('on', Math.abs(d) < 0.5);
     });
     wheelRaf = Math.abs(wheelTarget - wheelPos) > 0.001 ? requestAnimationFrame(wheelStep) : 0;
