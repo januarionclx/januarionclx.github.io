@@ -288,3 +288,8 @@ html.morphing .sheen .ch { transition-property: color !important; }
 
 /* Right now: the statement is written out like the hero subline */
 .now .big[data-letters] { color: var(--ink); }
+
+/* the page is a surface to play with: text isn't selectable (except the email), clicks go to the smoke */
+body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: default; }
+.mail .addr { -webkit-user-select: all; user-select: all; }
+a, button { cursor: pointer; }
