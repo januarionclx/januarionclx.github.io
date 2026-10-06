@@ -25,6 +25,7 @@
 </head>
 <body>
 <div class="themes">
+  <a class="cta" href="#contact"><span class="long">Let&rsquo;s work together</span><span class="short">Work with me</span></a>
   <button type="button" id="themeBtn" aria-label="Switch to light">
     <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
       <mask id="moon-cut"><rect x="-4" y="-4" width="32" height="32" fill="white"/><circle class="cut" cx="26" cy="4" r="7.2" fill="black"/></mask>
@@ -187,12 +188,13 @@
     var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!calm) {
       shaders.forEach(function (s) { s.morph(); });
-      if (!morphEls) morphEls = [].slice.call(document.querySelectorAll('[data-split] .w > span, p, h1, h2, h3, li, a, .label, .t, .d, .yr, .k, button'));
+      if (!morphEls) morphEls = [].slice.call(document.querySelectorAll('.ch, [data-split] .w > span, p, h1, h2, h3, li, a, .label, .t, .d, .k, button, .ini'));
       var cx = innerWidth / 2, cy = innerHeight / 2, far = Math.hypot(cx, cy), ms = shaders[0] ? shaders[0].ms : 2800;
       morphEls.forEach(function (el) {
         var r = el.getBoundingClientRect();
         var d = Math.hypot(r.left + r.width / 2 - cx, r.top + r.height / 2 - cy) / far;
-        el.style.setProperty('--md', (Math.min(d, 1.2) * ms * 0.55 / 1000).toFixed(2) + 's');
+        // the shader front passes this point about 0.55s + 1.05s x distance after the switch
+        el.style.setProperty('--md', (0.55 + Math.min(d, 1.2) * 1.05).toFixed(2) + 's');
       });
       root.classList.add('morphing');
       clearTimeout(morphTimer); morphTimer = setTimeout(function () { root.classList.remove('morphing'); }, ms + 1400);
@@ -295,7 +297,7 @@
 
   // word reveal: split text into masked words, play when the screen is in view
   function split(el) {
-    var i = 0;
+    var i = 0, label = el.textContent.replace(/\s+/g, ' ').trim();
     (function walk(node) {
       [].slice.call(node.childNodes).forEach(function (n) {
         if (n.nodeType === 3) {
@@ -313,6 +315,11 @@
         } else if (n.nodeType === 1) walk(n);
       });
     })(el);
+    // the animated letters are hidden from screen readers; they read one plain copy instead
+    var shown = document.createElement('span'); shown.setAttribute('aria-hidden', 'true'); shown.className = 'split-view';
+    while (el.firstChild) shown.appendChild(el.firstChild);
+    el.appendChild(shown);
+    var sr = document.createElement('span'); sr.className = 'sr-only'; sr.textContent = label; el.appendChild(sr);
   }
   var splitEls = [].slice.call(document.querySelectorAll('[data-split]'));
   splitEls.forEach(split);
