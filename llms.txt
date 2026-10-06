@@ -12,10 +12,11 @@
 - Flows: build the chat bots a business runs on, step by step.
 - Artist OS: site, bookings and numbers for artists.
 
-## Right now
-- Private clients: a few businesses at a time, built end to end.
-- A restaurant modernized end to end: its own sales system, a live cloud portal for the owner, a customer CRM, WhatsApp ordering, delivery integrations.
-- A tool for doctors: patients, follow-ups and records in one place, with AI drafting the reports.
+## What I'm doing now
+- Automating systems for restaurants, shops and services.
+- Creating harnesses for doctors, clinics and teams.
+- Building software factories.
+- Working with private clients.
 
 ## Contact
 - Email: contact@januariopinto.com

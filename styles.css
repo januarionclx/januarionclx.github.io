@@ -535,3 +535,23 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
   .hero .cell, .head .cell, .panel, #now .inner, #work .inner, .coda .cell, .links, .body-cell { padding-inline: clamp(18px, 3vw, 36px) !important; }
 }
 @media (prefers-reduced-motion: reduce) { .js [data-split] .ch { filter: none !important; } }
+
+/* doing now: one line each, trailing dots that keep typing */
+.ex li { display: block; }
+.ex-t { display: inline; }
+.ex-d { display: inline; font-size: clamp(14px, 1.1vw, 16px); color: var(--ink-3); margin-left: 6px; padding-left: 0; }
+.dots { display: inline-block; width: 1.2em; font-size: clamp(1.45rem, 2.4vw, 2.2rem); font-weight: 700; color: var(--teal); }
+.dots::after { content: ''; animation: dots 1.4s steps(4, end) infinite; animation-delay: calc(var(--n) * 250ms); }
+@keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75%, 100% { content: '...'; } }
+@media (prefers-reduced-motion: reduce) { .dots::after { animation: none; content: '...'; } }
+/* phones: service text sits a little higher than dead centre */
+@media (max-width: 860px) { .panel { padding-bottom: 16vh; } }
+
+.ex-t { display: inline; }
+.dots { display: inline-block; width: 1.3em; text-align: left; font-size: inherit; line-height: 1; }
+.ex li { font-size: clamp(1.45rem, 2.4vw, 2.2rem); font-weight: 700; }
+.ex-d { display: block; margin: 6px 0 0; font-size: clamp(14px, 1.1vw, 16px); font-weight: 400; color: var(--ink-3); }
+
+.nw { white-space: nowrap; }
+.ex li { line-height: 1.12; }
+.ex-d { margin-top: 8px; line-height: 1.5; }
