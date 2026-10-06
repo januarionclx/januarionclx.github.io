@@ -19,7 +19,7 @@
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';</script>
+  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = 'dark';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap">
@@ -27,12 +27,11 @@
 </head>
 <body>
 <div class="themes">
-  <button type="button" id="themeBtn" aria-label="Switch to light">
-    <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
-      <mask id="moon-cut"><rect x="-4" y="-4" width="32" height="32" fill="white"/><circle class="cut" cx="26" cy="4" r="7.2" fill="black"/></mask>
-      <g class="rays" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(0 12 12)" style="--r:0"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(45 12 12)" style="--r:1"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(90 12 12)" style="--r:2"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(135 12 12)" style="--r:3"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(180 12 12)" style="--r:4"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(225 12 12)" style="--r:5"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(270 12 12)" style="--r:6"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(315 12 12)" style="--r:7"/></g>
-      <circle class="core" cx="12" cy="12" r="4.6" mask="url(#moon-cut)" fill="currentColor"/>
-      <g class="stars" fill="currentColor"><path class="s1" d="M19.2 3.2l.55 1.25 1.25.55-1.25.55-.55 1.25-.55-1.25-1.25-.55 1.25-.55z"/><circle class="s2" cx="21.4" cy="9.6" r=".75"/></g>
+  <button type="button" id="themeBtn" aria-label="Change colour">
+    <svg class="emblem" viewBox="0 0 24 24" aria-hidden="true">
+      <g class="em em-dark"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-4 3-6 6-10z"/></g>
+      <g class="em em-ink"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3" class="fill"/></g>
+      <g class="em em-gold"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></g>
     </svg>
   </button>
 </div>
@@ -101,8 +100,8 @@
     <div class="bar"><div class="inner"><div class="cells"><div class="cell grow body-cell">
         <div class="building">
           <ol class="ex">
-            <li style="--n:0"><span class="ex-t" data-split>Automating systems</span><span class="ex-d">for restaurants, shops and services</span></li>
-            <li style="--n:1"><span class="ex-t" data-split>Creating harnesses</span><span class="ex-d">for doctors, clinics and teams</span></li>
+            <li style="--n:0"><span class="ex-t" data-split>Automating systems</span></li>
+            <li style="--n:1"><span class="ex-t" data-split>Creating harnesses</span></li>
             <li style="--n:2"><span class="ex-t" data-split>Building software factories</span></li>
             <li style="--n:3"><span class="ex-t" data-split>Working with private clients</span></li>
           </ol>
@@ -183,7 +182,7 @@
     var vh = innerHeight;
     (stages.length ? stages : [document.querySelector('.hero')]).forEach(function (st) {
       var r = st.getBoundingClientRect();
-      if (r.top < vh * 0.62 && r.bottom > vh * 0.38) { surface(st); st.classList.add('in'); }
+      if (r.top < vh * 0.62 && r.bottom > vh * 0.38 && !(document.documentElement.classList.contains('fixed') && st.closest('[data-stage]:not(.cur)'))) { surface(st); st.classList.add('in'); }
     });
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
@@ -193,7 +192,8 @@
   // theme toggle; stored choice wins, else system
   var root = document.documentElement;
   var themeBtn = document.getElementById('themeBtn');
-  function markTheme() { themeBtn.setAttribute('aria-label', root.dataset.theme === 'light' ? 'Switch to dark' : 'Switch to light'); }
+  var PALS = ['dark', 'ink', 'gold'];
+  function markTheme() { themeBtn.dataset.pal = root.dataset.theme; }
   // a theme switch spreads from a dot in the centre; words change colour as the front reaches them
   var morphEls = null, morphTimer = 0;
   function applyTheme(name) {
@@ -215,7 +215,7 @@
     try { localStorage.setItem('theme', name); } catch (e) {}
     markTheme(); shaders.forEach(function (s) { s.recolor(); });
   }
-  themeBtn.addEventListener('click', function () { applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light'); });
+  themeBtn.addEventListener('click', function () { applyTheme(PALS[(PALS.indexOf(root.dataset.theme) + 1) % PALS.length]); });
   markTheme();
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { markTheme(); shaders.forEach(function (s) { s.recolor(); }); });
 
@@ -442,12 +442,15 @@
   stageEls.forEach(function (el) { el.setAttribute('data-stage', ''); });
   var FIXED = true; // true = GIPX fixed screen; false = scroll with the same look
   if (FIXED) { document.documentElement.classList.add('fixed');
+  flow.forEach(function (f) { f.el.style.transform = ''; f.el.style.opacity = ''; }); flow.length = 0;
   stageEls.forEach(timeline);
   stageCheck = function () {};
   window.__stages = stageEls.length; window.__stage = 0;
   function show(i) {
     window.__stage = i; if (typeof markBar === 'function') markBar(i);
-    stageEls.forEach(function (el, j) { el.classList.toggle('cur', j === i); if (j !== i) el.classList.remove('in'); });
+    var want = ['dark', 'ink', 'gold', 'dark', 'ink'][i]; if (want && want !== root.dataset.theme) applyTheme(want);
+    stageEls.forEach(function (el, j) { el.classList.toggle('cur', j === i); });
+    [].forEach.call(document.querySelectorAll('.in'), function (e) { e.classList.remove('in'); });
     var el = stageEls[i]; surface(el);
     requestAnimationFrame(function () { el.classList.add('in'); });
   }
@@ -463,6 +466,7 @@
     setTimeout(function () { show(next); gliding = false; coolUntil = performance.now() + 250; }, reduce ? 0 : 260);
   };
   stageEls[0].classList.add('cur');
+  [].forEach.call(document.querySelectorAll('.panel.in'), function (e) { e.classList.remove('in'); });
   // one bar of buttons, always in the same place; the active one stays lit
   var GROUPS = [['Intro', [0]], ['Services', [1]], ['Now', [2]], ['Portfolio', [3]], ['Contact', [4]]];
   var bar = document.createElement('nav'); bar.className = 'stagebar'; bar.setAttribute('aria-label', 'Sections');
