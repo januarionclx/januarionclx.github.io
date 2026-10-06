@@ -26,7 +26,6 @@
 <body>
 <div class="themes">
   <a class="cta cta-glass" id="ctaGlass" href="#contact"><span class="long">Let&rsquo;s work together</span><span class="short">Work with me</span></a>
-  <a class="cta cta-ice" href="#contact"><span class="long">Let&rsquo;s work together</span><span class="short">Work with me</span></a>
   <button type="button" id="themeBtn" aria-label="Switch to light">
     <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
       <mask id="moon-cut"><rect x="-4" y="-4" width="32" height="32" fill="white"/><circle class="cut" cx="26" cy="4" r="7.2" fill="black"/></mask>
@@ -562,7 +561,7 @@
     size(); recolor();
     if (reduce) draw(performance.now()); else requestAnimationFrame(loop);
     requestAnimationFrame(function () { canvas.classList.add('on'); });
-    return { recolor: recolor, morph: function () { if (shown.length) { old = shown.slice().concat([shownT2 || shown[0]]); frontT0 = performance.now(); } }, ms: FRONT_MS };
+    return { ripple: function (cx, cy, big) { var r = canvas.getBoundingClientRect(); rips[ripN++ % 4] = [(cx - r.left) / r.width, 1 - (cy - r.top) / r.height, performance.now() / 1000 - (big ? 0 : 0.35)]; }, recolor: recolor, morph: function () { if (shown.length) { old = shown.slice().concat([shownT2 || shown[0]]); frontT0 = performance.now(); } }, ms: FRONT_MS };
   }
 
   // ---- the owner's glass component: liquid-glass lens (glass-dom.ts, Aave pipeline) ----
@@ -765,12 +764,24 @@
     var s = Shader(document.getElementById(d[0]), d[1], d[2]); if (s) shaders.push(s);
   });
 
-  // glass button: refract the live smoke under it (Chromium; others get a frosted fallback)
-  (function glassButton() {
+  // the button is a drop in the water: a glass lens over the smoke that swells on hover and sends ripples out
+  (function dropButton() {
     var btn = document.getElementById('ctaGlass'), cv = document.getElementById('bgShader');
-    if (!btn || !cv || !window.chrome || !shaders.length) { if (btn) btn.classList.add('no-lens'); return; }
+    if (!btn) return;
+    var sh = shaders[0], still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function centre() { var r = btn.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+    var drip = 0;
+    btn.addEventListener('pointerenter', function () {
+      if (!sh || still) return;
+      var c = centre(); sh.ripple(c[0], c[1]);
+      clearInterval(drip); drip = setInterval(function () { var c2 = centre(); sh.ripple(c2[0], c2[1]); }, 1500);
+    });
+    btn.addEventListener('pointerleave', function () { clearInterval(drip); });
+    btn.addEventListener('pointerdown', function () { if (sh && !still) { var c = centre(); sh.ripple(c[0], c[1], true); } });
+
+    if (!cv || !window.chrome || !sh) { btn.classList.add('no-lens'); return; }
     var g;
-    try { g = createGlass(cv, { radius: 999, depth: 12, scale: 0.16, chroma: 0.35, blur: 0, glow: 0.55, edge: 0.7, edgeWidth: 2.5, specularRotation: 35 }); }
+    try { g = createGlass(cv, { radius: 999, depth: 12, scale: 0.16, chroma: 0.35, glow: 0.55, edge: 0.7, edgeWidth: 2.5, specularRotation: 35 }); }
     catch (e) { btn.classList.add('no-lens'); return; }
     function place() {
       var r = btn.getBoundingClientRect(), c = cv.getBoundingClientRect();
@@ -779,6 +790,12 @@
       g.setPosition((r.left - c.left) * sx, (r.top - c.top) * sy);
     }
     place(); addEventListener('resize', place); setTimeout(place, 900);
+    // the surface bulges: refraction eases up on hover, back down after
+    var sc = 0.16, target = 0.16, raf = 0;
+    function ease() { sc += (target - sc) * 0.12; g.setOptions({ scale: sc, glow: 0.4 + (sc - 0.16) * 3 }); raf = Math.abs(target - sc) > 0.001 ? requestAnimationFrame(ease) : 0; }
+    function to(v) { target = v; if (!raf) raf = requestAnimationFrame(ease); }
+    btn.addEventListener('pointerenter', function () { to(0.3); });
+    btn.addEventListener('pointerleave', function () { to(0.16); });
   })();
 
 })();
