@@ -143,65 +143,77 @@
     root.dataset.look = name; lookBtn.dataset.look = name;
     if (themeColor) themeColor.content = getComputedStyle(root).getPropertyValue('--bg').trim();
     if (sky) sky.tint(instant);
+    tint(name, false, instant);
   }
   lookBtn.addEventListener('click', function () { setLook(LOOKS[(LOOKS.indexOf(root.dataset.look) + 1) % LOOKS.length]); });
 
-  // Section buttons. The lit bubble is a second copy of the row clipped to the current button, so it slides
-  // and the labels swap colour exactly where it passes; it takes each section's colour on the way and glints
-  // when it lands (and now and then). On a phone the row is compact: the current section shows its name, the
-  // others their first letter, which leaves room for the emblem at the end. A finger dragged along the row
-  // moves the bubble from button to button, and letting go opens that section.
+  // Section buttons. Everything in the row moves with transforms and opacity only, so it stays smooth on a
+  // phone: the bubble slides to the current button and fades into the section's colour while its label
+  // crossfades, and it glints once things have settled. On a phone the row is compact: the other sections
+  // are letter circles that slide aside to make room, which leaves space for the emblem at the end.
+  // A finger dragged along the row moves the bubble from button to button; letting go opens that section.
   var bar = document.createElement('nav'); bar.className = 'bar'; bar.setAttribute('aria-label', 'Sections');
   var row = document.createElement('div'); row.className = 'bar-row';
-  var lit = document.createElement('div'); lit.className = 'bar-lit'; lit.setAttribute('aria-hidden', 'true');
-  var glint = document.createElement('i'); glint.className = 'glint';
-  function label(name) { return '<span class="ini" aria-hidden="true">' + name.charAt(0) + '</span><span class="full" aria-hidden="true">' + name + '</span>'; }
-  var lits = [];
+  var bub = document.createElement('div'); bub.className = 'bubble'; bub.setAttribute('aria-hidden', 'true');
+  bub.innerHTML = '<i class="was"></i>' + NAMES.map(function (n) { return '<span class="bl">' + n + '</span>'; }).join('') + '<i class="glint"></i>';
+  var was = bub.querySelector('.was'), bls = [].slice.call(bub.querySelectorAll('.bl')), glint = bub.querySelector('.glint');
   var btns = NAMES.map(function (name, i) {
-    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', name); b.innerHTML = label(name);
+    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', name);
+    b.innerHTML = '<span class="ini" aria-hidden="true">' + name.charAt(0) + '</span><span class="full" aria-hidden="true">' + name + '</span>';
     b.setAttribute('aria-controls', stages[i].id);
     b.style.setProperty('--btn-c', 'var(--a-' + stages[i].dataset.look + ')');
     b.addEventListener('click', function () { go(i); });
-    b.addEventListener('pointerdown', function () { if (i === cur) lit.classList.add('press'); });
+    b.addEventListener('pointerdown', function () { if (i === cur) bub.classList.add('press'); });
     row.appendChild(b);
-    var s = document.createElement('span'); s.innerHTML = label(name); lit.appendChild(s); lits.push(s);
     return b;
   });
-  lit.appendChild(glint);
-  row.appendChild(lit); bar.appendChild(row); bar.appendChild(lookBtn); document.body.appendChild(bar); // the emblem ends the row
+  row.appendChild(bub); bar.appendChild(row); bar.appendChild(lookBtn); document.body.appendChild(bar); // the emblem ends the row
   document.addEventListener('touchstart', function () {}, { passive: true }); // lets iOS show the pressed state
 
-  var cur = 0, shown = 0, timer = 0, started = false, drag = null, compact = false, SMALL = 44;
-  // where each button sits while the bubble is on button k (the compact row widens that one)
-  function spans(k) {
-    var W = row.clientWidth, g = parseFloat(getComputedStyle(row).columnGap) || 0, n = btns.length, x = 0;
+  var cur = 0, shown = 0, timer = 0, started = false, drag = null, compact = false, SMALL = 44, movedAt = 0;
+  // where each button sits, as [x, width], while the bubble is on button k
+  function layout(k) {
+    var W = row.clientWidth, n = btns.length, g = compact ? 4 : 6, x = 0;
     var wide = compact ? W - (n - 1) * (SMALL + g) : (W - (n - 1) * g) / n;
-    return btns.map(function (b, j) { var w = compact && j !== k ? SMALL : wide, p = [x, x + w]; x += w + g; return p; });
+    return btns.map(function (b, j) { var w = compact && j !== k ? SMALL : wide, p = [x, w]; x += w + g; return p; });
   }
   function place(k) {
     if (k === undefined) k = shown;
-    var p = spans(k), W = row.clientWidth;
-    var cols = compact ? p.map(function (q) { return (q[1] - q[0]).toFixed(1) + 'px'; }).join(' ') : '';
-    row.style.gridTemplateColumns = cols; lit.style.gridTemplateColumns = cols;
-    lit.style.setProperty('--cl', p[k][0].toFixed(1) + 'px');
-    lit.style.setProperty('--cr', (W - p[k][1]).toFixed(1) + 'px');
-    lit.style.setProperty('--ox', ((p[k][0] + p[k][1]) / 2).toFixed(1) + 'px');
-    btns.forEach(function (b, j) { b.classList.toggle('on', j === k); lits[j].classList.toggle('on', j === k); });
+    var L = layout(k);
+    btns.forEach(function (b, j) {
+      var w = compact ? SMALL : L[j][1], x = L[j][0] + (L[j][1] - w) / 2;
+      b.style.width = w.toFixed(1) + 'px'; b.style.translate = x.toFixed(1) + 'px 0';
+    });
+    bub.style.width = L[k][1].toFixed(1) + 'px'; bub.style.translate = L[k][0].toFixed(1) + 'px 0';
+    bls.forEach(function (s, j) { s.classList.toggle('on', j === k); });
   }
-  function fit() { compact = bar.clientWidth < 520; bar.classList.toggle('compact', compact); place(); }
+  function fit() {
+    compact = bar.clientWidth < 520; bar.classList.toggle('compact', compact);
+    bar.classList.add('still'); place(); void bar.offsetWidth; bar.classList.remove('still');
+  }
   addEventListener('resize', fit);
+  // the bubble takes the new colour at once while the old one fades off the top of it
+  var bubLook = null;
+  function tint(look, fast, instant) {
+    if (look === bubLook) return;
+    var old = bubLook; bubLook = look;
+    bub.style.backgroundColor = 'var(--a-' + look + ')';
+    if (!old || instant || reduce || !was.animate) return;
+    was.style.backgroundColor = 'var(--a-' + old + ')';
+    was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fast ? 220 : 420, easing: 'cubic-bezier(.645, .045, .355, 1)' });
+  }
+  // a glint crosses the bubble once everything has settled, and again now and then
   function shine(delay) {
     if (reduce || !glint.animate) return;
-    var p = spans(shown)[shown];
-    glint.animate([{ transform: 'translateX(' + Math.round(p[0] - 64) + 'px)' }, { transform: 'translateX(' + Math.round(p[1] + 8) + 'px)' }],
+    glint.animate([{ transform: 'translateX(-64px)' }, { transform: 'translateX(' + Math.round(bub.offsetWidth + 8) + 'px)' }],
       { duration: 800, delay: delay || 0, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'backwards' });
   }
-  setInterval(function () { if (started && !drag && !document.hidden) shine(0); }, 7000);
+  setInterval(function () { if (started && !drag && !document.hidden && performance.now() - movedAt > 2500) shine(0); }, 7000);
 
   // dragging along the row moves the bubble to the button under the finger; letting go opens it
   function under(x) {
     var px = x - row.getBoundingClientRect().left, best = 0, d = Infinity;
-    spans(shown).forEach(function (q, j) { var e = px < q[0] ? q[0] - px : px > q[1] ? px - q[1] : 0; if (e < d) { d = e; best = j; } });
+    layout(shown).forEach(function (p, j) { var e = px < p[0] ? p[0] - px : px > p[0] + p[1] ? px - p[0] - p[1] : 0; if (e < d) { d = e; best = j; } });
     return best;
   }
   row.addEventListener('pointerdown', function (e) { if (e.button === 0) drag = { id: e.pointerId, x: e.clientX, on: false }; });
@@ -209,23 +221,23 @@
     if (!drag || e.pointerId !== drag.id) return;
     if (!drag.on) {
       if (Math.abs(e.clientX - drag.x) < 8) return;
-      drag.on = true; lit.classList.remove('press'); bar.classList.add('dragging');
+      drag.on = true; bub.classList.remove('press'); bar.classList.add('dragging');
       try { row.setPointerCapture(e.pointerId); } catch (err) {}
     }
     var k = under(e.clientX);
-    if (k !== shown) { shown = k; place(k); lit.style.setProperty('--tint', 'var(--a-' + stages[k].dataset.look + ')'); }
+    if (k !== shown) { shown = k; place(k); tint(stages[k].dataset.look, true); }
   });
   function letGo(e) {
-    lit.classList.remove('press');
+    bub.classList.remove('press');
     if (!drag || e.pointerId !== drag.id) return;
     var d = drag; drag = null;
     if (!d.on) return;
-    bar.classList.remove('dragging'); lit.style.removeProperty('--tint');
+    bar.classList.remove('dragging');
     var k = e.type === 'pointercancel' ? cur : shown;
-    if (k === cur) { shown = cur; place(); shine(300); } else go(k);
+    if (k === cur) { shown = cur; place(); tint(root.dataset.look, true); } else go(k);
   }
   row.addEventListener('pointerup', letGo); row.addEventListener('pointercancel', letGo);
-  row.addEventListener('pointerleave', function () { lit.classList.remove('press'); });
+  row.addEventListener('pointerleave', function () { bub.classList.remove('press'); });
 
   // links to a section (like "Let's talk") switch screens instead of jumping
   document.addEventListener('click', function (e) {
@@ -259,10 +271,11 @@
   function go(i, now) {
     if (i === cur && !now) return;
     var from = stages[cur];
-    cur = shown = i;
+    cur = shown = i; movedAt = performance.now();
     setLook(stages[i].dataset.look, now);
+    tint(root.dataset.look, false, now);
     btns.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
-    place(); if (!now) shine(380);
+    place(); if (!now) shine(1600);
     try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
     from.classList.remove('in'); swapStop();
     clearTimeout(timer);
@@ -277,8 +290,7 @@
   function begin() {
     if (started) return;
     started = true; root.classList.add('ready'); show();
-    requestAnimationFrame(function () { bar.classList.add('armed'); });
-    setTimeout(function () { shine(0); }, 1500); // a first glint as the bar arrives
+    setTimeout(function () { shine(0); }, 1700); // a first glint once the bar has arrived
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
   setTimeout(begin, 1000);
@@ -328,6 +340,7 @@
 
     var mouse = [0.5, 0.5], aim = [0.5, 0.5], act = 0, actAim = 0, moved = 0;
     function point(e) {
+      if (e.target.closest && e.target.closest('.bar')) return; // fingers on the buttons don't stir the smoke
       var x = e.clientX / innerWidth, y = 1 - e.clientY / innerHeight;
       if (act < 0.01) mouse = [x, y];
       aim = [x, y]; actAim = 1; moved = performance.now(); kick();
@@ -342,9 +355,9 @@
       addEventListener('blur', away);
     }
 
-    // full sharpness on phones; big retina screens are capped near 2.4 million pixels
+    // touch screens draw at 1.5x (the smoke is soft, the phone stays cool); big retina screens are capped near 2.4 million pixels
     function size() {
-      var d = Math.min(devicePixelRatio || 1, 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
+      var d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
       canvas.width = Math.max(1, Math.round(canvas.clientWidth * d)); canvas.height = Math.max(1, Math.round(canvas.clientHeight * d));
       gl.viewport(0, 0, canvas.width, canvas.height);
     }
@@ -361,7 +374,7 @@
     function frame(now) {
       raf = 0;
       if (document.hidden) return;
-      var busy = from !== to || Math.abs(actAim - act) > 0.002 || now - moved < 600;
+      var busy = Math.abs(actAim - act) > 0.002 || now - moved < 600; // colour blends run at 30 frames, pointer play at 60
       if (now - last >= (busy ? 15 : 32)) {
         var dt = last ? Math.min((now - last) / 1000, 0.1) : 0.016; last = now;
         var k = 1 - Math.pow(0.92, dt * 60), ka = 1 - Math.pow(0.96, dt * 60);

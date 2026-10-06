@@ -35,7 +35,6 @@ body {
   margin: 0; min-height: 100svh; background: var(--bg); color: var(--fg);
   font-family: var(--f-sans); font-size: 17px; line-height: 1.45;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-  transition: background-color var(--fade), color var(--fade);
 }
 ::selection { background: var(--accent); color: var(--bg); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -65,19 +64,19 @@ button { font: inherit; color: inherit; }
 .hero .name { color: var(--bg); -webkit-text-stroke: .04em var(--fg); paint-order: stroke fill; letter-spacing: -.035em; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
-.thesis { margin: clamp(22px, 3.2vh, 36px) 0 0; font-size: clamp(1.1rem, 5.6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); transition: color var(--fade); }
+.thesis { margin: clamp(26px, 3.8vh, 44px) 0 0; font-size: clamp(1.1rem, 5.6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); }
 .thesis p { margin: 0; white-space: nowrap; }
-.thesis em { font-style: normal; white-space: nowrap; color: var(--fg); transition: color var(--fade); }
+.thesis em { font-style: normal; white-space: nowrap; color: var(--fg); }
 /* the switching word: the next one rises out of a blur as the last one lifts away */
 .swap { display: inline-grid; }
-.swap em { grid-area: 1 / 1; opacity: 0; transform: translateY(.35em); filter: blur(.1em); transition: opacity .45s var(--reel), transform .45s var(--reel), filter .45s var(--reel), color var(--fade); }
+.swap em { grid-area: 1 / 1; opacity: 0; transform: translateY(.35em); filter: blur(.1em); transition: opacity .45s var(--reel), transform .45s var(--reel), filter .45s var(--reel); }
 .swap em.on { opacity: 1; transform: none; filter: none; }
 .swap em.off { transform: translateY(-.35em); }
 
 .svc { display: grid; gap: clamp(20px, 3.2vh, 36px); margin-top: clamp(20px, 3vh, 36px); }
 /* service names share the 'doing now' style */
 .svc h3 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
-.svc p, .lead { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; transition: color var(--fade); }
+.svc p, .lead { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
 .svc p .l, .lead .l, .thesis .l { display: block; }
 .svc p .l, .lead .l, .thesis .l, .nm-d { text-wrap: balance; }
 
@@ -96,7 +95,7 @@ button { font: inherit; color: inherit; }
 .mail { display: flex; align-items: flex-end; gap: 4px; margin-top: clamp(22px, 3.4vh, 40px); }
 /* the address reads like the portfolio names: big and light */
 .addr { font-size: clamp(2.2rem, 9.4vw, 4.2rem); font-weight: 500; line-height: 1; letter-spacing: -.055em; text-decoration: none; color: var(--fg); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
-.addr .hi { color: var(--accent); transition: color var(--fade); }
+.addr .hi { color: var(--accent); }
 .copy { position: relative; flex: none; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), color .2s ease; }
 .copy svg { grid-area: 1 / 1; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: opacity .2s ease, transform .3s var(--reel), filter .2s ease; }
 .copy .ok { opacity: 0; transform: scale(.6); filter: blur(2px); }
@@ -127,56 +126,48 @@ button { font: inherit; color: inherit; }
 }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
-.js .stage:not(.hero) .title { min-height: 2.02em; }
-.js .hero-in { flex: 1; display: flex; flex-direction: column; }
-.js .hero .thesis { margin-top: auto; margin-bottom: clamp(4px, 2.4vh, 28px); padding-top: clamp(28px, 4vh, 48px); } /* every title takes two lines, so the content below starts at the same height */
+.js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
 .js .foot { display: none; }
 
 /* lines rise out of a soft blur, one after another; on leaving they all fade at once */
 .js .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); transition: opacity var(--out) var(--reel), transform 0s var(--out), filter 0s var(--out); }
 .js .in .l { opacity: 1; transform: none; filter: none; transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
-/* lines that carry their own colour keep the colour fade in both states */
-.js :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity var(--out) var(--reel), transform 0s var(--out), filter 0s var(--out), color var(--fade), -webkit-text-stroke-color var(--fade); }
-.js .in :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color var(--fade), -webkit-text-stroke-color var(--fade); }
 
-/* ---------- section buttons: one row; the lit bubble slides, takes each section's colour on the way,
-   glints when it lands and follows a finger dragged along the row ---------- */
+/* ---------- section buttons: one row, and everything in it moves with transforms and opacity only.
+   The bubble slides to the current button and fades into the section's colour while its label crossfades;
+   on a phone (compact) the other sections are letter circles that slide aside to make room. ---------- */
 .bar { position: fixed; z-index: 5; left: var(--pad); bottom: var(--bar-b); width: min(590px, calc(100vw - 2 * var(--pad))); display: flex; gap: 6px; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .6s var(--reel) 1s, transform .6s var(--reel) 1s; }
 .ready .bar { opacity: 1; transform: none; pointer-events: auto; }
-.bar-row, .bar-lit { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.bar-row { position: relative; flex: 1; min-width: 0; touch-action: none; }
-.bar-row button, .bar-lit > span { min-width: 0; overflow: hidden; grid-template-columns: minmax(0, 1fr); }
-.bar .ini, .bar .full { grid-area: 1 / 1; transition: opacity .2s ease; }
-.bar .ini { opacity: 0; font-size: 11.5px; letter-spacing: 0; }
-.bar.compact .ini { opacity: 1; }
-.bar.compact .full { opacity: 0; }
-.bar.compact .on .full { opacity: 1; transition-delay: .12s; }
-.bar.compact .on .ini { opacity: 0; transition-delay: 0s; }
-.bar.armed .bar-row { transition: grid-template-columns .42s var(--move); }
-.bar.dragging .bar-row { transition: grid-template-columns .22s var(--move); }
-.bar-row button, .bar-lit > span { height: var(--bar-h); display: grid; place-items: center; padding: 0; border-radius: 999px; font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.bar-row { position: relative; flex: 1; min-width: 0; height: var(--bar-h); touch-action: none; }
 .bar-row button {
-  appearance: none; border: 1px solid var(--line); background: rgba(0, 0, 0, .24); color: var(--muted); cursor: pointer;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, .35); -webkit-tap-highlight-color: transparent; touch-action: none;
-  transition: transform .15s var(--press), box-shadow .15s var(--press), color .2s ease, border-color var(--fade);
+  position: absolute; top: 0; left: 0; height: var(--bar-h); display: grid; place-items: center; padding: 0; appearance: none;
+  border: 1px solid rgba(255, 255, 255, .17); border-radius: 999px; background: rgba(0, 0, 0, .24); box-shadow: 0 2px 0 rgba(0, 0, 0, .35);
+  color: var(--muted); font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: none;
+  transition: translate .42s var(--move), scale .15s var(--press);
 }
-.bar-row button:active { transform: translateY(1px) scale(.97); box-shadow: 0 1px 0 rgba(0, 0, 0, .35); }
+.bar-row button:active { scale: .97; }
 .bar-row button:focus-visible { outline-offset: 2px; }
-@media (hover: hover) and (pointer: fine) { .bar-row button:hover { color: var(--btn-c, var(--fg)); border-color: color-mix(in srgb, var(--btn-c, var(--fg)) 45%, transparent); } }
-.bar-lit {
-  position: absolute; inset: 0; pointer-events: none; background: var(--tint, var(--accent)); color: var(--bg);
-  clip-path: inset(0 var(--cr, 100%) 0 var(--cl, 0px) round 999px); transform-origin: var(--ox, 50%) 50%;
-  transition: background-color .42s var(--move), color .42s var(--move), transform .15s var(--press);
+@media (hover: hover) and (pointer: fine) { .bar-row button:hover { color: var(--btn-c, var(--fg)); } }
+.bar .ini { display: none; font-size: 11.5px; letter-spacing: 0; }
+.bar.compact .ini { display: block; }
+.bar.compact .full { display: none; }
+.bubble {
+  position: absolute; top: 0; left: 0; height: var(--bar-h); display: grid; place-items: center; border-radius: 999px; overflow: hidden;
+  pointer-events: none; color: #0b0b0b; will-change: translate; transition: translate .42s var(--move), scale .15s var(--press);
 }
-.bar.armed .bar-lit { transition: clip-path .42s var(--move), grid-template-columns .42s var(--move), background-color .42s var(--move), color .42s var(--move), transform .15s var(--press); }
-.bar.dragging .bar-lit { transition: clip-path .22s var(--move), grid-template-columns .22s var(--move), background-color .22s ease, color .22s ease; }
-.bar.dragging .bar-row button:active { transform: none; box-shadow: 0 2px 0 rgba(0, 0, 0, .35); }
-.bar-lit.press { transform: translateY(1px) scale(.97); }
-.bar-lit .glint { position: absolute; top: 0; bottom: 0; left: 0; width: 56px; background: linear-gradient(100deg, transparent 15%, rgba(255, 255, 255, .6) 50%, transparent 85%); transform: translateX(-120px); }
+.bubble .was { position: absolute; inset: 0; opacity: 0; }
+.bubble .bl { grid-area: 1 / 1; position: relative; z-index: 1; font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; opacity: 0; transition: opacity .2s ease; }
+.bubble .bl.on { opacity: 1; transition-delay: .14s; }
+.bubble .glint { position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: 56px; background: linear-gradient(100deg, transparent 15%, rgba(255, 255, 255, .6) 50%, transparent 85%); transform: translateX(-80px); }
+.bubble.press { scale: .97; }
+.bar.dragging .bar-row button, .bar.dragging .bubble { transition-duration: .22s; }
+.bar.dragging .bar-row button:active { scale: none; }
+.bar.still .bar-row button, .bar.still .bubble { transition: none; }
 
 /* ---------- colour button: one emblem per look ---------- */
 /* ---------- the emblem ends the row: it changes shape and colour with the section, and tapping it plays through the looks ---------- */
-.js .look { flex: none; width: var(--bar-h); height: var(--bar-h); display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 999px; background: rgba(0, 0, 0, .24); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); color: var(--accent); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), box-shadow .15s var(--press), color .42s var(--move), border-color var(--fade); }
+.js .look { flex: none; width: var(--bar-h); height: var(--bar-h); display: grid; place-items: center; padding: 0; border: 1px solid rgba(255, 255, 255, .17); border-radius: 999px; background: rgba(0, 0, 0, .24); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); color: var(--accent); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), box-shadow .15s var(--press), color .42s var(--move); }
 .js .look:active { transform: translateY(1px) scale(.94); box-shadow: 0 1px 0 rgba(0, 0, 0, .35); }
 .look svg { width: 20px; height: 20px; overflow: visible; }
 .look .em { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; transform-box: fill-box; transform-origin: center; opacity: 0; transform: scale(.6) rotate(-40deg); transition: opacity .25s ease, transform .5s var(--reel); }
@@ -194,7 +185,6 @@ button { font: inherit; color: inherit; }
 
 @media (max-width: 420px) {
   .bar { left: 12px; width: calc(100vw - 24px); gap: 4px; }
-  .bar-row, .bar-lit { gap: 4px; }
 }
 @media (max-height: 720px) {
   :root { --top: calc(env(safe-area-inset-top, 0px) + 84px); }
@@ -202,9 +192,9 @@ button { font: inherit; color: inherit; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .js .l, .js .in .l, .js :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transform: none; filter: none; }
-  .js .in .l, .js .in :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity .4s ease, color var(--fade); }
-  .bar.armed .bar-lit, .bar.armed .bar-row { transition: background-color .3s ease, color .3s ease; }
+  .js .l, .js .in .l { transform: none; filter: none; }
+  .js .in .l { transition: opacity .4s ease; }
+  .bar-row button, .bubble { transition: none; }
   .swap em { transition: opacity .3s ease; }
   .sky canvas { transition: none; }
 }
