@@ -176,6 +176,7 @@
     if (playAt !== null) return;
     playAt = performance.now();
     document.documentElement.classList.remove('gated');
+    setTimeout(function () { if (typeof stageKick === 'function') stageKick(); }, 30);
     // whatever is already on screen when the intro starts comes up right away
     var vh = innerHeight;
     (stages.length ? stages : [document.querySelector('.hero')]).forEach(function (st) {
@@ -311,11 +312,21 @@
   splitEls.forEach(split);
   var stages = [];
   splitEls.forEach(function (el) { var st = el.closest('.ex li, .panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
-  var stageIO = new IntersectionObserver(function (en) {
-    if (playAt === null) return;
-    en.forEach(function (e) { if (e.isIntersecting && !e.target.classList.contains('in')) surface(e.target); e.target.classList.toggle('in', e.isIntersecting); });
-  }, { rootMargin: '-38% 0px -38% 0px' });
-  stages.forEach(function (st) { stageIO.observe(st); });
+  // a stage is "in" while it crosses the middle band of the screen. Measured on scroll, not with
+  // IntersectionObserver margins, which browsers ignore inside embedded frames (the preview).
+  var stageRaf = 0;
+  function stageCheck() {
+    stageRaf = 0; if (playAt === null) return;
+    var vh = innerHeight, top = vh * 0.38, bot = vh * 0.62;
+    stages.forEach(function (st) {
+      var r = st.getBoundingClientRect(), on = r.bottom > top && r.top < bot;
+      if (on && !st.classList.contains('in')) surface(st);
+      st.classList.toggle('in', on);
+    });
+  }
+  function stageKick() { if (!stageRaf) stageRaf = requestAnimationFrame(stageCheck); }
+  addEventListener('scroll', stageKick, { passive: true }); addEventListener('resize', stageKick);
+  setTimeout(stageKick, 50);
 
   // magnetic: the element leans toward the cursor and eases back
   [].slice.call(document.querySelectorAll('.magnet')).forEach(function (el) {
