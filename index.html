@@ -63,6 +63,7 @@
 
 <main>
   <section id="services" class="svc" aria-label="Services">
+    <div class="bar head svc-head"><div class="inner"><div class="cells"><div class="cell grow"><h2 data-split>How I <span class="accent sheen">help</span></h2></div></div></div></div>
     <div class="inner svc-grid">
       <div class="svc-index">
         <span class="label">Services</span>
@@ -314,7 +315,7 @@
   var stages = [];
   splitEls.forEach(function (el) { var st = el.closest('.panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
   // one timeline per screen: everything reveals top to bottom, left to right, each piece after the one before
-  stages.forEach(function (st) {
+  function timeline(st) {
     var t = 0.15;
     st.querySelectorAll('[data-split], .nm-d, .ex-d, .mail').forEach(function (el) {
       if (el.matches('.nm-d, .ex-d, .mail')) { el.style.setProperty('--d', t.toFixed(2) + 's'); t += 0.5; return; }
@@ -325,7 +326,8 @@
       chs.forEach(function (ch, i) { ch.style.setProperty('--d', (t + i * step).toFixed(3) + 's'); });
       t += chs.length * step + (letters ? 0.25 : 0.45);
     });
-  });
+  }
+  stages.forEach(timeline);
 
   // a stage is "in" while it crosses the middle band of the screen. Measured on scroll, not with
   // IntersectionObserver margins, which browsers ignore inside embedded frames (the preview).
@@ -433,12 +435,14 @@
   });
 
   // ---------- stage mode (GIPX narrative): the screen stays put; each step fades out and the next surfaces in place ----------
-  var stageEls = deckSteps.map(function (sel) { return document.querySelector(sel); });
+  var FIXED_STEPS = ['#top', '#services', '#work', '#now', '#contact'];
+  var stageEls = FIXED_STEPS.map(function (sel) { return document.querySelector(sel); });
   var cur = 0, busyUntil = 0;
   document.documentElement.classList.add('stage-mode');
   stageEls.forEach(function (el) { el.setAttribute('data-stage', ''); });
   var FIXED = true; // true = GIPX fixed screen; false = scroll with the same look
   if (FIXED) { document.documentElement.classList.add('fixed');
+  stageEls.forEach(timeline);
   stageCheck = function () {};
   window.__stages = stageEls.length; window.__stage = 0;
   function show(i) {
@@ -448,7 +452,7 @@
     requestAnimationFrame(function () { el.classList.add('in'); });
   }
   deckIndex = function () { return cur; };
-  deckOn = function () { return playAt !== null; };
+  deckOn = function () { return false; }; // buttons only: no wheel, keys or swipe
   deckGo = function (i) {
     i = Math.max(0, Math.min(stageEls.length - 1, i));
     var now = performance.now();
@@ -460,7 +464,7 @@
   };
   stageEls[0].classList.add('cur');
   // one bar of buttons, always in the same place; the active one stays lit
-  var GROUPS = [['Intro', [0]], ['Services', [1, 2, 3]], ['Now', [4]], ['Portfolio', [5]], ['Contact', [6]]];
+  var GROUPS = [['Intro', [0]], ['Services', [1]], ['Now', [2]], ['Portfolio', [3]], ['Contact', [4]]];
   var bar = document.createElement('nav'); bar.className = 'stagebar'; bar.setAttribute('aria-label', 'Sections');
   GROUPS.forEach(function (g) {
     var b = document.createElement('button'); b.type = 'button'; b.textContent = g[0]; b.dataset.first = g[1][0];

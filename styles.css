@@ -656,3 +656,34 @@ h2 .accent { display: block; font-size: 1.25em; line-height: 1; margin-left: 0; 
 /* buttons a little higher */
 .stagebar { bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(44px, 10vh, 96px)); }
 .fixed [data-stage] { padding-bottom: clamp(150px, 26vh, 260px) !important; }
+
+/* buttons only; every step after the hero keeps the title and the text in the same place */
+.fixed [data-stage]:not(.hero) { justify-content: flex-start; padding-top: clamp(110px, 24vh, 230px); padding-bottom: 0 !important; }
+.fixed [data-stage]:not(.hero) .head .cell { padding-top: 0 !important; }
+.fixed .panel h3, .fixed .head h2 { font-size: clamp(2.6rem, 6vw, 5.4rem); line-height: 1; min-height: 2.05em; display: flex; flex-direction: column; justify-content: flex-end; margin: 0 0 clamp(18px, 3vh, 30px); }
+.fixed .head h2 .accent { font-size: 1em; }
+.fixed .body-cell, .fixed .panel p.soft, .fixed .building, .fixed .names { margin-top: 0; }
+.fixed .coda .lead { margin-top: 0; }
+/* the hero: confident */
+.fixed .hero .name { font-size: clamp(4.6rem, 15vw, 13rem); line-height: .86; }
+@media (max-width: 560px) { .fixed .hero .name { font-size: 20.5vw; } .fixed .panel h3, .fixed .head h2 { font-size: clamp(2.3rem, 11vw, 3.1rem); } }
+
+/* services as one screen: "How I help" + three title/text rows */
+.svc-head { display: none; }
+.fixed .svc-head { display: block; }
+.fixed .svc .panel { position: static; min-height: 0 !important; display: block; padding: 0 0 clamp(14px, 2.4vh, 24px) clamp(18px, 3vw, 36px) !important; opacity: 1; visibility: visible; }
+.fixed .svc-grid { padding-inline: var(--gut); max-width: var(--col); margin: 0 auto; }
+.fixed .svc .panel h3 { font-size: clamp(1.45rem, 2.4vw, 2.2rem); font-weight: 700; letter-spacing: -0.035em; min-height: 0; display: block; margin: 0 0 4px; }
+.fixed .svc .panel h3 .accent { font-family: inherit; font-style: normal; font-weight: inherit; display: inline; font-size: 1em; }
+.fixed .svc .panel p.soft { font-size: clamp(14px, 1.1vw, 16px); line-height: 1.5; max-width: 60ch; }
+.fixed .svc .panel p.soft br { display: none; }
+/* hero centred so the big name never clips; desktop stages a bit higher so lists fit above the buttons */
+.fixed .hero { justify-content: center !important; padding-bottom: 12vh !important; }
+@media (min-width: 861px) { .fixed [data-stage]:not(.hero) { padding-top: clamp(80px, 14vh, 150px); } .fixed .nm { font-size: clamp(2.6rem, 5.6vw, 5.4rem); } }
+.fixed .svc-head, .fixed .svc-head .cells, .fixed .svc-head .cell { border: 0 !important; }
+.fixed .svc .panel p.soft br { display: inline; }
+.fixed .coda h2 { font-size: clamp(2.6rem, 6vw, 5.4rem); line-height: 1; min-height: 2.05em; display: flex; flex-direction: column; justify-content: flex-end; margin: 0 0 clamp(18px, 3vh, 30px); }
+.fixed .coda .cell { padding-top: 0 !important; }
+@media (min-width: 861px) { .fixed .hero .name { font-size: clamp(4.6rem, 11vw, 10.5rem); } }
+@media (max-width: 560px) { .fixed .coda h2 { font-size: clamp(2.3rem, 11vw, 3.1rem); } }
+.fixed .keys { display: none !important; }
