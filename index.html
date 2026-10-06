@@ -437,7 +437,7 @@
   var cur = 0, busyUntil = 0;
   document.documentElement.classList.add('stage-mode');
   stageEls.forEach(function (el) { el.setAttribute('data-stage', ''); });
-  var FIXED = false; // true = GIPX fixed screen; false = scroll with the same look
+  var FIXED = true; // true = GIPX fixed screen; false = scroll with the same look
   if (FIXED) { document.documentElement.classList.add('fixed');
   stageCheck = function () {};
   window.__stages = stageEls.length; window.__stage = 0;
@@ -459,6 +459,20 @@
     setTimeout(function () { show(next); gliding = false; coolUntil = performance.now() + 250; }, reduce ? 0 : 260);
   };
   stageEls[0].classList.add('cur');
+  // jump links under each step (GIPX-style mono labels): click and the step swaps in place
+  var LINKS = [['Services', 2 - 1], ['Now', 4], ['Portfolio', 5], ['Contact', 6]];
+  stageEls.forEach(function (el, j) {
+    var nav = document.createElement('nav'); nav.className = 'jumps'; nav.setAttribute('aria-label', 'Go to');
+    LINKS.forEach(function (l) {
+      var on = j === l[1] || (l[0] === 'Services' && j >= 1 && j <= 3);
+      if (on) return;
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = l[0];
+      b.addEventListener('click', function () { deckGo(l[1]); }); nav.appendChild(b);
+    });
+    if (j === stageEls.length - 1) { var t = document.createElement('button'); t.type = 'button'; t.textContent = 'Start over'; t.addEventListener('click', function () { deckGo(0); }); nav.appendChild(t); }
+    var cells = el.querySelectorAll('.body-cell, .cell.grow');
+    (el.classList.contains('panel') ? el : (cells[cells.length - 1] || el)).appendChild(nav);
+  });
   // swipe on touch screens
   var ty = null;
   addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
