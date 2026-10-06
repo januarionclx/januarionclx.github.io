@@ -74,9 +74,9 @@ button { font: inherit; color: inherit; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
 /* two big lines under the name: what I do (turning from one thing to the next) and where; last words in white */
-.say { margin: clamp(28px, 6svh, 72px) 0 0; font-size: clamp(1.6rem, 8.6vw, 4.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.045em; color: var(--muted); white-space: nowrap; }
-.say p { margin: 0; }
-.say p + p { margin-top: clamp(4px, 1.2svh, 14px); }
+.say { margin: 0; font-size: clamp(1.6rem, 8.6vw, 4.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.045em; color: var(--muted); white-space: nowrap; }
+.say.what { margin-top: clamp(28px, 6svh, 72px); }
+.say.where { margin-top: clamp(4px, 1.2svh, 14px); }
 .say .k { color: var(--fg); }
 .morph { position: relative; display: inline-block; }
 .morph .w { display: inline-block; }
@@ -87,10 +87,10 @@ button { font: inherit; color: inherit; }
 .svc { display: grid; gap: clamp(22px, 3.4svh, 38px); margin-top: clamp(20px, 3svh, 36px); }
 /* service names read like the portfolio names: big, light and white, with the grey description under them */
 .svc h3 { margin: 0; font-size: clamp(1.9rem, 9vw, 3.2rem); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
-.svc p, .lead { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
+.svc p { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
 .svc p { margin-top: .6em; }
-.svc p .l, .lead .l { display: block; }
-.svc p .l, .lead .l, .nm-d { text-wrap: balance; }
+.svc p .l { display: block; }
+.svc p .l, .nm-d { text-wrap: balance; }
 
 .doing { list-style: none; margin: clamp(20px, 3svh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 4svh, 44px); }
 .js .doing { margin-block: auto; } /* centred in the room under the title */
@@ -104,10 +104,12 @@ button { font: inherit; color: inherit; }
 .more .nm { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
 
 /* contact opens with two questions in the 'doing now' size, in white */
+/* contact: five lines in one size, the questions in white, the promise in grey */
 .asks { margin: clamp(20px, 3svh, 36px) 0 0; }
-.asks p { margin: 0; font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--fg); text-wrap: balance; }
-.asks p + p { margin-top: .35em; }
-.lead { font-size: clamp(1.15rem, 1.6vw, 1.45rem); font-weight: 600; line-height: 1.3; letter-spacing: -.02em; margin-top: clamp(20px, 3svh, 36px); }
+.asks p { margin: 0; font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--fg); }
+.asks p + p { margin-top: .3em; }
+.asks .dim { color: var(--muted); }
+.asks .m { display: none; } /* phone-only line breaks */
 .mail { display: flex; align-items: flex-end; gap: 4px; margin-top: clamp(22px, 3.4svh, 40px); }
 /* the address reads like the portfolio names: big and light */
 .addr { font-size: clamp(2.2rem, 9.4vw, 4.2rem); font-weight: 500; line-height: 1; letter-spacing: -.055em; text-decoration: none; color: var(--fg); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
@@ -126,7 +128,7 @@ button { font: inherit; color: inherit; }
 .foot a { text-decoration: none; }
 
 /* smaller text keeps a soft dark halo, so it stays readable when a bright part of the smoke drifts behind it */
-.say, .asks, .svc h3, .svc p, .doing li, .nm-d, .lead, .mail { text-shadow: 0 1px 14px rgba(0, 0, 0, .5), 0 1px 2px rgba(0, 0, 0, .3); }
+.say, .asks, .svc h3, .svc p, .doing li, .nm-d, .mail { text-shadow: 0 1px 14px rgba(0, 0, 0, .5), 0 1px 2px rgba(0, 0, 0, .3); }
 
 /* ---------- without script: one page you scroll ---------- */
 .stage { position: relative; z-index: 2; padding: 16svh var(--pad) 6svh; }
@@ -197,6 +199,7 @@ button { font: inherit; color: inherit; }
   .svc { grid-template-columns: max-content minmax(0, 50ch); column-gap: clamp(28px, 3.4vw, 56px); row-gap: clamp(22px, 3.2svh, 34px); }
   .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: start; }
   .svc p { margin-top: 0; max-width: none; }
+  .asks p { font-size: min(2.6rem, 5svh); }
   .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); text-align: right; }
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d { margin-top: 0; }
@@ -208,19 +211,27 @@ button { font: inherit; color: inherit; }
 /* tall phone screens have room to spare: the intro and the 'doing now' list spread further down */
 /* phones: the headings are the roof and the bar is the floor; the content sits centred between them */
 @media (max-aspect-ratio: 3/4) {
-  .doing { gap: clamp(14px, 4.6svh, 48px); }
-  .svc { gap: clamp(22px, 4.6svh, 48px); }
   .names { gap: clamp(14px, 4.6svh, 48px); }
   .js .svc, .js .names { margin-block: auto; padding-top: clamp(16px, 2.4svh, 28px); }
   .js .more { margin-top: clamp(10px, 4svh, 44px); }
-  .lead { margin-top: clamp(16px, 2.6svh, 28px); }
-  /* the intro, as on desktop: big and sure of itself. What I do breaks over two lines, Porto stays */
+  /* the intro in three places: the name at the top, what I do big in the middle (it moves, so it leads),
+     Porto just above the bar. What I do always breaks before its last word */
   .js .hero-in { flex: 1; display: flex; flex-direction: column; }
-  .say { margin-block: auto; padding-top: clamp(20px, 3svh, 36px); font-size: clamp(1.6rem, 11vw, 4.6rem); line-height: 1.04; }
-  .say p:first-child { white-space: normal; }
+  .say.what { margin-block: auto; padding-block: clamp(20px, 3svh, 36px); font-size: clamp(1.6rem, 14.5vw, 4.6rem); line-height: 1; white-space: normal; }
   .say .morph { display: block; }
   .say .cut { display: inline; }
-  .say p + p { margin-top: clamp(10px, 3.4svh, 36px); }
+  .say.where { margin-top: 0; font-size: clamp(1.4rem, 10vw, 4rem); }
+  /* bigger lists: long lines may take two */
+  .doing li { font-size: clamp(1.55rem, 9.5vw, 3rem); line-height: 1.04; text-wrap: balance; }
+  .doing { gap: clamp(14px, 3.6svh, 40px); }
+  .asks p { font-size: clamp(1.55rem, 8.2vw, 2.6rem); line-height: 1.06; }
+  .asks .m { display: inline; }
+  .svc { gap: clamp(18px, 3.6svh, 48px); }
+}
+/* tall phones: services get a little more presence and air */
+@media (max-aspect-ratio: 3/4) and (min-height: 800px) {
+  .svc p { font-size: 1.06rem; line-height: 1.42; }
+  .svc { gap: clamp(22px, 5svh, 56px); }
 }
 @media (max-height: 720px) {
   .svc { gap: 16px; }
