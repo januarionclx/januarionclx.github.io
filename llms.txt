@@ -8,11 +8,11 @@
 - Ventures: companies built from the ground up, incubated and funded through The Unit Organization.
 
 ## Public portfolio
-- People: the platform for self-managing teams.
-- Flows: business automations the business can read.
-- Artist OS: websites and tools for musicians, on their own domain.
+- People: the CRM for clients and patients, in one place.
+- Flows: build the chat bots a business runs on, step by step.
+- Artist OS: site, bookings and numbers for artists.
 
-## Current work (with clients; described, not linked)
+## Right now (with clients, under NDA; described, not linked)
 - A restaurant platform: point of sale, a WhatsApp ordering bot, an ordering website, delivery through transport-partner API integrations, cloud sales dashboards.
 - A clinic platform: CRM for a medical practice with AI-drafted reports for doctors.
 - Holacracy tooling: an AI assistant for self-management, used by teams in practice.
