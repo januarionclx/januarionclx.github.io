@@ -46,8 +46,8 @@
           <span class="line"><span>Hey, I&rsquo;m</span></span>
           <span class="line"><span class="accent sheen">Januario.</span></span>
         </h1>
-        <p class="where">Software and consulting, from <em>Lisbon.</em></p>
-        <p class="thesis">I design organizations, and the software they run on, as <em>living systems.</em></p>
+        <p class="where" data-split data-letters style="--base: .55s">Software and consulting, from <em>Lisbon.</em></p>
+        <p class="thesis" data-split data-letters style="--base: 1.5s">I design organizations, and the software they run on, as <em>living systems.</em></p>
         <p class="keys" aria-hidden="true"><kbd>&darr;</kbd> or scroll to continue</p>
       </div>
     </div>
@@ -322,7 +322,7 @@
             if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
             var w = document.createElement('span'); w.className = 'w';
             var inner = document.createElement('span');
-            if (n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i); i += part.length; }
+            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
             else part.split('').forEach(function (ch) { var l = document.createElement('span'); l.className = 'ch'; l.textContent = ch; l.style.setProperty('--i', i++); inner.appendChild(l); });
             w.appendChild(inner); frag.appendChild(w);
           });
