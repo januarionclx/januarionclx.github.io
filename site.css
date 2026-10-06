@@ -64,8 +64,15 @@ button { font: inherit; color: inherit; }
 /* the name is cut out in the background colour with a light edge */
 .hero .name { color: var(--bg); -webkit-text-stroke: .04em var(--fg); paint-order: stroke fill; letter-spacing: -.035em; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
-.thesis { margin: clamp(22px, 3.2vh, 36px) 0 0; max-width: 21em; font-size: clamp(1.05rem, 4.6vw, 2.1rem); font-weight: 700; line-height: 1.2; letter-spacing: -.035em; color: var(--muted); transition: color var(--fade); }
+/* three statements, each on one line at the largest size that allows; the last word of each in white */
+.thesis { margin: clamp(22px, 3.2vh, 36px) 0 0; font-size: clamp(1.1rem, 5.6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); transition: color var(--fade); }
+.thesis p { margin: 0; white-space: nowrap; }
 .thesis em { font-style: normal; white-space: nowrap; color: var(--fg); transition: color var(--fade); }
+/* the switching word: the next one rises out of a blur as the last one lifts away */
+.swap { display: inline-grid; }
+.swap em { grid-area: 1 / 1; opacity: 0; transform: translateY(.35em); filter: blur(.1em); transition: opacity .45s var(--reel), transform .45s var(--reel), filter .45s var(--reel), color var(--fade); }
+.swap em.on { opacity: 1; transform: none; filter: none; }
+.swap em.off { transform: translateY(-.35em); }
 
 .svc { display: grid; gap: clamp(20px, 3.2vh, 36px); margin-top: clamp(20px, 3vh, 36px); }
 /* service names share the 'doing now' style */
@@ -120,7 +127,9 @@ button { font: inherit; color: inherit; }
 }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
-.js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
+.js .stage:not(.hero) .title { min-height: 2.02em; }
+.js .hero-in { flex: 1; display: flex; flex-direction: column; }
+.js .hero .thesis { margin-top: auto; margin-bottom: clamp(4px, 2.4vh, 28px); padding-top: clamp(28px, 4vh, 48px); } /* every title takes two lines, so the content below starts at the same height */
 .js .foot { display: none; }
 
 /* lines rise out of a soft blur, one after another; on leaving they all fade at once */
@@ -136,23 +145,32 @@ button { font: inherit; color: inherit; }
 .ready .bar { opacity: 1; transform: none; pointer-events: auto; }
 .bar-row, .bar-lit { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .bar-row { position: relative; flex: 1; min-width: 0; touch-action: none; }
-.bar button, .bar-lit span { height: var(--bar-h); display: grid; place-items: center; padding: 0; border-radius: 999px; font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
-.bar button {
+.bar-row button, .bar-lit > span { min-width: 0; overflow: hidden; grid-template-columns: minmax(0, 1fr); }
+.bar .ini, .bar .full { grid-area: 1 / 1; transition: opacity .2s ease; }
+.bar .ini { opacity: 0; font-size: 11.5px; letter-spacing: 0; }
+.bar.compact .ini { opacity: 1; }
+.bar.compact .full { opacity: 0; }
+.bar.compact .on .full { opacity: 1; transition-delay: .12s; }
+.bar.compact .on .ini { opacity: 0; transition-delay: 0s; }
+.bar.armed .bar-row { transition: grid-template-columns .42s var(--move); }
+.bar.dragging .bar-row { transition: grid-template-columns .22s var(--move); }
+.bar-row button, .bar-lit > span { height: var(--bar-h); display: grid; place-items: center; padding: 0; border-radius: 999px; font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.bar-row button {
   appearance: none; border: 1px solid var(--line); background: rgba(0, 0, 0, .24); color: var(--muted); cursor: pointer;
   box-shadow: 0 2px 0 rgba(0, 0, 0, .35); -webkit-tap-highlight-color: transparent; touch-action: none;
   transition: transform .15s var(--press), box-shadow .15s var(--press), color .2s ease, border-color var(--fade);
 }
-.bar button:active { transform: translateY(1px) scale(.97); box-shadow: 0 1px 0 rgba(0, 0, 0, .35); }
-.bar button:focus-visible { outline-offset: 2px; }
-@media (hover: hover) and (pointer: fine) { .bar button:hover { color: var(--btn-c, var(--fg)); border-color: color-mix(in srgb, var(--btn-c, var(--fg)) 45%, transparent); } }
+.bar-row button:active { transform: translateY(1px) scale(.97); box-shadow: 0 1px 0 rgba(0, 0, 0, .35); }
+.bar-row button:focus-visible { outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .bar-row button:hover { color: var(--btn-c, var(--fg)); border-color: color-mix(in srgb, var(--btn-c, var(--fg)) 45%, transparent); } }
 .bar-lit {
   position: absolute; inset: 0; pointer-events: none; background: var(--tint, var(--accent)); color: var(--bg);
   clip-path: inset(0 var(--cr, 100%) 0 var(--cl, 0px) round 999px); transform-origin: var(--ox, 50%) 50%;
   transition: background-color .42s var(--move), color .42s var(--move), transform .15s var(--press);
 }
-.bar.armed .bar-lit { transition: clip-path .42s var(--move), background-color .42s var(--move), color .42s var(--move), transform .15s var(--press); }
-.bar.dragging .bar-lit { transition: background-color .25s ease, color .25s ease; }
-.bar.dragging button:active { transform: none; box-shadow: 0 2px 0 rgba(0, 0, 0, .35); }
+.bar.armed .bar-lit { transition: clip-path .42s var(--move), grid-template-columns .42s var(--move), background-color .42s var(--move), color .42s var(--move), transform .15s var(--press); }
+.bar.dragging .bar-lit { transition: clip-path .22s var(--move), grid-template-columns .22s var(--move), background-color .22s ease, color .22s ease; }
+.bar.dragging .bar-row button:active { transform: none; box-shadow: 0 2px 0 rgba(0, 0, 0, .35); }
 .bar-lit.press { transform: translateY(1px) scale(.97); }
 .bar-lit .glint { position: absolute; top: 0; bottom: 0; left: 0; width: 56px; background: linear-gradient(100deg, transparent 15%, rgba(255, 255, 255, .6) 50%, transparent 85%); transform: translateX(-120px); }
 
@@ -177,10 +195,6 @@ button { font: inherit; color: inherit; }
 @media (max-width: 420px) {
   .bar { left: 12px; width: calc(100vw - 24px); gap: 4px; }
   .bar-row, .bar-lit { gap: 4px; }
-  .bar button, .bar-lit span { font-size: 9.5px; letter-spacing: .02em; }
-}
-@media (max-width: 370px) {
-  .bar button, .bar-lit span { font-size: 9px; letter-spacing: 0; }
 }
 @media (max-height: 720px) {
   :root { --top: calc(env(safe-area-inset-top, 0px) + 84px); }
@@ -190,6 +204,7 @@ button { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .js .l, .js .in .l, .js :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transform: none; filter: none; }
   .js .in .l, .js .in :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity .4s ease, color var(--fade); }
-  .bar.armed .bar-lit { transition: background-color .3s ease, color .3s ease; }
+  .bar.armed .bar-lit, .bar.armed .bar-row { transition: background-color .3s ease, color .3s ease; }
+  .swap em { transition: opacity .3s ease; }
   .sky canvas { transition: none; }
 }

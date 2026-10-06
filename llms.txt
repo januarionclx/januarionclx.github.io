@@ -1,6 +1,6 @@
 # Januario Pinto
 
-> Software developer and consultant in Lisbon. Designs and consults companies as living systems and creates software. Founder of The Unit Organization, an incubator and studio.
+> Software developer and consultant in Porto. Designs and consults companies as living systems and creates software. Founder of The Unit Organization, an incubator and studio.
 
 ## Services
 - Software development: web platforms, internal tools, AI features and automation. A working product, not a prototype.

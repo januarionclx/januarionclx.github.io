@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Januario Pinto | Software &amp; consulting</title>
-  <meta name="description" content="Januario Pinto designs and consults companies as living systems and creates software, from Lisbon.">
+  <meta name="description" content="Januario Pinto designs and consults companies as living systems and creates software. Based in Porto.">
   <meta name="author" content="Januario Pinto">
   <meta name="theme-color" content="#090909">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Januario Pinto">
-  <meta property="og:description" content="I design and consult companies as living systems and create software, from Lisbon.">
+  <meta property="og:description" content="I design and consult companies. I create software. Based in Porto.">
   <meta property="og:image" content="https://januariopinto.com/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://januariopinto.com/">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://januariopinto.com/">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Porto","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -43,7 +43,11 @@
 <header class="stage hero" id="top" data-look="ink" data-rest="0.7" aria-label="Intro">
   <div class="hero-in">
     <h1 class="title"><span class="l">Hey, I&rsquo;m</span> <span class="l name">Januario.</span></h1>
-    <p class="thesis grp"><span class="l">I design and consult companies as <em>living systems</em> and create <em>software</em>,</span> <span class="l">from Lisbon.</span></p>
+    <div class="thesis">
+      <p class="l grp">I design and consult <em>companies.</em></p>
+      <p class="l grp">I create <span class="swap" aria-hidden="true"><em class="on">software.</em><em>products.</em><em>platforms.</em><em>automations.</em></span><span class="sr-only">software, products, platforms and automations.</span></p>
+      <p class="l grp">Based in <em>Porto.</em></p>
+    </div>
   </div>
 </header>
 
@@ -143,47 +147,61 @@
   lookBtn.addEventListener('click', function () { setLook(LOOKS[(LOOKS.indexOf(root.dataset.look) + 1) % LOOKS.length]); });
 
   // Section buttons. The lit bubble is a second copy of the row clipped to the current button, so it slides
-  // and the labels swap colour exactly where it passes. It takes each section's colour on the way, glints
-  // when it lands (and now and then), and follows a finger dragged along the row.
+  // and the labels swap colour exactly where it passes; it takes each section's colour on the way and glints
+  // when it lands (and now and then). On a phone the row is compact: the current section shows its name, the
+  // others their first letter, which leaves room for the emblem at the end. A finger dragged along the row
+  // moves the bubble from button to button, and letting go opens that section.
   var bar = document.createElement('nav'); bar.className = 'bar'; bar.setAttribute('aria-label', 'Sections');
   var row = document.createElement('div'); row.className = 'bar-row';
   var lit = document.createElement('div'); lit.className = 'bar-lit'; lit.setAttribute('aria-hidden', 'true');
   var glint = document.createElement('i'); glint.className = 'glint';
+  function label(name) { return '<span class="ini" aria-hidden="true">' + name.charAt(0) + '</span><span class="full" aria-hidden="true">' + name + '</span>'; }
+  var lits = [];
   var btns = NAMES.map(function (name, i) {
-    var b = document.createElement('button'); b.type = 'button'; b.textContent = name;
+    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', name); b.innerHTML = label(name);
     b.setAttribute('aria-controls', stages[i].id);
     b.style.setProperty('--btn-c', 'var(--a-' + stages[i].dataset.look + ')');
     b.addEventListener('click', function () { go(i); });
     b.addEventListener('pointerdown', function () { if (i === cur) lit.classList.add('press'); });
     row.appendChild(b);
-    var s = document.createElement('span'); s.textContent = name; lit.appendChild(s);
+    var s = document.createElement('span'); s.innerHTML = label(name); lit.appendChild(s); lits.push(s);
     return b;
   });
   lit.appendChild(glint);
   row.appendChild(lit); bar.appendChild(row); bar.appendChild(lookBtn); document.body.appendChild(bar); // the emblem ends the row
   document.addEventListener('touchstart', function () {}, { passive: true }); // lets iOS show the pressed state
 
-  var cur = 0, timer = 0, started = false, drag = null;
-  function place() {
-    var r = row.getBoundingClientRect(), b = btns[cur].getBoundingClientRect();
-    lit.style.setProperty('--cl', (b.left - r.left).toFixed(1) + 'px');
-    lit.style.setProperty('--cr', (r.right - b.right).toFixed(1) + 'px');
-    lit.style.setProperty('--ox', (b.left - r.left + b.width / 2).toFixed(1) + 'px');
+  var cur = 0, shown = 0, timer = 0, started = false, drag = null, compact = false, SMALL = 44;
+  // where each button sits while the bubble is on button k (the compact row widens that one)
+  function spans(k) {
+    var W = row.clientWidth, g = parseFloat(getComputedStyle(row).columnGap) || 0, n = btns.length, x = 0;
+    var wide = compact ? W - (n - 1) * (SMALL + g) : (W - (n - 1) * g) / n;
+    return btns.map(function (b, j) { var w = compact && j !== k ? SMALL : wide, p = [x, x + w]; x += w + g; return p; });
   }
-  addEventListener('resize', place);
+  function place(k) {
+    if (k === undefined) k = shown;
+    var p = spans(k), W = row.clientWidth;
+    var cols = compact ? p.map(function (q) { return (q[1] - q[0]).toFixed(1) + 'px'; }).join(' ') : '';
+    row.style.gridTemplateColumns = cols; lit.style.gridTemplateColumns = cols;
+    lit.style.setProperty('--cl', p[k][0].toFixed(1) + 'px');
+    lit.style.setProperty('--cr', (W - p[k][1]).toFixed(1) + 'px');
+    lit.style.setProperty('--ox', ((p[k][0] + p[k][1]) / 2).toFixed(1) + 'px');
+    btns.forEach(function (b, j) { b.classList.toggle('on', j === k); lits[j].classList.toggle('on', j === k); });
+  }
+  function fit() { compact = bar.clientWidth < 520; bar.classList.toggle('compact', compact); place(); }
+  addEventListener('resize', fit);
   function shine(delay) {
     if (reduce || !glint.animate) return;
-    var r = row.getBoundingClientRect(), b = btns[cur].getBoundingClientRect();
-    glint.animate([{ transform: 'translateX(' + Math.round(b.left - r.left - 64) + 'px)' }, { transform: 'translateX(' + Math.round(b.right - r.left + 8) + 'px)' }],
+    var p = spans(shown)[shown];
+    glint.animate([{ transform: 'translateX(' + Math.round(p[0] - 64) + 'px)' }, { transform: 'translateX(' + Math.round(p[1] + 8) + 'px)' }],
       { duration: 800, delay: delay || 0, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'backwards' });
   }
   setInterval(function () { if (started && !drag && !document.hidden) shine(0); }, 7000);
 
-  // Dragging along the row: the bubble tracks the finger exactly, takes the colour of the button
-  // underneath, and settles on the nearest one when let go.
-  function nearest(x) {
-    var best = 0, d = Infinity;
-    btns.forEach(function (b, i) { var r = b.getBoundingClientRect(), e = Math.abs(r.left + r.width / 2 - x); if (e < d) { d = e; best = i; } });
+  // dragging along the row moves the bubble to the button under the finger; letting go opens it
+  function under(x) {
+    var px = x - row.getBoundingClientRect().left, best = 0, d = Infinity;
+    spans(shown).forEach(function (q, j) { var e = px < q[0] ? q[0] - px : px > q[1] ? px - q[1] : 0; if (e < d) { d = e; best = j; } });
     return best;
   }
   row.addEventListener('pointerdown', function (e) { if (e.button === 0) drag = { id: e.pointerId, x: e.clientX, on: false }; });
@@ -194,11 +212,8 @@
       drag.on = true; lit.classList.remove('press'); bar.classList.add('dragging');
       try { row.setPointerCapture(e.pointerId); } catch (err) {}
     }
-    var r = row.getBoundingClientRect(), w = btns[0].getBoundingClientRect().width;
-    var c = Math.max(w / 2, Math.min(r.width - w / 2, e.clientX - r.left));
-    lit.style.setProperty('--cl', (c - w / 2).toFixed(1) + 'px');
-    lit.style.setProperty('--cr', (r.width - c - w / 2).toFixed(1) + 'px');
-    lit.style.setProperty('--tint', 'var(--a-' + stages[nearest(e.clientX)].dataset.look + ')');
+    var k = under(e.clientX);
+    if (k !== shown) { shown = k; place(k); lit.style.setProperty('--tint', 'var(--a-' + stages[k].dataset.look + ')'); }
   });
   function letGo(e) {
     lit.classList.remove('press');
@@ -206,8 +221,8 @@
     var d = drag; drag = null;
     if (!d.on) return;
     bar.classList.remove('dragging'); lit.style.removeProperty('--tint');
-    var i = e.type === 'pointercancel' ? cur : nearest(e.clientX);
-    if (i === cur) { place(); shine(380); } else go(i);
+    var k = e.type === 'pointercancel' ? cur : shown;
+    if (k === cur) { shown = cur; place(); shine(300); } else go(k);
   }
   row.addEventListener('pointerup', letGo); row.addEventListener('pointercancel', letGo);
   row.addEventListener('pointerleave', function () { lit.classList.remove('press'); });
@@ -218,25 +233,43 @@
     for (var i = 0; i < stages.length; i++) if (a.getAttribute('href') === '#' + stages[i].id) { e.preventDefault(); go(i); return; }
   });
 
+  // The intro's second line switches its last word, quickly, while the intro is on screen.
+  var swap = document.querySelector('.swap'), words = swap ? [].slice.call(swap.children) : [], wi = 0, swapT = 0, swapWait = 0;
+  function swapStop() { clearTimeout(swapWait); clearInterval(swapT); swapT = 0; }
+  function swapReset() { swapStop(); wi = 0; words.forEach(function (w, j) { w.classList.toggle('on', j === 0); w.classList.remove('off'); }); }
+  function swapStart() {
+    swapStop();
+    if (!words.length || reduce) return;
+    swapWait = setTimeout(function () {
+      swapT = setInterval(function () {
+        var prev = words[wi]; wi = (wi + 1) % words.length;
+        prev.classList.remove('on'); prev.classList.add('off');
+        words[wi].classList.remove('off'); words[wi].classList.add('on');
+      }, 1700);
+    }, 2400);
+  }
+
   function show() {
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
     if (!started) return;
     var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
+    if (cur === 0) swapStart(); else swapReset();
   }
   // Leaving fades everything at once; the next screen starts as soon as the old one is gone.
   function go(i, now) {
     if (i === cur && !now) return;
     var from = stages[cur];
-    cur = i;
+    cur = shown = i;
     setLook(stages[i].dataset.look, now);
     btns.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     place(); if (!now) shine(380);
     try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
-    from.classList.remove('in');
+    from.classList.remove('in'); swapStop();
     clearTimeout(timer);
     if (now || reduce) show(); else timer = setTimeout(show, 170);
   }
   function fromHash() { for (var i = 0; i < stages.length; i++) if (location.hash === '#' + stages[i].id) return i; return -1; }
+  fit();
   go(Math.max(0, fromHash()), true);
   addEventListener('hashchange', function () { var i = fromHash(); if (i >= 0) go(i); });
 
