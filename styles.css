@@ -116,7 +116,7 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .wheel li { transform-origin: left center; will-change: transform, opacity; }
 .wheel a { display: block; text-decoration: none; padding-block: 0.12em; font-size: clamp(2rem, 4.4vw, 3.9rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1.05; color: var(--ink-3); transition: color .4s; }
 .panel { min-height: calc(100svh - var(--barh)); display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: clamp(48px, 8vh, 96px) clamp(18px, 3vw, 44px); scroll-snap-align: center; scroll-snap-stop: always; }
-.panel h3 { display: none; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; color: var(--ink); }
+.panel h3 { display: none; margin: 0 0 6px; font-size: clamp(2.2rem, 9vw, 2.8rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: var(--ink); }
 .panel p.lead { color: var(--ink); max-width: 17ch; margin: 0; font-weight: 800; font-size: clamp(1.9rem, 3.3vw, 3rem); line-height: 1.02; letter-spacing: -0.05em; text-wrap: balance; }
 .panel p { margin: 0; max-width: 42ch; color: color-mix(in srgb, var(--ink) 82%, transparent); font-size: 18px; font-weight: 500; line-height: 1.6; letter-spacing: -0.01em; }
 .panel p.lead + p { margin-top: 10px; }
@@ -264,7 +264,7 @@ html.js.gated .themes { opacity: 0; pointer-events: none; }
 
 
 /* theme switch: colours follow the front outward from the centre */
-html.morphing h1, html.morphing h2, html.morphing h3, html.morphing p, html.morphing .t, html.morphing .d, html.morphing .k, html.morphing .label, html.morphing .wheel a, html.morphing .links a, html.morphing .copy, html.morphing .cta, html.morphing .sunmoon { transition-property: color, background-color, border-color, --ga, --gb; transition-duration: 1.1s; transition-timing-function: ease; transition-delay: var(--md, 0s); }
+html.morphing h1, html.morphing h2, html.morphing h3, html.morphing p, html.morphing .t, html.morphing .d, html.morphing .k, html.morphing .label, html.morphing .wheel a, html.morphing .links a, html.morphing .copy, html.morphing .sunmoon { transition-property: color, background-color, border-color, --ga, --gb; transition-duration: 1.1s; transition-timing-function: ease; transition-delay: var(--md, 0s); }
 .ch { transition-property: opacity, transform; }
 /* gradient words and letters inherit their two colours from the block, so they crossfade with it as one piece */
 
@@ -332,26 +332,11 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
 
 /* ---- 4. work with me: a friendly, firm button beside the theme toggle */
 .themes { display: flex; align-items: center; gap: 10px; }
-.cta { font-weight: 700; font-size: 14px; letter-spacing: -0.01em; text-decoration: none; color: var(--bg); background: var(--ink); padding: 11px 18px; border-radius: 99px; white-space: nowrap; transition: background .3s ease, transform .3s cubic-bezier(.16, 1, .3, 1); }
-.cta:hover { background: var(--teal); transform: translateY(-1px); }
 
 
-/* the work button never shows a selection ring or box */
-.cta, .cta:focus, .cta:focus-visible, .cta:active { outline: none; -webkit-tap-highlight-color: transparent; }
 
 
 /* Let's work together: a frosted pill at the end of the story, next to the email */
-.work-cta { margin: 26px 0 0; }
-.cta { display: inline-block; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; text-decoration: none; color: var(--ink); padding: 13px 22px; border-radius: 99px; white-space: nowrap; position: relative; isolation: isolate; border: 0;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02) 55%), color-mix(in srgb, var(--bg) 35%, transparent);
-  backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  transition: transform .5s cubic-bezier(.16, 1, .3, 1), background .3s ease; }
-.cta::before { content: ''; position: absolute; inset: -14px -18px; z-index: -1; border-radius: 99px; pointer-events: none; background: radial-gradient(50% 60% at 50% 60%, color-mix(in srgb, var(--teal) 40%, transparent), transparent 70%); opacity: .35; animation: breathe 4.5s ease-in-out infinite; will-change: opacity; }
-@keyframes breathe { 50% { opacity: .65; } }
-@media (prefers-reduced-motion: reduce) { .cta::before { animation: none; } }
-.cta:hover { transform: translateY(-1px); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 55%), color-mix(in srgb, var(--bg) 50%, transparent); }
-.cta:hover::before { opacity: .7; }
 .mail { margin-top: 22px; }
 
 /* Work done: plain rows, roomier descriptions, no icon column */
