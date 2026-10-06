@@ -555,3 +555,10 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
 .nw { white-space: nowrap; }
 .ex li { line-height: 1.12; }
 .ex-d { margin-top: 8px; line-height: 1.5; }
+
+/* second text, GIPX style: the whole line arrives at once right after its title, a quick fade and a soft spring up */
+.js .panel [data-letters] .ch, .js .soft[data-letters] .ch, .js .ex-d, .js .nm-d, .js .coda .lead .ch {
+  transform: translateY(.45em); filter: none; transition: opacity .4s ease, transform .7s cubic-bezier(.34, 1.56, .64, 1) !important; transition-delay: .32s !important; }
+.js .in .panel [data-letters] .ch, .js .panel.in [data-letters] .ch, .js .in .soft[data-letters] .ch, .js .ex li.in .ex-d, .js .in .nm-d, .js .in .coda .lead .ch, .js .coda.in .lead .ch { transform: none; }
+.js .ex-d { opacity: 0; } .js .ex li.in .ex-d { opacity: 1; }
+h2 .dots { width: 1.2em; color: var(--teal); }
