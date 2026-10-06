@@ -428,3 +428,10 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
 .stmt { margin: 0; max-width: 30ch; font-size: clamp(1.6rem, 3vw, 2.7rem); font-weight: 800; letter-spacing: -0.045em; line-height: 1.08; color: var(--ink); text-wrap: balance; }
 .stmt em { font-style: normal; color: var(--teal); }
 .prod { display: flex; flex-direction: column; gap: 8px; }
+
+/* calmer: one highlight per statement, hairline rows with a dot */
+.cases { gap: 0; }
+.stmt { position: relative; max-width: none; padding: clamp(16px, 2.6vh, 26px) 0 clamp(16px, 2.6vh, 26px) 26px; border-top: 1px solid var(--line); font-size: clamp(1.35rem, 2.3vw, 2.1rem); font-weight: 700; line-height: 1.15; color: var(--ink-2); }
+.stmt:last-child { border-bottom: 1px solid var(--line); }
+.stmt::before { content: ''; position: absolute; left: 2px; top: calc(clamp(16px, 2.6vh, 26px) + .45em); width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+.stmt em { color: var(--ink); }
