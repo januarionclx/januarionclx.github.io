@@ -230,20 +230,8 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .products h3 { transform-origin: left center; }
 
 
-/* ---------- play gate ---------- */
-html.js.gated, html.js.gated body { overflow: hidden; }
-html.gated .where, html.gated .hero .thesis { animation-play-state: paused; }
-.gate { position: fixed; inset: 0; z-index: 100; background: var(--bg); display: grid; place-items: center; align-content: center; gap: 22px; transition: opacity 1s ease, visibility 0s 1s; }
-.gate.gone { opacity: 0; visibility: hidden; pointer-events: none; }
-.play { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: var(--bg); background: var(--ink); border: 0; box-shadow: 0 24px 60px -24px var(--glass-shadow); }
-.play svg { width: 30px; height: 30px; margin-left: 4px; }
-.play::after { content: ''; position: absolute; width: 88px; height: 88px; border-radius: 50%; border: 1px solid var(--line-2); animation: halo 2.6s cubic-bezier(.16, 1, .3, 1) infinite; pointer-events: none; }
-.play { position: relative; }
-@keyframes halo { from { transform: scale(1); opacity: 1; } to { transform: scale(1.9); opacity: 0; } }
-.gate-name { font-weight: 900; font-size: clamp(1.4rem, 2.6vw, 2rem); letter-spacing: -0.05em; }
-.gate-hint { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); margin-top: -10px; }
-html:not(.js) .gate { display: none; }
-@media (prefers-reduced-motion: reduce) { .play::after { animation: none; } .gate { transition: none; } }
+/* ---------- intro: held briefly until fonts are ready ---------- */
+html.js.gated .where, html.js.gated .hero .thesis { animation-play-state: paused; }
 
 
 
@@ -254,14 +242,14 @@ html.deck { scroll-snap-type: none; scroll-behavior: auto; }
 .keys { display: none; }
 html.deck .keys { display: inline-flex; gap: 8px; align-items: center; margin-top: clamp(28px, 4vw, 44px); font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); animation: fade .9s 1.4s ease-out both; }
 .keys kbd { font-family: var(--f-mono); font-size: 11px; min-width: 26px; height: 26px; display: inline-grid; place-items: center; border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 7px; color: var(--ink-2); background: color-mix(in srgb, var(--bg) 60%, transparent); }
-html.gated .keys { animation-play-state: paused; }
+html.js.gated .keys { animation-play-state: paused; }
 
 
 
 
 /* light / dark toggle, top right */
 .themes { position: fixed; z-index: 45; top: calc(env(safe-area-inset-top, 0px) + 16px); right: clamp(12px, 2vw, 24px); display: flex; gap: 6px; padding: 6px; border-radius: 99px; background: var(--glass); border: 1px solid var(--glass-line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: opacity .6s ease .4s; }
-html.gated .themes { opacity: 0; pointer-events: none; }
+html.js.gated .themes { opacity: 0; pointer-events: none; }
 .themes button { width: 30px; height: 30px; padding: 0; border-radius: 50%; border: 0; cursor: pointer; background: none; display: grid; place-items: center; }
 .sunmoon { width: 20px; height: 20px; color: var(--ink); overflow: visible; }
 .sunmoon .core { transform-origin: center; transition: r .6s cubic-bezier(.16, 1, .3, 1); }

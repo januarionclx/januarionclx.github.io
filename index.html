@@ -29,13 +29,6 @@
     </svg>
   </button>
 </div>
-<div class="gate" id="gate">
-  <button class="play magnet" id="play" type="button" aria-label="Play the introduction">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
-  </button>
-  <span class="gate-name">Januario Pinto</span>
-  <span class="gate-hint">Press play</span>
-</div>
 <canvas id="bgShader" class="page-shader" aria-hidden="true"></canvas>
 
 
@@ -169,18 +162,16 @@
 <script>
 (function () {
   document.documentElement.classList.add('js');
-  // play gate: nothing moves until a person presses play
+  // the intro starts on its own once the fonts are in (at most about a second), so words never rise in a fallback face
   var playAt = null;
   function begin() {
     if (playAt !== null) return;
     playAt = performance.now();
     document.documentElement.classList.remove('gated');
-    document.getElementById('gate').classList.add('gone');
     document.querySelector('.hero').classList.add('in');
   }
-  document.getElementById('play').addEventListener('click', begin);
-  addEventListener('keydown', function (e) { if (playAt === null && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown')) { e.preventDefault(); begin(); } });
-  document.getElementById('play').focus({ preventScroll: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
+  setTimeout(begin, 1100);
   document.getElementById('year').textContent = new Date().getFullYear();
 
   // theme toggle; stored choice wins, else system
