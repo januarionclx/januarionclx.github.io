@@ -1,0 +1,25 @@
+# Januario Pinto
+
+> Software developer and consultant in Lisbon. Designs organizations as living systems and the software that runs on them. Founder of The Unit Organization, an incubator and studio.
+
+## Services
+- Software development: web platforms, internal tools, AI features and automation. A working product, not a prototype.
+- Consulting: strategy, technology and organization. Fractional CTO without the cost of a full-time hire. Distributed systems that don't rely on the founder. Self-managing teams (Teal, Holacracy).
+- Ventures: companies built from the ground up, incubated and funded through The Unit Organization.
+
+## Public portfolio (products you can open)
+- People (via https://theunitorganization.com): the platform for self-managing teams (roles, circles, decisions).
+- Flows (via https://theunitorganization.com): business automations the business can read.
+- Restaurant CRM: orders, customers, deliveries and the numbers behind them, in one system.
+
+## Private work (with clients; described, not linked)
+- A restaurant platform: point of sale, a WhatsApp ordering bot, an ordering website, delivery through transport-partner API integrations, cloud sales dashboards.
+- A clinic platform: CRM for a medical practice with AI-drafted reports for doctors.
+- Holacracy tooling: an AI assistant for self-management, used by teams in practice.
+
+## Contact
+- Email: contact@januariopinto.com
+- Site: https://januariopinto.com
+- The Unit Organization: https://theunitorganization.com
+- X: https://x.com/januario_xyz
+- GitHub: https://github.com/januarionclx
