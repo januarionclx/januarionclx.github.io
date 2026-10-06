@@ -432,6 +432,41 @@
     e.preventDefault(); deckGo(i);
   });
 
+  // ---------- stage mode (GIPX narrative): the screen stays put; each step fades out and the next surfaces in place ----------
+  var stageEls = deckSteps.map(function (sel) { return document.querySelector(sel); });
+  var cur = 0, busyUntil = 0;
+  document.documentElement.classList.add('stage-mode');
+  stageEls.forEach(function (el) { el.setAttribute('data-stage', ''); });
+  stageCheck = function () {};
+  window.__stages = stageEls.length; window.__stage = 0;
+  function show(i) {
+    window.__stage = i;
+    stageEls.forEach(function (el, j) { el.classList.toggle('cur', j === i); if (j !== i) el.classList.remove('in'); });
+    var el = stageEls[i]; surface(el);
+    requestAnimationFrame(function () { el.classList.add('in'); });
+  }
+  deckIndex = function () { return cur; };
+  deckOn = function () { return playAt !== null; };
+  deckGo = function (i) {
+    i = Math.max(0, Math.min(stageEls.length - 1, i));
+    var now = performance.now();
+    if (i === cur || now < busyUntil) return;
+    busyUntil = now + 700; gliding = true;
+    stageEls[cur].classList.remove('in');
+    var next = i; cur = i;
+    setTimeout(function () { show(next); gliding = false; coolUntil = performance.now() + 250; }, reduce ? 0 : 380);
+  };
+  stageEls[0].classList.add('cur');
+  // swipe on touch screens
+  var ty = null;
+  addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchmove', function (e) { if (deckOn()) e.preventDefault(); }, { passive: false });
+  addEventListener('touchend', function (e) {
+    if (ty === null || !deckOn()) return;
+    var dy = ty - e.changedTouches[0].clientY; ty = null;
+    if (Math.abs(dy) > 40) deckGo(cur + (dy > 0 ? 1 : -1));
+  }, { passive: true });
+
   // copy email
   var btn = document.getElementById('copyBtn');
   btn.addEventListener('click', function () {
@@ -513,7 +548,7 @@
       act += (actTarget - act) * 0.025;
       gl.uniform1f(U.u_act, act);
       // page-wide smoke: full on the hero, quieter behind reading sections
-      if (canvas.classList.contains('page-shader')) amt += ((inSvc > 0.5 || scrollY < innerHeight * 0.5 || scrollY > document.documentElement.scrollHeight - innerHeight * 1.5 ? 1 : 0.38) - amt) * 0.04;
+      if (canvas.classList.contains('page-shader')) amt += ((window.__stage !== undefined ? (window.__stage === 0 || window.__stage === window.__stages - 1 ? 1 : 0.38) : (scrollY < innerHeight * 0.5 || scrollY > document.documentElement.scrollHeight - innerHeight * 1.5 ? 1 : 0.38)) - amt) * 0.04;
       gl.uniform1f(U.u_amt, amt);
       // the palette drifts slowly between the theme's two tones (about 50s a cycle)
       var inSvc = 0;

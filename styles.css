@@ -590,3 +590,15 @@ h2 .dots { width: 1.2em; color: var(--teal); }
 .js [data-split] .ch, .js .nm-d, .js .ex-d { transition-delay: 0s !important; }
 .js .in [data-split] .ch, .js [data-split].in .ch, .js .in .nm-d, .js .in .ex-d { transition-delay: var(--d, 0s) !important; }
 .dots3 { display: none; }
+
+/* ---------- stage mode: one fixed screen, steps swap in place ---------- */
+html.stage-mode, html.stage-mode body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+.stage-mode [data-stage] { position: fixed; inset: 0; z-index: 2; min-height: 0 !important; display: flex; flex-direction: column; justify-content: center; opacity: 0; visibility: hidden; transition: opacity .38s ease, visibility 0s .38s; }
+.stage-mode [data-stage].cur { opacity: 1; visibility: visible; transition: opacity .25s ease; }
+.stage-mode .svc-index { display: none; }
+.stage-mode .svc-grid { display: block; }
+.stage-mode .panel { padding-block: 0; padding-inline: calc(max(0px, (100vw - var(--col)) / 2) + var(--gut) + clamp(18px, 3vw, 36px)); justify-content: center; }
+.stage-mode .panel h3 { display: block; font-size: clamp(2.6rem, 6vw, 5.4rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1; margin-bottom: clamp(16px, 3vh, 28px); }
+.stage-mode .panel p.soft { max-width: 46ch; }
+.stage-mode .foot { position: absolute; }
+@media (max-width: 560px) { .stage-mode .panel { padding-inline: clamp(18px, 3vw, 36px); } .stage-mode .panel h3 { font-size: clamp(2.4rem, 11vw, 3.2rem); } }
