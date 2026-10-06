@@ -25,7 +25,6 @@
   --glass-shadow: rgba(19, 40, 36, 0.35);
 
   --f-display: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --f-serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
   --f-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   --col: 1120px;
   --gut: clamp(16px, 4vw, 40px);
@@ -61,7 +60,6 @@ body::after {
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
 
-.serif { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
 .label { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); }
 
 /* ---------- bars: full-bleed hairlines with a boxed inner column ---------- */
@@ -87,7 +85,6 @@ a { color: inherit; }
 .name .line { display: block; }
 .name .line + .line { margin-top: 0.03em; }
 .name .accent { color: var(--teal); }
-.name .serif { font-weight: 300; color: var(--teal); letter-spacing: -0.04em; font-size: 1.04em; padding-right: 0.06em; }
 .where { margin: clamp(26px, 3.4vw, 40px) 0 0; font-weight: 600; font-size: clamp(1rem, 1.4vw, 1.2rem); letter-spacing: -0.015em; color: var(--ink-2); }
 .thesis { margin: clamp(10px, 1.2vw, 14px) 0 0; max-width: 34ch; font-weight: 500; font-size: clamp(1.4rem, 2.5vw, 2.1rem); line-height: 1.22; letter-spacing: -0.035em; text-wrap: balance; }
 .thesis em, .where em { font-style: normal; color: var(--teal); }
@@ -105,7 +102,6 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .head .cell { padding: 22px clamp(18px, 3vw, 36px); display: flex; align-items: baseline; }
 .head .tag { width: clamp(64px, 9vw, 104px); flex: none; justify-content: center; }
 .head h2 { margin: 0; font-size: clamp(2.3rem, 5.6vw, 4.4rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1; }
-.head h2 .serif { font-weight: 400; color: var(--teal); }
 .head .aside { margin-left: auto; padding-left: 16px; }
 
 /* ---------- services: sticky wheel index + one panel per screen ---------- */
@@ -180,7 +176,6 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .coda { position: relative; overflow: hidden; isolation: isolate; }
 .coda .cell { padding: clamp(40px, 6vw, 80px) clamp(18px, 3vw, 36px) 80px; }
 .coda h2 { margin: 0; font-size: clamp(2.6rem, 8vw, 6.6rem); font-weight: 900; letter-spacing: -0.065em; line-height: 0.88; }
-.coda h2 .serif { font-weight: 300; color: var(--teal); }
 .coda .lead { margin: 24px 0 0; max-width: 44ch; color: var(--ink-2); font-size: 17px; }
 .mail { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .mail .addr { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.3rem, 3vw, 2.1rem); letter-spacing: -0.035em; user-select: all; text-decoration: none;  overflow-wrap: anywhere; }
