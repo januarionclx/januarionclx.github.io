@@ -205,7 +205,7 @@
     var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!calm) {
       shaders.forEach(function (s) { s.morph(); });
-      if (!morphEls) morphEls = [].slice.call(document.querySelectorAll('.ch, [data-split] .w > span, p, h1, h2, h3, li, a, .label, .t, .d, .k, button, .ini'));
+      if (!morphEls) morphEls = [].slice.call(document.querySelectorAll('h1, h2, h3, p, .t, .d, .k, .label, .wheel a, .links a, .copy, .cta'));
       var cx = innerWidth / 2, cy = innerHeight / 2, far = Math.hypot(cx, cy), ms = shaders[0] ? shaders[0].ms : 2800;
       morphEls.forEach(function (el) {
         var r = el.getBoundingClientRect();
