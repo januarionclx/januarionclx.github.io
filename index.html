@@ -30,6 +30,12 @@
   </button>
 </div>
 <canvas id="bgShader" class="page-shader" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="surface" x="-10%" y="-30%" width="120%" height="160%">
+    <feTurbulence id="surfaceNoise" type="fractalNoise" baseFrequency="0.006 0.05" numOctaves="2" seed="4" result="n"/>
+    <feDisplacementMap id="surfaceMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 
 
 <header class="hero" id="top">
@@ -40,8 +46,8 @@
           <span class="line"><span>Hey, I&rsquo;m</span></span>
           <span class="line"><span class="accent sheen">Januario.</span></span>
         </h1>
-        <p class="where">Software and consulting, from <em>Lisbon.</em></p>
-        <p class="thesis">I design organizations, and the software they run on, as <em>living systems.</em></p>
+        <p class="where" data-split data-letters style="--base: .55s">Software and consulting, from <em>Lisbon.</em></p>
+        <p class="thesis" data-split data-letters style="--base: 1.5s">I design organizations, and the software they run on, as <em>living systems.</em></p>
         <p class="keys" aria-hidden="true"><kbd>&darr;</kbd> or scroll to continue</p>
       </div>
     </div>
@@ -63,17 +69,16 @@
         <article class="panel" id="svc-dev" style="--c: var(--teal)">
           <h3>Software development</h3>
           <p class="lead" data-depth="0.5" data-split>A working product, <em>not a prototype.</em></p>
-          <p data-depth="0.8">From the first conversation to launch, and kept running after it. Built on an architecture your next engineer can understand.</p>
         </article>
         <article class="panel" id="svc-tech" style="--c: var(--ochre)">
           <h3>Technical consulting</h3>
-          <p class="lead" data-depth="0.5" data-split>A senior technical partner, <em>without the full-time hire.</em></p>
-          <p data-depth="0.8">Fractional CTO for the decisions that are expensive to get wrong: what to build, what to buy, how it scales, and where AI actually pays off.</p>
+          <p class="lead" data-depth="0.5" data-split>A fractional CTO for the decisions <em>you can&rsquo;t get wrong.</em></p>
+          <p data-depth="0.8">Senior judgment on architecture, infrastructure and AI, without the cost of a full-time hire.</p>
         </article>
         <article class="panel" id="svc-org" style="--c: var(--clay)">
           <h3>Organizational consulting</h3>
           <p class="lead" data-depth="0.5" data-split>A company that runs <em>without a boss</em> in every loop.</p>
-          <p data-depth="0.8">Clear roles, distributed authority, decisions made where the work happens. New ventures can be incubated with you through The Unit.</p>
+          <p data-depth="0.8">Clear roles. Distributed authority. Systems people can run without you.</p>
         </article>
       </div>
     </div>
@@ -84,7 +89,7 @@
       <div class="inner">
         <div class="cells">
           <div class="cell tag"><span class="label">II</span></div>
-          <div class="cell grow" data-depth="0.3"><h2 id="now-title" data-split>Right <span class="serif">now</span></h2><span class="aside label">October 2026</span></div>
+          <div class="cell grow" data-depth="0.3"><h2 id="now-title" data-split>Right <span class="accent sheen">now</span></h2></div>
         </div>
       </div>
     </div>
@@ -92,16 +97,15 @@
       <div class="inner">
         <div class="cells now">
           <div data-depth="0.6">
-            <p class="big" data-split>Large-scale software and organizational work, <em>in a country rebuilding itself.</em></p>
-            <p>From Lisbon, I work alongside a small group of partners on projects where technology, institutions and people have to change together. The kind of work where getting the organization right is the project.</p>
+            <p class="big" data-split data-letters style="--base: .6s">Large-scale software and organizational work, in a country rebuilding itself.</p>
+            <p>From Lisbon, with a small group of partners, where technology and institutions have to change together.</p>
           </div>
           <div data-depth="1.1">
-            <span class="label">Building at The Unit</span>
             <ul class="products" id="products">
-              <li style="--c: var(--teal)"><h3>People</h3><p>The platform for self-managing teams. Roles, circles and decisions in one place.</p></li>
-              <li style="--c: var(--ochre)"><h3>Flows</h3><p>Business automations written so the business can read them.</p></li>
-              <li style="--c: var(--clay)"><h3>Verbal</h3><p>Voice-first dictation. Speak, and it is written.</p></li>
-              <li style="--c: var(--ink)"><h3>Artist OS</h3><p>Websites and tools for musicians, on their own domain.</p></li>
+              <li style="--c: var(--teal)"><h3>People</h3></li>
+              <li style="--c: var(--ochre)"><h3>Flows</h3></li>
+              <li style="--c: var(--clay)"><h3>Verbal</h3></li>
+              <li style="--c: var(--ink)"><h3>Artist OS</h3></li>
             </ul>
           </div>
         </div>
@@ -114,7 +118,7 @@
       <div class="inner">
         <div class="cells">
           <div class="cell tag"><span class="label">III</span></div>
-          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>Public <span class="serif">portfolio</span></h2></div>
+          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>Public <span class="accent sheen">portfolio</span></h2></div>
         </div>
       </div>
     </div>
@@ -122,11 +126,11 @@
       <div class="inner">
         <div class="cells" style="display:block">
           <div class="work">
-            <a data-depth="0.40" href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="yr">2019</span><span class="t">The Unit Organization</span><span class="d">Incubator and studio. Products, companies, consulting.</span><span class="k"><span class="txt">Founder</span><span class="arrow">&#8599;</span></span></a>
-            <a href="https://restaurantesabasnieves.com" target="_blank" rel="noopener"><span class="yr">2026</span><span class="t">Sabas Nieves</span><span class="d">Point of sale and owner&rsquo;s portal for a restaurant in Venezuela.</span><span class="k"><span class="txt">Client</span><span class="arrow">&#8599;</span></span></a>
-            <a data-depth="0.58" href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t">Holacracy Assistant</span><span class="d">An AI guide to self-management, used by teams in practice.</span><span class="k"><span class="txt">Product</span><span class="arrow">&#8599;</span></span></a>
-            <a data-depth="0.76" href="https://strangeartefacts.com" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t">Strange Artefacts</span><span class="d">AI-powered creative tools and film concepts.</span><span class="k"><span class="txt">Studio</span><span class="arrow">&#8599;</span></span></a>
-            <div class="row"><span class="yr">2023</span><span class="t">Self-run communities</span><span class="d">Governance for coliving and coworking spaces, run by the people who live and work in them.</span><span class="k"><span class="txt">Consulting</span></span></div>
+            <a data-depth="0.40" href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="yr">2019</span><span class="t"><span class="ini">T</span>he Unit Organization</span><span class="d">Incubator and studio. Products, companies, consulting.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <a href="https://restaurantesabasnieves.com" target="_blank" rel="noopener"><span class="yr">2026</span><span class="t"><span class="ini">S</span>abas Nieves</span><span class="d">Point of sale and owner&rsquo;s portal for a restaurant in Venezuela.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <a data-depth="0.58" href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t"><span class="ini">H</span>olacracy Assistant</span><span class="d">An AI guide to self-management, used by teams in practice.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <a data-depth="0.76" href="https://strangeartefacts.com" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t"><span class="ini">S</span>trange Artefacts</span><span class="d">AI-powered creative tools and film concepts.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <div class="row"><span class="yr">2023</span><span class="t"><span class="ini">S</span>elf-run communities</span><span class="d">Governance for coliving and coworking spaces, run by the people who live and work in them.</span><span class="k"></span></div>
           </div>
         </div>
       </div>
@@ -140,7 +144,7 @@
       <div class="cells">
         <div class="cell grow">
           <h2 data-depth="0.4" data-split>Let&rsquo;s <span class="accent sheen">talk.</span></h2>
-          <p class="lead" data-depth="0.7">If you are building something that has to grow, a company, a product or a team, write to me.<br>I read everything myself.</p>
+          <p class="lead" data-depth="0.7">Building something that has to grow? Write to me.<br>I read everything myself.</p>
           <div class="mail" data-depth="1">
             <a class="addr" id="addr" href="mailto:contact@januariopinto.com">contact@januariopinto.com</a>
             <button class="copy magnet" id="copyBtn" type="button">Copy</button>
@@ -164,11 +168,26 @@
   document.documentElement.classList.add('js');
   // the intro starts on its own once the fonts are in (at most about a second), so words never rise in a fallback face
   var playAt = null;
+  // ripple: strong while the words break the surface, calming to still glass
+  var surfMap = document.getElementById('surfaceMap'), surfNoise = document.getElementById('surfaceNoise'), surfRaf = 0, surfStage = null;
+  function surface(stage) {
+    if (!surfMap || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (surfStage && surfStage !== stage) surfStage.classList.remove('surfacing');
+    surfStage = stage; stage.classList.add('surfacing');
+    var t0 = performance.now(), dur = 2600;
+    cancelAnimationFrame(surfRaf);
+    (function f(now) {
+      var k = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - k, 3);
+      surfMap.setAttribute('scale', (34 * (1 - e)).toFixed(2));
+      surfNoise.setAttribute('baseFrequency', (0.006 + 0.004 * Math.sin(now / 400)).toFixed(4) + ' ' + (0.05 + 0.012 * Math.cos(now / 330)).toFixed(4));
+      if (k < 1) surfRaf = requestAnimationFrame(f); else { stage.classList.remove('surfacing'); surfMap.setAttribute('scale', '0'); }
+    })(t0);
+  }
   function begin() {
     if (playAt !== null) return;
     playAt = performance.now();
     document.documentElement.classList.remove('gated');
-    document.querySelector('.hero').classList.add('in');
+    surface(document.querySelector('.hero')); document.querySelector('.hero').classList.add('in');
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
   setTimeout(begin, 1100);
@@ -300,7 +319,9 @@
             if (!part) return;
             if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
             var w = document.createElement('span'); w.className = 'w';
-            var inner = document.createElement('span'); inner.textContent = part; inner.style.setProperty('--i', i++);
+            var inner = document.createElement('span');
+            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
+            else part.split('').forEach(function (ch) { var l = document.createElement('span'); l.className = 'ch'; l.textContent = ch; l.style.setProperty('--i', i++); inner.appendChild(l); });
             w.appendChild(inner); frag.appendChild(w);
           });
           n.parentNode.replaceChild(frag, n);
@@ -314,7 +335,7 @@
   splitEls.forEach(function (el) { var st = el.closest('.panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
   var stageIO = new IntersectionObserver(function (en) {
     if (playAt === null) return;
-    en.forEach(function (e) { e.target.classList.toggle('in', e.isIntersecting); });
+    en.forEach(function (e) { if (e.isIntersecting && !e.target.classList.contains('in')) surface(e.target); e.target.classList.toggle('in', e.isIntersecting); });
   }, { threshold: 0.45 });
   stages.forEach(function (st) { stageIO.observe(st); });
 
@@ -369,13 +390,13 @@
   }
   function deckGo(i) {
     i = Math.max(0, Math.min(deckSteps.length - 1, i));
-    var y = Math.round(deckY(deckSteps[i])), from = scrollY, start = performance.now(), ms = reduce ? 1 : 1000;
+    var y = Math.round(deckY(deckSteps[i])), from = scrollY, start = performance.now(), ms = reduce ? 1 : 650;
     if (Math.abs(y - from) < 2) return;
     gliding = true; document.documentElement.style.scrollSnapType = 'none';
     (function f(now) {
       var k = Math.min((now - start) / ms, 1), e = 0.5 - 0.5 * Math.cos(Math.PI * k);
       scrollTo(0, from + (y - from) * e);
-      if (k < 1) requestAnimationFrame(f); else { gliding = false; coolUntil = performance.now() + 450; acc = 0; document.documentElement.style.scrollSnapType = ''; }
+      if (k < 1) requestAnimationFrame(f); else { gliding = false; coolUntil = performance.now() + 220; acc = 0; document.documentElement.style.scrollSnapType = ''; }
     })(start);
   }
   function deckOn() { return deckMq.matches && playAt !== null; }
