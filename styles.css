@@ -520,3 +520,7 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
 /* optical alignment: big heavy type carries a left side-bearing; nudge small text to match */
 .panel p.soft, .ex-d, .nm-d { padding-left: .06em; }
 @media (max-width: 860px) { .panel p.soft, .ex-d { padding-left: 4px; } }
+
+/* examples stay below the section heading in weight and size; no colour */
+.ex-t { font-size: clamp(1.45rem, 2.4vw, 2.2rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; }
+.ex { gap: clamp(18px, 3.4vh, 34px); }
