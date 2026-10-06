@@ -646,3 +646,13 @@ h1 .accent .ch, h2 .accent .ch { font-style: italic; }
 .copy:hover { color: var(--ink); } .copy:active { transform: scale(.9); }
 .copy.done { color: var(--teal); }
 h1 .accent, h2 .accent { margin-left: .06em; }
+
+/* slower, clearer beats */
+.stage-mode .in [data-split] .ch { transition-duration: .8s, 1.2s, 1s !important; }
+.js .mail { opacity: 0; filter: blur(8px); transform: scale(.96); transform-origin: 0 50%; transition: opacity 1s ease, filter 1.1s ease, transform 1.3s cubic-bezier(.16, 1, .3, 1); transition-delay: 0s; }
+.js .in .mail { opacity: 1; filter: blur(0); transform: none; transition-delay: var(--d, 0s); }
+/* GIPX: the accent word takes its own line, bigger */
+h2 .accent { display: block; font-size: 1.25em; line-height: 1; margin-left: 0; margin-top: .02em; }
+/* buttons a little higher */
+.stagebar { bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(44px, 10vh, 96px)); }
+.fixed [data-stage] { padding-bottom: clamp(150px, 26vh, 260px) !important; }

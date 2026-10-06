@@ -316,14 +316,14 @@
   // one timeline per screen: everything reveals top to bottom, left to right, each piece after the one before
   stages.forEach(function (st) {
     var t = 0.15;
-    st.querySelectorAll('[data-split], .nm-d, .ex-d').forEach(function (el) {
-      if (el.matches('.nm-d, .ex-d')) { el.style.setProperty('--d', t.toFixed(2) + 's'); t += 0.3; return; }
+    st.querySelectorAll('[data-split], .nm-d, .ex-d, .mail').forEach(function (el) {
+      if (el.matches('.nm-d, .ex-d, .mail')) { el.style.setProperty('--d', t.toFixed(2) + 's'); t += 0.5; return; }
       var chs = el.querySelectorAll('.ch');
       var letters = el.hasAttribute('data-letters'), soft = el.classList.contains('soft') || el.closest('.panel, .coda') && letters && !el.closest('header');
-      if (letters && soft) { chs.forEach(function (ch) { ch.style.setProperty('--d', t.toFixed(2) + 's'); }); t += 0.3; return; }
-      var step = letters ? 0.016 : 0.045;
+      if (letters && soft) { chs.forEach(function (ch) { ch.style.setProperty('--d', t.toFixed(2) + 's'); }); t += 0.6; return; }
+      var step = letters ? 0.02 : 0.07;
       chs.forEach(function (ch, i) { ch.style.setProperty('--d', (t + i * step).toFixed(3) + 's'); });
-      t += chs.length * step + (letters ? 0.1 : 0.2);
+      t += chs.length * step + (letters ? 0.25 : 0.45);
     });
   });
 
