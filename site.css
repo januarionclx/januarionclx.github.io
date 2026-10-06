@@ -13,17 +13,19 @@
   --top: calc(env(safe-area-inset-top, 0px) + clamp(96px, 18vh, 190px));
   --bar-b: calc(env(safe-area-inset-bottom, 0px) + clamp(24px, 7vh, 72px));
   --bar-h: 44px;
-  --c-teal: #7fd1c4;
-  --c-gold: #e6c27a;
   color-scheme: dark;
 }
 @media (min-width: 640px) { :root { --pad: 40px; } }
 @media (min-width: 900px) { :root { --top: calc(env(safe-area-inset-top, 0px) + clamp(72px, 13vh, 150px)); } }
 
-/* looks: GIPX's teal and ink, and a gold one built the same way */
-:root, :root[data-look="teal"] { --bg: #071615; --fg: #eaf6f3; --muted: #a9c7c1; --accent: #7fd1c4; --s1: #1f5f5b; --s2: #7fd1c4; --s3: #071615; }
-:root[data-look="ink"] { --bg: #090909; --fg: #f5f5f3; --muted: #aaa9a5; --accent: #d4d3cf; --s1: #404040; --s2: #c9c9c9; --s3: #090909; }
+/* looks: GIPX's ink, teal, violet and ember (its red), and a gold one built the same way.
+   On black the name keeps the brand teal. */
+:root, :root[data-look="ink"] { --bg: #090909; --fg: #f5f5f3; --muted: #aaa9a5; --accent: #d4d3cf; --name: #7fd1c4; --s1: #404040; --s2: #c9c9c9; --s3: #090909; }
+:root[data-look="teal"] { --bg: #071615; --fg: #eaf6f3; --muted: #a9c7c1; --accent: #7fd1c4; --s1: #1f5f5b; --s2: #7fd1c4; --s3: #071615; }
 :root[data-look="gold"] { --bg: #120d05; --fg: #f7f0e1; --muted: #c8ba9c; --accent: #e6c27a; --s1: #5c471a; --s2: #e6c27a; --s3: #120d05; }
+:root[data-look="violet"] { --bg: #0b0716; --fg: #f3eeff; --muted: #bdb3d6; --accent: #c3a8ff; --s1: #3b2a7a; --s2: #c3a8ff; --s3: #0b0716; }
+:root[data-look="ember"] { --bg: #140705; --fg: #fff1e6; --muted: #d9bba9; --accent: #ffb070; --s1: #7a2a12; --s2: #ffb070; --s3: #140705; }
+:root[data-look]:not([data-look="ink"]) { --name: var(--accent); }
 :root { --line: color-mix(in srgb, var(--fg) 22%, transparent); }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -58,14 +60,14 @@ button { font: inherit; color: inherit; }
 .title .acc { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.025em; padding-left: .06em; color: var(--accent); }
 
 .hero .title { font-size: clamp(4.4rem, min(20.5vw, 19vh), 12.5rem); }
-.hero .name { color: var(--accent); }
+.hero .name { color: var(--name); }
 .where { margin: clamp(20px, 3vh, 34px) 0 0; font-size: clamp(1rem, 1.3vw, 1.2rem); font-weight: 600; letter-spacing: -.01em; color: var(--muted); }
 .thesis { margin: .5em 0 0; max-width: 23ch; font-size: clamp(1.32rem, 2.3vw, 2.1rem); font-weight: 700; line-height: 1.16; letter-spacing: -.035em; text-wrap: balance; }
-.where em, .thesis em { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.01em; color: var(--accent); transition: color var(--fade); }
+.where em, .thesis em { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.01em; color: var(--name); transition: color var(--fade); }
 .thesis em { font-size: 1.08em; }
 
 .svc { display: grid; gap: clamp(18px, 2.6vh, 30px); margin-top: clamp(20px, 3vh, 36px); }
-.svc h3 { margin: 0; font-size: clamp(1.35rem, 2vw, 1.9rem); font-weight: 800; line-height: 1.1; letter-spacing: -.035em; color: var(--c, var(--fg)); }
+.svc h3 { margin: 0; font-size: clamp(1.35rem, 2vw, 1.9rem); font-weight: 800; line-height: 1.1; letter-spacing: -.035em; color: var(--accent); }
 .svc p, .lead { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; transition: color var(--fade); }
 .svc p .l, .lead .l, .thesis .l { display: block; }
 .svc p .l, .lead .l, .nm-d { text-wrap: balance; }
@@ -148,7 +150,7 @@ button { font: inherit; color: inherit; }
 .look svg { width: 20px; height: 20px; overflow: visible; }
 .look .em { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; transform-box: fill-box; transform-origin: center; opacity: 0; transform: scale(.6) rotate(-40deg); transition: opacity .25s ease, transform .5s var(--reel); }
 .look .em .fill { fill: currentColor; stroke: none; }
-.look[data-look="teal"] .em-teal, .look[data-look="ink"] .em-ink, .look[data-look="gold"] .em-gold { opacity: 1; transform: none; }
+.look[data-look="teal"] .em-teal, .look[data-look="ink"] .em-ink, .look[data-look="gold"] .em-gold, .look[data-look="violet"] .em-violet, .look[data-look="ember"] .em-ember { opacity: 1; transform: none; }
 
 /* ---------- wider screens ---------- */
 @media (min-width: 900px) {

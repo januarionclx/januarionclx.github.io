@@ -6,7 +6,7 @@
   <title>Januario Pinto | Software &amp; consulting</title>
   <meta name="description" content="Januario Pinto designs organizations as living systems and the software that runs on them. Software and consulting from Lisbon.">
   <meta name="author" content="Januario Pinto">
-  <meta name="theme-color" content="#071615">
+  <meta name="theme-color" content="#090909">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Januario Pinto">
   <meta property="og:description" content="I design organizations as living systems and the software that runs on them.">
@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <script>document.documentElement.classList.add('js'); document.documentElement.dataset.look = 'teal';</script>
+  <script>document.documentElement.classList.add('js'); document.documentElement.dataset.look = 'ink';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap">
@@ -30,15 +30,17 @@
 <div class="sky" aria-hidden="true"><canvas id="sky"></canvas></div>
 <div class="veil" aria-hidden="true"></div>
 
-<button type="button" class="look" id="lookBtn" data-look="teal" aria-label="Change colour">
+<button type="button" class="look" id="lookBtn" data-look="ink" aria-label="Change colour">
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <g class="em em-teal"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-4 3-6 6-10z"/></g>
     <g class="em em-ink"><circle cx="12" cy="12" r="7.5"/><circle class="fill" cx="12" cy="12" r="3"/></g>
     <g class="em em-gold"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></g>
+    <g class="em em-violet"><path d="M12 3.5l7 6-7 11-7-11z"/><path d="M5 9.5h14"/></g>
+    <g class="em em-ember"><path d="M12 3c.9 3.6 6 5.6 6 10.6a6 6 0 0 1-12 0c0-2.6 1.4-4.3 3-5.6.2 2 1.1 3.2 2.5 3.8C11 9.4 11.2 6.2 12 3z"/></g>
   </svg>
 </button>
 
-<header class="stage hero" id="top" data-look="teal" data-rest="0.7" aria-label="Intro">
+<header class="stage hero" id="top" data-look="ink" data-rest="0.7" aria-label="Intro">
   <div class="hero-in">
     <h1 class="title"><span class="l">Hey, I&rsquo;m</span> <span class="l name">Januario.</span></h1>
     <p class="where l grp">Software and consulting, from <em>Lisbon.</em></p>
@@ -47,14 +49,14 @@
 </header>
 
 <main>
-  <section class="stage" id="services" data-look="ink" aria-labelledby="services-title">
+  <section class="stage" id="services" data-look="teal" aria-labelledby="services-title">
     <h2 class="title" id="services-title"><span class="l">Services</span></h2>
     <div class="svc">
-      <article class="grp" style="--c: var(--c-teal)">
+      <article class="grp">
         <h3 class="l">Software development</h3>
         <p><span class="l">A working product, not a prototype.</span> <span class="l">Web platforms, internal tools and AI, built to last.</span></p>
       </article>
-      <article class="grp" style="--c: var(--c-gold)">
+      <article class="grp">
         <h3 class="l">Consulting</h3>
         <p><span class="l">A fractional CTO, without the cost of a full-time hire.</span> <span class="l">Distributed systems that don&rsquo;t rely on you.</span> <span class="l">Self-managing teams that run on their own.</span></p>
       </article>
@@ -75,7 +77,7 @@
     </ul>
   </section>
 
-  <section class="stage" id="portfolio" data-look="teal" aria-labelledby="portfolio-title">
+  <section class="stage" id="portfolio" data-look="violet" aria-labelledby="portfolio-title">
     <h2 class="title" id="portfolio-title"><span class="l">Public</span> <span class="l acc">portfolio</span></h2>
     <ul class="names">
       <li class="grp"><span class="nm l">People</span> <span class="nm-d l">A human-centric CRM.</span></li>
@@ -85,7 +87,7 @@
   </section>
 </main>
 
-<footer class="stage" id="contact" data-look="ink" aria-labelledby="contact-title">
+<footer class="stage" id="contact" data-look="ember" aria-labelledby="contact-title">
   <h2 class="title" id="contact-title"><span class="l">Let&rsquo;s</span> <span class="l acc">talk.</span></h2>
   <p class="lead grp"><span class="l">Building something that has to grow?</span> <span class="l">Write to me.</span> <span class="l">I read everything myself.</span></p>
   <div class="mail l grp" data-rest="0.2">
@@ -108,7 +110,7 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var stages = [].slice.call(document.querySelectorAll('.stage'));
   var NAMES = ['Intro', 'Services', 'Now', 'Portfolio', 'Contact'];
-  var LOOKS = ['teal', 'ink', 'gold'];
+  var LOOKS = ['ink', 'teal', 'gold', 'violet', 'ember'];
   var lookBtn = document.getElementById('lookBtn');
   document.getElementById('year').textContent = new Date().getFullYear();
 
