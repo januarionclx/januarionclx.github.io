@@ -100,11 +100,11 @@
       </div>
     </div>
     <div class="inner">
-        <p class="label case-note">With clients, under NDA. Described, never linked.</p>
+        <p class="label case-note">Private work, under NDA. Ask me about it.</p>
         <div class="cases">
-          <p class="stmt" data-depth="0.5" data-split>A full-stack system for a restaurant: point of sale, a <em>WhatsApp bot</em> that takes orders, a web shop, delivery and live sales dashboards.</p>
-          <p class="stmt" data-depth="0.7" data-split>A clinic CRM where <em>AI drafts the reports</em> doctors used to write by hand.</p>
-          <p class="stmt" data-depth="0.9" data-split>A <em>Holacracy copilot</em> that answers governance questions and drafts proposals for self-managing teams.</p>
+          <div class="stmt" data-depth="0.5"><p class="stmt-t" data-split>Restaurants that run on <em>WhatsApp.</em></p><p class="stmt-s">Point of sale &middot; ordering bot &middot; delivery &middot; live sales</p></div>
+          <div class="stmt" data-depth="0.7"><p class="stmt-t" data-split>Clinics where <em>AI</em> writes the reports.</p><p class="stmt-s">Patient CRM &middot; AI-drafted reports</p></div>
+          <div class="stmt" data-depth="0.9"><p class="stmt-t" data-split>Teams with no boss <em>in the loop.</em></p><p class="stmt-s">Holacracy copilot</p></div>
         </div>
     </div>
   </section>
@@ -441,7 +441,7 @@
   var SMOKE = HEAD + NOISE + WAVES +
     'void main(){vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;float t=u_time*.045;vec2 p=uv*1.9;p.x+=t*.4;p.y-=t*.3;' +
     'float act=u_act;float asp=u_res.x/u_res.y;vec2 m=((u_mouse-.5)*vec2(asp,1.))*1.9;float md=length(uv*1.9-m);p+=act*(m-uv*1.9)*.2*exp(-md*1.8);' +
-    'float glow=0.;for(int i=0;i<4;i++){vec3 rp=u_rip[i];float age=u_clock-rp.z;if(rp.z>0.&&age>0.&&age<4.5){vec2 rc=(rp.xy-.5)*vec2(asp,1.);vec2 dv=uv-rc;float d=length(dv);float ring=d-age*.42;float w=exp(-ring*ring*55.)*exp(-age*.9);p+=dv/(d+.001)*w*.4;glow+=w;}}' +
+    'float glow=0.;for(int i=0;i<4;i++){vec3 rp=u_rip[i];float age=u_clock-rp.z;if(rp.z>0.&&age>0.&&age<4.5){vec2 rc=(rp.xy-.5)*vec2(asp,1.);vec2 dv=uv-rc;float d=length(dv);float ring=d-age*.42;float w=exp(-ring*ring*55.)*exp(-age*.9);p+=dv/(d+.001)*w*.22;glow+=w*.6;}}' +
     'vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)+t*.35));vec2 r=vec2(fbm(p+3.2*q+vec2(1.7,9.2)),fbm(p+3.2*q+vec2(8.3,2.8)-t*.25));float f=fbm(p+3.*r);' +
     'float body=smoothstep(.38,.92,f);float vein=pow(1.-abs(2.*f-1.),10.);float warm=smoothstep(.55,1.,r.x)*body;' +
     'vec2 bw=waves(uv);float b2=bw.y;float vig=smoothstep(1.35,.2,length(uv*vec2(.8,1.)));' +

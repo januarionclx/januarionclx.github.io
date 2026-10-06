@@ -435,3 +435,10 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
 .stmt:last-child { border-bottom: 1px solid var(--line); }
 .stmt::before { content: ''; position: absolute; left: 2px; top: calc(clamp(16px, 2.6vh, 26px) + .45em); width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
 .stmt em { color: var(--ink); }
+
+/* intriguing: one short line each, the parts in small mono underneath */
+.stmt { font-size: inherit; color: var(--ink); }
+.stmt-t { margin: 0; font-size: clamp(1.7rem, 3.2vw, 2.9rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1.04; color: var(--ink); }
+.stmt-t em { font-style: normal; color: var(--teal); }
+.stmt-s { margin: 10px 0 0; font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.stmt::before { top: calc(clamp(16px, 2.6vh, 26px) + .9rem); }
