@@ -1,569 +1,534 @@
 <!DOCTYPE html>
-<html lang="en" class="gated">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Januario Pinto | Software &amp; consulting</title>
-  <meta name="description" content="Januario Pinto designs organizations as living systems and the software that runs on them. Software and consulting from Lisbon.">
+  <meta name="description" content="Januario Pinto designs and consults companies as living systems and creates software. Based in Porto.">
   <meta name="author" content="Januario Pinto">
+  <meta name="theme-color" content="#071615">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Januario Pinto">
-  <meta property="og:description" content="I design organizations as living systems and the software that runs on them.">
+  <meta property="og:description" content="I design and consult companies. I create software. Based in Porto.">
   <meta property="og:image" content="https://januariopinto.com/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://januariopinto.com/">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://januariopinto.com/">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs organizations as living systems and the software that runs on them. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Porto","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';</script>
+  <script>document.documentElement.classList.add('js'); document.documentElement.dataset.look = 'teal';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800;900&family=Geist+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap">
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
-<div class="themes">
-  <button type="button" id="themeBtn" aria-label="Switch to light">
-    <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
-      <mask id="moon-cut"><rect x="-4" y="-4" width="32" height="32" fill="white"/><circle class="cut" cx="26" cy="4" r="7.2" fill="black"/></mask>
-      <g class="rays" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(0 12 12)" style="--r:0"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(45 12 12)" style="--r:1"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(90 12 12)" style="--r:2"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(135 12 12)" style="--r:3"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(180 12 12)" style="--r:4"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(225 12 12)" style="--r:5"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(270 12 12)" style="--r:6"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(315 12 12)" style="--r:7"/></g>
-      <circle class="core" cx="12" cy="12" r="4.6" mask="url(#moon-cut)" fill="currentColor"/>
-      <g class="stars" fill="currentColor"><path class="s1" d="M19.2 3.2l.55 1.25 1.25.55-1.25.55-.55 1.25-.55-1.25-1.25-.55 1.25-.55z"/><circle class="s2" cx="21.4" cy="9.6" r=".75"/></g>
-    </svg>
-  </button>
-</div>
-<canvas id="bgShader" class="page-shader" aria-hidden="true"></canvas>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <filter id="surface" x="-10%" y="-30%" width="120%" height="160%">
-    <feTurbulence id="surfaceNoise" type="fractalNoise" baseFrequency="0.006 0.05" numOctaves="2" seed="4" result="n"/>
-    <feDisplacementMap id="surfaceMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
+<div class="sky" aria-hidden="true"><canvas id="sky"></canvas></div>
+<div class="veil" aria-hidden="true"></div>
 
+<button type="button" class="look" id="lookBtn" data-look="teal" aria-label="Change colour">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <g class="em em-teal"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-4 3-6 6-10z"/></g>
+    <g class="em em-ink"><circle cx="12" cy="12" r="7.5"/><circle class="fill" cx="12" cy="12" r="3"/></g>
+    <g class="em em-gold"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></g>
+    <g class="em em-violet"><path d="M12 3.5l7 6-7 11-7-11z"/><path d="M5 9.5h14"/></g>
+    <g class="em em-ember"><path d="M12 3c.9 3.6 6 5.6 6 10.6a6 6 0 0 1-12 0c0-2.6 1.4-4.3 3-5.6.2 2 1.1 3.2 2.5 3.8C11 9.4 11.2 6.2 12 3z"/></g>
+  </svg>
+</button>
 
-<header class="hero" id="top">
-  <div class="inner">
-    <div class="cells">
-      <div class="cell grow" data-depth="0.9" data-scale>
-        <h1 class="name" data-split>
-          <span class="line"><span>Hey, I&rsquo;m</span></span>
-          <span class="line"><span class="accent sheen">Januario.</span></span>
-        </h1>
-        <p class="where" data-split data-letters style="--base: .55s">Software and consulting, from <em>Lisbon.</em></p>
-        <p class="thesis" data-split data-letters style="--base: 1.5s">I design organizations as <em>living systems</em> and the software that runs on them.</p>
-        <p class="keys" aria-hidden="true"><kbd>&darr;</kbd> or scroll to continue</p>
-      </div>
-    </div>
+<header class="stage hero" id="top" data-look="teal" data-rest="0.7" aria-label="Intro">
+  <div class="hero-in">
+    <h1 class="title"><span class="l">Hey, I&rsquo;m</span> <span class="l name">Januario.</span></h1>
+    <p class="say what l grp"><span class="sr-only">I design and consult companies, and create products and software.</span><span class="morph" aria-hidden="true">I design companies.</span></p>
+    <p class="say where l grp">Based in <span class="k">Porto.</span></p>
   </div>
 </header>
 
 <main>
-  <section id="services" class="svc" aria-label="Services">
-    <div class="inner svc-grid">
-      <div class="svc-index">
-        <span class="label">Services</span>
-        <ol class="wheel" id="wheel">
-          <li style="--c: var(--teal)"><a href="#svc-dev">Software development</a></li>
-          <li style="--c: var(--ochre)"><a href="#svc-consult">Consulting</a></li>
-          <li style="--c: var(--clay)"><a href="#svc-ventures">Ventures</a></li>
-        </ol>
-      </div>
-      <div class="svc-panels">
-        <article class="panel" id="svc-dev" style="--c: var(--teal)">
-          <h3 data-split><span class="accent sheen">S</span>oftware development</h3>
-          <p data-depth="0.8" data-split data-letters class="soft" style="--base: .5s">A working product, not a prototype.<br>Web platforms, internal tools and AI, built to last.</p>
-        </article>
-        <article class="panel" id="svc-consult" style="--c: var(--ochre)">
-          <h3 data-split><span class="accent sheen">C</span>onsulting</h3>
-          <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.7s">A fractional CTO, without the cost of a full-time hire.<br>Distributed systems that don&rsquo;t rely on you.<br>Self-managing teams that run on their own.</p>
-        </article>
-        <article class="panel" id="svc-ventures" style="--c: var(--clay)">
-          <h3 data-split><span class="accent sheen">V</span>entures</h3>
-          <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.3s">Companies built from the ground up.<br>Incubation and investment through The Unit.</p>
-        </article>
-      </div>
+  <section class="stage" id="services" data-look="ink" aria-labelledby="services-title">
+    <h2 class="title" id="services-title"><span class="l">My</span> <span class="l acc">services</span></h2>
+    <div class="svc">
+      <article class="grp">
+        <h3 class="l">Software development</h3>
+        <p><span class="l">A working product, not a prototype.</span> <span class="l">Web platforms, internal tools and AI, built to last.</span></p>
+      </article>
+      <article class="grp">
+        <h3 class="l">Consulting</h3>
+        <p><span class="l">A fractional CTO, without the cost of a full-time hire.</span> <span class="l">Distributed systems that don&rsquo;t rely on you.</span> <span class="l">Self-managing teams that run on their own.</span></p>
+      </article>
+      <article class="grp">
+        <h3 class="l">Ventures</h3>
+        <p><span class="l">Companies built from the ground up.</span> <span class="l">Incubation and investment through The Unit.</span></p>
+      </article>
     </div>
   </section>
 
-  <section id="work" aria-labelledby="work-title">
-    <div class="bar head">
-      <div class="inner">
-        <div class="cells">
-          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>What I&rsquo;m building <span class="accent sheen">now</span></h2></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar"><div class="inner"><div class="cells"><div class="cell grow body-cell">
-        <div class="building">
-          <ol class="ex">
-            <li style="--n:0"><span class="ex-t" data-split>Systems that run themselves.</span><span class="ex-d">Sales, orders, messages and delivery, for businesses.</span></li>
-            <li style="--n:1"><span class="ex-t" data-split>Harnesses for professionals.</span><span class="ex-d">Like giving doctors their time back.</span></li>
-            <li style="--n:2"><span class="ex-t" data-split>Private clients.</span><span class="ex-d">A few at a time. Ask me.</span></li>
-          </ol>
-        </div>
-    </div></div></div></div>
+  <section class="stage" id="now" data-look="gold" aria-labelledby="now-title">
+    <h2 class="title" id="now-title"><span class="l">What I&rsquo;m doing</span> <span class="l acc">now</span></h2>
+    <ul class="doing grp">
+      <li class="l">Automating systems</li>
+      <li class="l">Creating harnesses</li>
+      <li class="l">Building software factories</li>
+      <li class="l">Working with private clients</li>
+    </ul>
   </section>
 
-  <section id="now" aria-labelledby="now-title">
-    <div class="bar head">
-      <div class="inner">
-        <div class="cells">
-          <div class="cell grow" data-depth="0.3"><h2 id="now-title" data-split>Public <span class="accent sheen">portfolio</span></h2></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar"><div class="inner"><div class="cells"><div class="cell grow body-cell">
-        <ul class="names">
-          <li style="--n:0"><span class="nm" data-split>People</span><span class="nm-d">The CRM for clients and patients.</span></li>
-          <li style="--n:1"><span class="nm" data-split>Flows</span><span class="nm-d">Chat bots, built step by step.</span></li>
-          <li style="--n:2"><span class="nm" data-split>Artist OS</span><span class="nm-d">Site, bookings and numbers for artists.</span></li>
-        </ul>
-    </div></div></div></div>
+  <section class="stage" id="portfolio" data-look="violet" data-pace="0.7" aria-labelledby="portfolio-title">
+    <h2 class="title" id="portfolio-title"><span class="l">Public</span> <span class="l acc">portfolio</span></h2>
+    <ul class="names">
+      <li class="grp"><span class="nm l">People</span> <span class="nm-d l">A human-centric CRM.</span></li>
+      <li class="grp"><span class="nm l">Flows</span> <span class="nm-d l">Chat automations, built step by step.</span></li>
+      <li class="grp"><span class="nm l">Artist OS</span> <span class="nm-d l">Presence, tooling and consulting for artists.</span></li>
+      <li class="grp more"><span class="nm l">and more.</span> <span class="nm-d l">Open to investors and buyers.</span></li>
+    </ul>
   </section>
-
 </main>
 
-<footer class="coda" id="contact">
-  <div class="bar">
-    <div class="inner">
-      <div class="cells">
-        <div class="cell grow">
-          <h2 data-depth="0.4" data-split>Let&rsquo;s <span class="accent sheen">talk.</span></h2>
-          <p class="lead soft" data-depth="0.7" data-split data-letters style="--base: .5s">Building something that has to grow? Write to me.<br>I read everything myself.</p>
-          <div class="mail" data-depth="1">
-            <a class="addr" id="addr" href="mailto:contact@januariopinto.com">contact@januariopinto.com</a>
-            <button class="copy magnet" id="copyBtn" type="button">Copy</button>
-          </div>
-        </div>
-      </div>
-    </div>
+<footer class="stage" id="contact" data-look="ember" aria-labelledby="contact-title">
+  <h2 class="title" id="contact-title"><span class="l">Let&rsquo;s</span> <span class="l acc">talk.</span></h2>
+  <div class="asks grp">
+    <p class="l">Have an idea?</p>
+    <p class="l">Need help?</p>
+    <p class="l">Building something<br class="m"> that grows?</p>
+    <p class="l dim">Write to me.</p>
+    <p class="l dim">I read everything<br class="m"> myself.</p>
+  </div>
+  <div class="mail l grp" data-rest="0.2">
+    <a class="addr" id="addr" href="mailto:contact@januariopinto.com"><span class="hi">contact@</span><wbr>januariopinto.com</a>
+    <button class="copy" id="copyBtn" type="button" aria-label="Copy email">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+      <svg class="ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </button>
+    <span class="sr-only" role="status" id="copyNote"></span>
   </div>
   <div class="foot">
-    <div class="inner">
-      <div class="links label">
-        <span>&copy; <span id="year">2026</span> Januario Pinto</span>
-        <nav aria-label="Elsewhere"><a href="https://x.com/januario_xyz" target="_blank" rel="noopener">X</a><a href="https://github.com/januarionclx" target="_blank" rel="noopener">GitHub</a><a href="https://theunitorganization.com" target="_blank" rel="noopener">The Unit</a></nav>
-      </div>
-    </div>
+    <span>&copy; <span id="year">2026</span> Januario Pinto</span>
+    <nav aria-label="Elsewhere"><a href="https://x.com/januario_xyz" target="_blank" rel="noopener">X</a><a href="https://github.com/januarionclx" target="_blank" rel="noopener">GitHub</a><a href="https://theunitorganization.com" target="_blank" rel="noopener">The Unit</a></nav>
   </div>
 </footer>
 
 <script>
 (function () {
-  document.documentElement.classList.add('js');
-  // the intro starts on its own once the fonts are in (at most about a second), so words never rise in a fallback face
-  var playAt = null;
-  // ripple: strong while the words break the surface, calming to still glass
-  var surfMap = document.getElementById('surfaceMap'), surfNoise = document.getElementById('surfaceNoise'), surfRaf = 0, surfStage = null;
-  function surface(stage) {
-    if (!surfMap || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (surfStage && surfStage !== stage) surfStage.classList.remove('surfacing');
-    surfStage = stage; stage.classList.add('surfacing');
-    var t0 = performance.now(), dur = 2600;
-    cancelAnimationFrame(surfRaf);
-    (function f(now) {
-      var k = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - k, 3);
-      surfMap.setAttribute('scale', (34 * (1 - e)).toFixed(2));
-      surfNoise.setAttribute('baseFrequency', (0.006 + 0.004 * Math.sin(now / 400)).toFixed(4) + ' ' + (0.05 + 0.012 * Math.cos(now / 330)).toFixed(4));
-      if (k < 1) surfRaf = requestAnimationFrame(f); else { stage.classList.remove('surfacing'); surfMap.setAttribute('scale', '0'); }
-    })(t0);
-  }
-  function begin() {
-    if (playAt !== null) return;
-    playAt = performance.now();
-    document.documentElement.classList.remove('gated');
-    setTimeout(function () { if (typeof stageKick === 'function') stageKick(); }, 30);
-    // whatever is already on screen when the intro starts comes up right away
-    var vh = innerHeight;
-    (stages.length ? stages : [document.querySelector('.hero')]).forEach(function (st) {
-      var r = st.getBoundingClientRect();
-      if (r.top < vh * 0.62 && r.bottom > vh * 0.38) { surface(st); st.classList.add('in'); }
-    });
-  }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
-  setTimeout(begin, 1100);
+  var root = document.documentElement;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stages = [].slice.call(document.querySelectorAll('.stage'));
+  var NAMES = ['Intro', 'Services', 'Now', 'Portfolio', 'Contact'];
+  var LOOKS = ['teal', 'ink', 'gold', 'violet', 'ember'];
+  var lookBtn = document.getElementById('lookBtn');
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // theme toggle; stored choice wins, else system
-  var root = document.documentElement;
-  var themeBtn = document.getElementById('themeBtn');
-  function markTheme() { themeBtn.setAttribute('aria-label', root.dataset.theme === 'light' ? 'Switch to dark' : 'Switch to light'); }
-  // a theme switch spreads from a dot in the centre; words change colour as the front reaches them
-  var morphEls = null, morphTimer = 0;
-  function applyTheme(name) {
-    var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!calm) {
-      shaders.forEach(function (s) { s.morph(); });
-      if (!morphEls) morphEls = [].slice.call(document.querySelectorAll('h1, h2, h3, p, .t, .d, .k, .label, .wheel a, .links a, .copy, .cta'));
-      var cx = innerWidth / 2, cy = innerHeight / 2, far = Math.hypot(cx, cy), ms = shaders[0] ? shaders[0].ms : 2800;
-      morphEls.forEach(function (el) {
-        var r = el.getBoundingClientRect();
-        var d = Math.hypot(r.left + r.width / 2 - cx, r.top + r.height / 2 - cy) / far;
-        // the shader front passes this point about 0.55s + 1.05s x distance after the switch
-        el.style.setProperty('--md', (0.55 + Math.min(d, 1.2) * 1.05).toFixed(2) + 's');
-      });
-      root.classList.add('morphing');
-      clearTimeout(morphTimer); morphTimer = setTimeout(function () { root.classList.remove('morphing'); }, ms + 1400);
-    }
-    root.dataset.theme = name;
-    try { localStorage.setItem('theme', name); } catch (e) {}
-    markTheme(); shaders.forEach(function (s) { s.recolor(); });
-  }
-  themeBtn.addEventListener('click', function () { applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light'); });
-  markTheme();
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { markTheme(); shaders.forEach(function (s) { s.recolor(); }); });
-
-
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // services wheel: the index turns with the panels
-  var wheel = document.getElementById('wheel'), svcEl = document.querySelector('.svc');
-  var items = [].slice.call(wheel.children);
-  var panels = [].slice.call(document.querySelectorAll('.panel'));
-  var wheelPos = 0, wheelTarget = 0, wheelRaf = 0;
-  function wheelMeasure() {
-    var mid = innerHeight / 2, best = 0;
-    // continuous index: how far the viewport centre has travelled through the panels
-    for (var i = 0; i < panels.length; i++) {
-      var r = panels[i].getBoundingClientRect();
-      var f = (mid - r.top) / r.height;
-      if (f >= 0) best = Math.min(i + Math.min(f, 1) - 0.5, panels.length - 1);
-    }
-    wheelTarget = Math.max(0, best);
-    if (!wheelRaf) wheelRaf = requestAnimationFrame(wheelStep);
-  }
-  function wheelStep() {
-    var sr = svcEl.getBoundingClientRect();
-    if (sr.bottom < -innerHeight || sr.top > innerHeight * 2) { wheelRaf = 0; return; }
-    wheelPos += (wheelTarget - wheelPos) * (reduce ? 1 : 0.14);
-    var h = items[0].offsetHeight;
-    wheel.style.transform = 'translateY(' + (((items.length - 1) / 2 - wheelPos) * h) + 'px)';
-    items.forEach(function (li, i) {
-      var d = i - wheelPos, a = Math.min(Math.abs(d), 1.6);
-      li.style.transform = 'perspective(800px) rotateX(' + (-Math.max(-1.2, Math.min(1.2, d)) * 24) + 'deg) scale(' + (1 - Math.min(a, 1) * 0.5) + ')';
-      li.style.opacity = String(1 - a * 0.42);
-      var bl = Math.round(Math.min(a, 1.4) * 2.5) * 2; // 0, 2, 4 or 6px
-      var fv = bl ? 'blur(' + bl + 'px)' : 'none'; if (li._fv !== fv) { li._fv = fv; li.style.filter = fv; }
-      li.classList.toggle('on', Math.abs(d) < 0.5);
+  // One rhythm for every screen: the title's lines 140ms apart (as on GIPX), a rest while it lands,
+  // then the text line by line, with a short breath before each new group.
+  var BEAT = 0.14, REST = 0.42, LINE = 0.16, BREATH = 0.18;
+  stages.forEach(function (stage) {
+    var t = 0, prev = null, pace = parseFloat(stage.dataset.pace || 1); // a pace under 1 plays a screen faster
+    [].forEach.call(stage.querySelectorAll('.l'), function (l) {
+      var group = l.closest('.title, .grp') || l;
+      if (prev) {
+        var step;
+        if (group === prev) step = group.classList.contains('title') ? BEAT : LINE;
+        else if (prev.classList.contains('title')) step = parseFloat(stage.dataset.rest || REST);
+        else step = LINE + BREATH;
+        if (group !== prev && group.dataset.rest) step += parseFloat(group.dataset.rest);
+        t += step * pace;
+      }
+      l.style.setProperty('--d', t.toFixed(2) + 's');
+      prev = group;
     });
-    wheelRaf = Math.abs(wheelTarget - wheelPos) > 0.001 ? requestAnimationFrame(wheelStep) : 0;
-  }
-  addEventListener('scroll', wheelMeasure, { passive: true });
-  addEventListener('resize', wheelMeasure);
-  wheelMeasure();
-
-  // scroll flow: everything eases toward its scroll position, nearer content leads, deeper content trails
-  var flow = [].slice.call(document.querySelectorAll('[data-depth]')).map(function (el) {
-    return { el: el, box: el.closest('.ex li, .panel, section, header, footer'), k: parseFloat(el.dataset.depth), scale: el.hasAttribute('data-scale'), p: null };
-  });
-  var flowRaf = 0;
-  function flowStep() {
-    var vh = innerHeight, moving = false;
-    var rects = flow.map(function (f) { return [f.box.getBoundingClientRect(), f.box.offsetHeight]; });
-    flow.forEach(function (f, fi) {
-      var r = rects[fi][0];
-      var target = Math.max(-1.2, Math.min(1.2, (r.top + r.height / 2 - vh / 2) / vh));
-      if (rects[fi][1] > vh * 1.2) target = Math.max(-1.2, Math.min(1.2, (r.top) / vh)) * (r.top > 0 ? 1 : 0);
-      if (f.p === null) f.p = target;
-      f.p += (target - f.p) * 0.1;
-      if (Math.abs(target - f.p) > 0.0005) moving = true;
-      var a = Math.max(0, Math.abs(f.p) - 0.12);
-      var t = 'translate3d(0,' + (f.p * f.k * (90)).toFixed(2) + 'px,0)';
-      if (f.scale) t += ' scale(' + (1 - Math.min(a, 1) * 0.12).toFixed(4) + ')';
-      f.el.style.transform = t;
-      f.el.style.opacity = (1 - Math.min(a * 1.1, 0.85)).toFixed(3);
-    });
-    flowRaf = moving ? requestAnimationFrame(flowStep) : 0;
-  }
-  function flowKick() { if (!flowRaf) flowRaf = requestAnimationFrame(flowStep); }
-  if (!reduce) { addEventListener('scroll', flowKick, { passive: true }); addEventListener('resize', flowKick); flowKick(); }
-
-
-  // word reveal: split text into masked words, play when the screen is in view
-  function split(el) {
-    var i = 0, label = el.textContent.replace(/\s+/g, ' ').trim();
-    (function walk(node) {
-      [].slice.call(node.childNodes).forEach(function (n) {
-        if (n.nodeType === 3) {
-          var frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(function (part) {
-            if (!part) return;
-            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-            var w = document.createElement('span'); w.className = 'w';
-            var inner = document.createElement('span');
-            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
-            else part.split('').forEach(function (ch) { var l = document.createElement('span'); l.className = 'ch'; l.textContent = ch; l.style.setProperty('--i', i++); inner.appendChild(l); });
-            w.appendChild(inner); frag.appendChild(w);
-          });
-          n.parentNode.replaceChild(frag, n);
-        } else if (n.nodeType === 1) walk(n);
-      });
-    })(el);
-    // the animated letters are hidden from screen readers; they read one plain copy instead
-    var shown = document.createElement('span'); shown.setAttribute('aria-hidden', 'true'); shown.className = 'split-view';
-    while (el.firstChild) shown.appendChild(el.firstChild);
-    el.appendChild(shown);
-    var sr = document.createElement('span'); sr.className = 'sr-only'; sr.textContent = label; el.appendChild(sr);
-  }
-  var splitEls = [].slice.call(document.querySelectorAll('[data-split]'));
-  splitEls.forEach(split);
-  var stages = [];
-  splitEls.forEach(function (el) { var st = el.closest('.ex li, .panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
-  // a stage is "in" while it crosses the middle band of the screen. Measured on scroll, not with
-  // IntersectionObserver margins, which browsers ignore inside embedded frames (the preview).
-  var stageRaf = 0;
-  function stageCheck() {
-    stageRaf = 0; if (playAt === null) return;
-    var vh = innerHeight, top = vh * 0.38, bot = vh * 0.62;
-    stages.forEach(function (st) {
-      var r = st.getBoundingClientRect(), on = r.bottom > top && r.top < bot;
-      if (on && !st.classList.contains('in')) surface(st);
-      st.classList.toggle('in', on);
-    });
-  }
-  function stageKick() { if (!stageRaf) stageRaf = requestAnimationFrame(stageCheck); }
-  addEventListener('scroll', stageKick, { passive: true }); addEventListener('resize', stageKick);
-  setTimeout(stageKick, 50);
-
-  // magnetic: the element leans toward the cursor and eases back
-  [].slice.call(document.querySelectorAll('.magnet')).forEach(function (el) {
-    el.addEventListener('pointermove', function (e) {
-      var r = el.getBoundingClientRect();
-      var x = (e.clientX - r.left - r.width / 2) * 0.35, y = (e.clientY - r.top - r.height / 2) * 0.45;
-      el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
-    });
-    el.addEventListener('pointerleave', function () { el.style.transform = ''; });
   });
 
-  // focus lists: the item under the cursor grows, the rest step back, eased
-  function focusList(list, itemSel, titleSel, dimSel, rest, big, small) {
-    if (!list) return;
-    var items = [].slice.call(list.querySelectorAll(itemSel));
-    var st = items.map(function () { return { s: rest, o: 1 }; });
-    var hot = -1, raf = 0;
-    function step() {
-      var moving = false;
-      items.forEach(function (it, i) {
-        var ts = hot < 0 ? rest : (i === hot ? big : small), to = hot < 0 ? 1 : (i === hot ? 1 : 0.35);
-        st[i].s += (ts - st[i].s) * (reduce ? 1 : 0.12); st[i].o += (to - st[i].o) * (reduce ? 1 : 0.12);
-        if (Math.abs(ts - st[i].s) > 0.001 || Math.abs(to - st[i].o) > 0.002) moving = true;
-        var t = it.querySelector(titleSel); t.style.transform = 'scale(' + st[i].s.toFixed(4) + ')'; t.style.opacity = Math.max(st[i].o, 0.45).toFixed(3);
-        it.querySelectorAll(dimSel).forEach(function (d) { d.style.opacity = st[i].o.toFixed(3); });
-        it.classList.toggle('on', i === hot);
-      });
-      raf = moving ? requestAnimationFrame(step) : 0;
-    }
-    function set(i) { hot = i; if (!raf) raf = requestAnimationFrame(step); }
-    items.forEach(function (it, i) { it.addEventListener('pointerenter', function () { set(i); }); it.addEventListener('focusin', function () { set(i); }); });
-    list.addEventListener('pointerleave', function () { set(-1); });
-    set(-1);
-    return set;
+  var sky = Sky(document.getElementById('sky')), nameFx = NameFx(document.querySelector('.hero .name'));
+  var themeColor = document.querySelector('meta[name="theme-color"]');
+  function setLook(name, instant) {
+    if (root.dataset.look === name) return;
+    root.dataset.look = name; lookBtn.dataset.look = name;
+    if (themeColor) themeColor.content = getComputedStyle(root).getPropertyValue('--bg').trim();
+    if (sky) sky.tint(instant);
+    if (nameFx) nameFx.tint(instant);
+    tint(name, false, instant);
   }
+  lookBtn.addEventListener('click', function () { setLook(LOOKS[(LOOKS.indexOf(root.dataset.look) + 1) % LOOKS.length]); });
 
-  // deck: on desktop every key press or scroll gesture moves exactly one step
-  var deckSteps = ['#top', '#svc-dev', '#svc-consult', '#svc-ventures', '#work', '#now', '#contact'];
-  var deckMq = matchMedia('(min-width: 861px) and (pointer: fine)');
-  var gliding = false, coolUntil = 0, acc = 0, accT = 0;
-  function deckY(sel) {
-    var el = document.querySelector(sel), r = el.getBoundingClientRect(), top = r.top + scrollY;
-    return el.classList.contains('panel') ? top + r.height / 2 - innerHeight / 2 : top;
+  // Section buttons. Everything in the row moves with transforms and opacity only, so it stays smooth on a
+  // phone: the bubble slides to the current button and fades into the section's colour while its label
+  // crossfades, and it glints once things have settled. On a phone the row is compact: the other sections
+  // are letter circles that slide aside to make room, which leaves space for the emblem at the end.
+  // A finger dragged along the row moves the bubble from button to button; letting go opens that section.
+  var bar = document.createElement('nav'); bar.className = 'bar'; bar.setAttribute('aria-label', 'Sections');
+  var row = document.createElement('div'); row.className = 'bar-row';
+  var bub = document.createElement('div'); bub.className = 'bubble'; bub.setAttribute('aria-hidden', 'true');
+  bub.innerHTML = '<i class="was"></i>' + NAMES.map(function (n) { return '<span class="bl">' + n + '</span>'; }).join('') + '<i class="glint"></i>';
+  var was = bub.querySelector('.was'), bls = [].slice.call(bub.querySelectorAll('.bl')), glint = bub.querySelector('.glint');
+  var btns = NAMES.map(function (name, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', name);
+    b.innerHTML = '<span class="ini" aria-hidden="true">' + name.charAt(0) + '</span><span class="full" aria-hidden="true">' + name + '</span>';
+    b.setAttribute('aria-controls', stages[i].id);
+    b.style.setProperty('--btn-c', 'var(--a-' + stages[i].dataset.look + ')');
+    b.addEventListener('click', function () { go(i); });
+    b.addEventListener('pointerdown', function () { if (i === cur) bub.classList.add('press'); });
+    row.appendChild(b);
+    return b;
+  });
+  row.appendChild(bub); bar.appendChild(row); bar.appendChild(lookBtn); document.body.appendChild(bar); // the emblem ends the row
+  document.addEventListener('touchstart', function () {}, { passive: true }); // lets iOS show the pressed state
+
+  var cur = 0, shown = 0, timer = 0, started = false, drag = null, compact = false, SMALL = 44, movedAt = 0;
+  // where each button sits, as [x, width], while the bubble is on button k
+  function layout(k) {
+    var W = row.clientWidth, n = btns.length, g = compact ? 4 : 6, x = 0;
+    var wide = compact ? W - (n - 1) * (SMALL + g) : (W - (n - 1) * g) / n;
+    return btns.map(function (b, j) { var w = compact && j !== k ? SMALL : wide, p = [x, w]; x += w + g; return p; });
   }
-  function deckIndex() {
-    var best = 0, bd = Infinity;
-    deckSteps.forEach(function (sel, i) { var d = Math.abs(deckY(sel) - scrollY); if (d < bd) { bd = d; best = i; } });
+  function place(k) {
+    if (k === undefined) k = shown;
+    var L = layout(k);
+    btns.forEach(function (b, j) {
+      var w = compact ? SMALL : L[j][1], x = L[j][0] + (L[j][1] - w) / 2;
+      b.style.width = w.toFixed(1) + 'px'; b.style.translate = x.toFixed(1) + 'px 0';
+    });
+    bub.style.width = L[k][1].toFixed(1) + 'px'; bub.style.translate = L[k][0].toFixed(1) + 'px 0';
+    bls.forEach(function (s, j) { s.classList.toggle('on', j === k); });
+  }
+  function fit() {
+    compact = bar.clientWidth < 520; bar.classList.toggle('compact', compact);
+    bar.classList.add('still'); place(); void bar.offsetWidth; bar.classList.remove('still');
+  }
+  addEventListener('resize', fit);
+  // the bubble takes the new colour at once while the old one fades off the top of it
+  var bubLook = null;
+  function tint(look, fast, instant) {
+    if (look === bubLook) return;
+    var old = bubLook; bubLook = look;
+    bub.style.backgroundColor = 'var(--a-' + look + ')';
+    if (!old || instant || reduce || !was.animate) return;
+    was.style.backgroundColor = 'var(--a-' + old + ')';
+    was.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fast ? 220 : 420, easing: 'cubic-bezier(.645, .045, .355, 1)' });
+  }
+  // a glint crosses the bubble once everything has settled, and again now and then
+  function shine(delay) {
+    if (reduce || !glint.animate) return;
+    glint.animate([{ transform: 'translateX(-64px)' }, { transform: 'translateX(' + Math.round(bub.offsetWidth + 8) + 'px)' }],
+      { duration: 800, delay: delay || 0, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'backwards' });
+  }
+  setInterval(function () { if (started && !drag && !document.hidden && performance.now() - movedAt > 2500) shine(0); }, 7000);
+
+  // dragging along the row moves the bubble to the button under the finger; letting go opens it
+  function under(x) {
+    var px = x - row.getBoundingClientRect().left, best = 0, d = Infinity;
+    layout(shown).forEach(function (p, j) { var e = px < p[0] ? p[0] - px : px > p[0] + p[1] ? px - p[0] - p[1] : 0; if (e < d) { d = e; best = j; } });
     return best;
   }
-  function deckGo(i) {
-    i = Math.max(0, Math.min(deckSteps.length - 1, i));
-    var y = Math.round(deckY(deckSteps[i])), from = scrollY, start = performance.now(), ms = reduce ? 1 : 650;
-    if (Math.abs(y - from) < 2) return;
-    gliding = true; document.documentElement.style.scrollSnapType = 'none';
-    (function f(now) {
-      var k = Math.min((now - start) / ms, 1), e = 0.5 - 0.5 * Math.cos(Math.PI * k);
-      scrollTo(0, from + (y - from) * e);
-      if (k < 1) requestAnimationFrame(f); else { gliding = false; coolUntil = performance.now() + 220; acc = 0; document.documentElement.style.scrollSnapType = ''; }
-    })(start);
-  }
-  function deckOn() { return deckMq.matches && playAt !== null; }
-  function setDeck() { document.documentElement.classList.toggle('deck', deckMq.matches); }
-  setDeck(); deckMq.addEventListener('change', setDeck);
-  addEventListener('wheel', function (e) {
-    if (!deckOn() || e.ctrlKey) return;
-    e.preventDefault();
-    var now = performance.now();
-    if (gliding || now < coolUntil) { acc = 0; return; }
-    if (now - accT > 220) acc = 0;
-    accT = now; acc += e.deltaY;
-    if (Math.abs(acc) > 40) { var dir = acc > 0 ? 1 : -1; acc = 0; deckGo(deckIndex() + dir); }
-  }, { passive: false });
-  addEventListener('keydown', function (e) {
-    if (!deckOn() || e.altKey || e.ctrlKey || e.metaKey) return;
-    var tag = (e.target.tagName || '').toLowerCase();
-    if (tag === 'input' || tag === 'textarea') return;
-    var next = ['ArrowDown', 'PageDown', 'ArrowRight'].indexOf(e.key) >= 0 || (e.key === ' ' && !e.shiftKey && tag !== 'button' && tag !== 'a');
-    var prev = ['ArrowUp', 'PageUp', 'ArrowLeft'].indexOf(e.key) >= 0 || (e.key === ' ' && e.shiftKey);
-    if (e.key === 'Home') { e.preventDefault(); deckGo(0); return; }
-    if (e.key === 'End') { e.preventDefault(); deckGo(deckSteps.length - 1); return; }
-    if (next || prev) { e.preventDefault(); if (!gliding) deckGo(deckIndex() + (next ? 1 : -1)); }
+  row.addEventListener('pointerdown', function (e) { if (e.button === 0) drag = { id: e.pointerId, x: e.clientX, on: false }; });
+  row.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (!drag.on) {
+      if (Math.abs(e.clientX - drag.x) < 8) return;
+      drag.on = true; bub.classList.remove('press'); bar.classList.add('dragging');
+      try { row.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    var k = under(e.clientX);
+    if (k !== shown) { shown = k; place(k); tint(stages[k].dataset.look, true); }
   });
-  // bottom bar and wheel index links glide instead of jumping
+  function letGo(e) {
+    bub.classList.remove('press');
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag; drag = null;
+    if (!d.on) return;
+    bar.classList.remove('dragging');
+    var k = e.type === 'pointercancel' ? cur : shown;
+    if (k === cur) { shown = cur; place(); tint(root.dataset.look, true); } else go(k);
+  }
+  row.addEventListener('pointerup', letGo); row.addEventListener('pointercancel', letGo);
+  row.addEventListener('pointerleave', function () { bub.classList.remove('press'); });
+
+  // links to a section (like "Let's talk") switch screens instead of jumping
   document.addEventListener('click', function (e) {
-    var a = e.target.closest('a[href^="#"]'); if (!a || !deckOn()) return;
-    var sel = a.getAttribute('href'); if (sel === '#services') sel = '#svc-dev'; if (sel === '#portfolio') sel = '#now';
-    var i = deckSteps.indexOf(sel); if (i < 0) return;
-    e.preventDefault(); deckGo(i);
+    var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+    for (var i = 0; i < stages.length; i++) if (a.getAttribute('href') === '#' + stages[i].id) { e.preventDefault(); go(i); return; }
   });
 
-  // copy email
-  var btn = document.getElementById('copyBtn');
-  btn.addEventListener('click', function () {
-    var addr = document.getElementById('addr').textContent;
-    var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); };
-    if (navigator.clipboard) navigator.clipboard.writeText(addr).then(done, select); else select();
-    function select() { var r = document.createRange(); r.selectNodeContents(document.getElementById('addr')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected'; }
+  // The intro's first line turns from one thing I do into the next while the intro is on screen (Porto stays).
+  // Words both phrases share stay, sliding into place if they must; the others lift away and the new ones rise in.
+  var PHRASES = ['I design companies.', 'I consult companies.', 'I create products.', 'I create software.'];
+  var line = document.querySelector('.morph'), pi = 0, morphT = 0, morphWait = 0;
+  function wordEl(w) { var s = document.createElement('span'); s.className = 'w'; s.textContent = w; return s; }
+  // on a phone the last word always takes the second line, so every phrase has the same shape
+  function gap(last) { var f = document.createDocumentFragment(); f.appendChild(document.createTextNode(' ')); if (last) { var br = document.createElement('br'); br.className = 'cut'; f.appendChild(br); } return f; }
+  function markKey() { var ws = line.querySelectorAll('.w:not(.ghost)'); [].forEach.call(ws, function (w, i) { w.classList.toggle('k', i === ws.length - 1); }); }
+  function setLine(text) {
+    line.textContent = '';
+    var ws = text.split(' ');
+    ws.forEach(function (w, i) { if (i) line.appendChild(gap(i === ws.length - 1)); line.appendChild(wordEl(w)); });
+    markKey();
+  }
+  function morphTo(text) {
+    var base = line.getBoundingClientRect(), olds = [].slice.call(line.querySelectorAll('.w:not(.ghost)'));
+    var at = olds.map(function (w) { var r = w.getBoundingClientRect(); return [r.left - base.left, r.top - base.top]; });
+    var next = text.split(' '), kept = [], used = [], from = 0;
+    next.forEach(function (w, i) { for (var k = from; k < olds.length; k++) if (olds[k].textContent === w) { kept[i] = olds[k]; used[k] = true; from = k + 1; return; } });
+    // each word that goes leaves a copy where it stood, which lifts away
+    olds.forEach(function (w, k) {
+      if (used[k]) return;
+      var g = w.cloneNode(true); g.classList.add('ghost'); g.style.left = at[k][0] + 'px'; g.style.top = at[k][1] + 'px';
+      line.appendChild(g);
+      g.animate(reduce ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 1, transform: 'none', filter: 'blur(0)' }, { opacity: 0, transform: 'translateY(-.3em)', filter: 'blur(.12em)' }],
+        { duration: 240, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'forwards' }).onfinish = function () { g.remove(); };
+    });
+    // the new line reuses the words it keeps
+    [].slice.call(line.childNodes).forEach(function (n) { if (!(n.classList && n.classList.contains('ghost'))) line.removeChild(n); });
+    var els = next.map(function (w, i) { return kept[i] || wordEl(w); });
+    els.forEach(function (el, i) { if (i) line.appendChild(gap(i === els.length - 1)); line.appendChild(el); });
+    markKey();
+    var n = 0;
+    els.forEach(function (el, i) {
+      if (kept[i]) {
+        var j = olds.indexOf(el), r = el.getBoundingClientRect(), dx = at[j][0] - (r.left - base.left), dy = at[j][1] - (r.top - base.top);
+        if ((Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) && !reduce) el.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.645, .045, .355, 1)' });
+      } else {
+        el.animate(reduce ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: 'translateY(.35em)', filter: 'blur(.12em)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
+          { duration: 440, delay: 170 + 50 * n++, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'backwards' });
+      }
+    });
+  }
+  function morphStop() { clearTimeout(morphWait); clearInterval(morphT); }
+  function morphReset() { morphStop(); pi = 0; setLine(PHRASES[0]); }
+  function morphStart() {
+    morphStop();
+    morphWait = setTimeout(function () {
+      morphT = setInterval(function () { pi = (pi + 1) % PHRASES.length; morphTo(PHRASES[pi]); }, 1500);
+    }, 900);
+  }
+  morphReset();
+
+  function show() {
+    stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
+    if (!started) return;
+    var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
+    if (cur === 0) morphStart(); else morphReset();
+    if (nameFx) { nameFx.show(cur === 0); if (cur === 0) setTimeout(nameFx.locate, 950); }
+  }
+  // Leaving fades everything at once; the next screen starts as soon as the old one is gone.
+  function go(i, now) {
+    if (i === cur && !now) return;
+    var from = stages[cur];
+    cur = shown = i; movedAt = performance.now();
+    setLook(stages[i].dataset.look, now);
+    tint(root.dataset.look, false, now);
+    btns.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    place(); if (!now) shine(1600);
+    try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
+    from.classList.remove('in'); morphStop();
+    clearTimeout(timer);
+    if (now || reduce) show(); else timer = setTimeout(show, 170);
+  }
+  function fromHash() { for (var i = 0; i < stages.length; i++) if (location.hash === '#' + stages[i].id) return i; return -1; }
+  fit();
+  go(Math.max(0, fromHash()), true);
+  addEventListener('hashchange', function () { var i = fromHash(); if (i >= 0) go(i); });
+
+  // The first screen starts once the fonts are in (at most a second), so nothing rises in a fallback face.
+  function begin() {
+    if (started) return;
+    started = true; root.classList.add('ready');
+    if (nameFx) nameFx.build();
+    show();
+    setTimeout(function () { shine(0); }, 1700); // a first glint once the bar has arrived
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
+  setTimeout(begin, 1000);
+
+  // copy the email; if the clipboard is blocked, select it instead
+  var copyBtn = document.getElementById('copyBtn'), addr = document.getElementById('addr'), note = document.getElementById('copyNote'), copyT = 0;
+  copyBtn.addEventListener('click', function () {
+    function done() {
+      copyBtn.classList.add('done'); note.textContent = 'Email copied';
+      clearTimeout(copyT); copyT = setTimeout(function () { copyBtn.classList.remove('done'); note.textContent = ''; }, 1800);
+    }
+    function select() { var r = document.createRange(); r.selectNodeContents(addr); var s = getSelection(); s.removeAllRanges(); s.addRange(r); note.textContent = 'Email selected'; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(addr.textContent).then(done, select); else select();
   });
 
-  // ---------- shaders (smoke + swirl, adapted from Artist OS) ----------
-  var VERT = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
-  var HEAD = 'precision highp float;uniform vec2 u_res;uniform float u_time;uniform vec3 u_c1,u_c2,u_c3,u_c4;uniform vec2 u_mouse;uniform float u_act;uniform float u_amt;uniform float u_clock;uniform float u_intro;uniform vec3 u_rip[4];uniform vec3 u_t1,u_t2;uniform vec3 u_o1,u_o2,u_o3,u_o4,u_ot2;uniform float u_front;';
-  var NOISE = 'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}' +
-    'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);}' +
-    'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<4;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}';
-  var WAVES = 'vec2 waves(vec2 uv){float wt=u_time*.034;vec2 wp=uv*.8+vec2(wt*.9,-wt*.55);float w2=fbm(wp*1.25+vec2(7.3,2.2)-vec2(wt*.4,wt*.7));float b1=0.;float b2=smoothstep(.55,.85,w2)*.75;return vec2(b1,b2);}';
-  // hero: slow smoke with teal veins, pulled toward the cursor
-  // one palette's paint, written out for the new and the old theme so a front can blend between them
-  function paint(v, c1, c2, c3, c4, t2) {
-    return "vec3 " + v + "=mix(" + c3 + "," + c1 + ",body*.9);" + v + "=mix(" + v + "," + c4 + ",warm*.22);" + v + "=mix(" + v + "," + t2 + ",b2*.55*(.6+.4*body));" +
-      v + "+=(" + c2 + "-" + v + ")*vein*.6;" + v + "+=(" + c2 + "-" + v + ")*clamp(glow,0.,1.)*.28;" + v + "=mix(" + c3 + "," + v + ",(.5+.5*vig)*u_amt);";
+  // The smoke: GIPX's shader (from Artist OS), written once for both canvases. smoke(fc) colours a point
+  // of the screen, fc in background-canvas pixels; the smoke leans toward the cursor or finger.
+  function smokeShader(head, main) {
+    return 'precision highp float;uniform vec2 u_res;uniform float u_time;uniform vec3 u_c1,u_c2,u_c3;uniform vec2 u_mouse;uniform float u_act;uniform vec2 u_band;' + head +
+      'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}' +
+      'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);}' +
+      'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<4;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}' +
+      'vec3 smoke(vec2 fc){float px=length(u_res)/900.;vec2 frag=floor(fc/px)*px;vec2 uv=(frag-.5*u_res)/u_res.y;' +
+      'float t=u_time*.12;vec2 p=uv*2.4;p.y-=t*.55;' +
+      'vec2 m=((u_mouse-.5)*vec2(u_res.x/u_res.y,1.))*2.4;float md=length(uv*2.4-m);p+=u_act*(m-uv*2.4)*.3*exp(-md*2.);' +
+      'vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)+t*.35));' +
+      'vec2 r=vec2(fbm(p+3.3*q+vec2(1.7,9.2)),fbm(p+3.3*q+vec2(8.3,2.8)-t*.25));float f=fbm(p+3.*r);' +
+      'float body=smoothstep(u_band.x,u_band.y,f);float vein=pow(1.-abs(2.*f-1.),8.);float spark=step(.986,noise(p*22.+r*6.+t*3.))*body;' +
+      'vec3 col=mix(u_c3,u_c1,body*.85);col+=u_c2*vein*.412*(.25+.75*body);col+=u_c2*spark*.5;return col;}' +
+      'void main(){' + main + '}';
   }
-  var SMOKE = HEAD + NOISE + WAVES +
-    'void main(){vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;float t=u_time*.045;vec2 p=uv*1.9;p.x+=t*.4;p.y-=t*.3;' +
-    'float act=u_act;float asp=u_res.x/u_res.y;vec2 m=((u_mouse-.5)*vec2(asp,1.))*1.9;float md=length(uv*1.9-m);p+=act*(m-uv*1.9)*.2*exp(-md*1.8);' +
-    'float glow=0.;for(int i=0;i<4;i++){vec3 rp=u_rip[i];float age=u_clock-rp.z;if(rp.z>0.&&age>0.&&age<4.5){vec2 rc=(rp.xy-.5)*vec2(asp,1.);vec2 dv=uv-rc;float d=length(dv);float ring=d-age*.42;float w=exp(-ring*ring*40.)*exp(-age*.9)*smoothstep(0.,.45,age);p+=dv/(d+.001)*w*.12;glow+=w*.5;}}' +
-    'vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)+t*.35));vec2 r=vec2(fbm(p+3.2*q+vec2(1.7,9.2)),fbm(p+3.2*q+vec2(8.3,2.8)-t*.25));float f=fbm(p+3.*r);' +
-    'float body=smoothstep(.38,.92,f);float vein=pow(1.-abs(2.*f-1.),10.);float warm=smoothstep(.55,1.,r.x)*body;' +
-    'vec2 bw=waves(uv);float b2=bw.y;float vig=smoothstep(1.35,.2,length(uv*vec2(.8,1.)));' +
-    paint('col', 'u_c1', 'u_c2', 'u_c3', 'u_c4', 'u_t2') +
-    // only while a theme switch is spreading: paint the old palette and blend at the front
-    'if(u_front<5.){' + paint('old', 'u_o1', 'u_o2', 'u_o3', 'u_o4', 'u_ot2') + 'float front=length(uv)+(fbm(uv*2.6+u_clock*.25)-.5)*.32;col=mix(old,col,smoothstep(u_front,u_front-.22,front));}' +
-    // only during the intro: the ink-drop edge
-    'if(u_intro<1.){vec2 o=(vec2(.3,.56)-.5)*vec2(asp,1.);float R=u_intro*2.4;float edge=fbm(uv*3.+u_clock*.2)*.35;col=mix(u_c3,col,smoothstep(R,R-.4,length(uv-o)+edge));}' +
-    'gl_FragColor=vec4(col,1.);}';
-
-  function rgb(v) {
-    v = v.trim();
-    if (v[0] === '#') { var n = parseInt(v.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
-    var m = v.match(/[\d.]+/g) || [0, 0, 0]; return [m[0] / 255, m[1] / 255, m[2] / 255];
-  }
-
-  var shaders = [];
-  function Shader(canvas, frag, scale) {
-    var gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
-    if (!gl) return null;
-    function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+  function program(gl, frag, names) {
+    function sh(type, src) { var x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; }
     var pr = gl.createProgram();
-    gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, frag)); gl.linkProgram(pr);
+    gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+    gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, frag)); gl.linkProgram(pr);
     if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
     gl.useProgram(pr);
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_c4', 'u_mouse', 'u_act', 'u_amt', 'u_clock', 'u_intro', 'u_t1', 'u_t2', 'u_o1', 'u_o2', 'u_o3', 'u_o4', 'u_ot2', 'u_front'].forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
-    var shown = [], shownT2 = null, old = null, frontT0 = 0, FRONT_MS = 2800;
-    var base = [], alt = [], tone = 0, svcEl = document.querySelector('.svc'), lastAcc = 0, accA = null, accB = null;
-    // text accent follows the drift, so highlights breathe with the background
-    var page = canvas.classList.contains('page-shader'), sim = Math.random() * 20, last = 0, vel = 0, lastY = scrollY, intro = reduce || !page ? 1 : 0, born = performance.now();
-    var rips = [[0, 0, -1], [0, 0, -1], [0, 0, -1], [0, 0, -1]], ripN = 0;
-    var uRip = gl.getUniformLocation(pr, 'u_rip');
-    var mouse = [0.5, 0.5], target = [0.5, 0.5], act = 0, actTarget = 0, amt = 1, visible = true, t0 = performance.now() - Math.random() * 20000;
-    function size() {
-      var r = canvas.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 1) * scale * (matchMedia('(pointer: coarse)').matches ? 0.85 : 1);
-      canvas.width = Math.max(1, Math.round(r.width * d)); canvas.height = Math.max(1, Math.round(r.height * d));
-      gl.viewport(0, 0, canvas.width, canvas.height);
-    }
-    function recolor() {
-      var cs = getComputedStyle(canvas);
-      gl.uniform3fv(U.u_t1, rgb(cs.getPropertyValue('--tint1') || cs.getPropertyValue('--sh-body')));
-      shownT2 = rgb(cs.getPropertyValue('--tint2') || cs.getPropertyValue('--sh-body')); gl.uniform3fv(U.u_t2, shownT2);
-      base = ['--sh-body', '--sh-vein', '--sh-field', '--sh-warm'].map(function (k) { return rgb(cs.getPropertyValue(k)); });
-      alt = ['--sh3-body', '--sh3-vein', '--sh3-field', '--sh3-warm'].map(function (k) { var v = cs.getPropertyValue(k); return v ? rgb(v) : null; });
-      if (reduce) draw(performance.now());
-    }
-    function draw(now) {
-      // ease toward the cursor, and fade the pull in and out instead of switching it
-      mouse[0] += (target[0] - mouse[0]) * 0.05; mouse[1] += (target[1] - mouse[1]) * 0.05;
-      act += (actTarget - act) * 0.025;
-      gl.uniform1f(U.u_act, act);
-      // page-wide smoke: full on the hero, quieter behind reading sections
-      if (canvas.classList.contains('page-shader')) amt += ((inSvc > 0.5 || scrollY < innerHeight * 0.5 || scrollY > document.documentElement.scrollHeight - innerHeight * 1.5 ? 1 : 0.38) - amt) * 0.04;
-      gl.uniform1f(U.u_amt, amt);
-      // the palette drifts slowly between the theme's two tones (about 50s a cycle)
-      var inSvc = 0;
-      if (svcEl) { var sr = svcEl.getBoundingClientRect(); inSvc = sr.top < innerHeight / 2 && sr.bottom > innerHeight / 2 ? 1 : 0; }
-      tone = reduce ? 0 : 0.5 - 0.5 * Math.cos(now / 1000 * Math.PI * 2 / 50);
-      
-      ['u_c1', 'u_c2', 'u_c3', 'u_c4'].forEach(function (k, i) {
-        var a = base[i], b = alt[i] || a;
-        var v = [a[0] + (b[0] - a[0]) * tone, a[1] + (b[1] - a[1]) * tone, a[2] + (b[2] - a[2]) * tone];
-        shown[i] = v; gl.uniform3fv(U[k], v);
-      });
-      gl.uniform2f(U.u_res, canvas.width, canvas.height);
-      // the current speeds up while you scroll and settles when you stop
-      var dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now;
-      var dy = Math.abs(scrollY - lastY); lastY = scrollY;
-      vel += (Math.min(dy / Math.max(dt, 0.001) / innerHeight, 6) - vel) * 0.08;
-      sim += dt * (1 + vel * 2.2);
-      gl.uniform1f(U.u_time, reduce ? (now - t0) / 1000 : sim);
-      gl.uniform1f(U.u_clock, now / 1000);
-      // ink-drop intro: the smoke spreads out from behind the name
-      if (intro < 1) { var k = playAt === null ? 0 : Math.min((now - playAt) / (4400), 1); intro = 1 - Math.pow(1 - k, 3); }
-      gl.uniform1f(U.u_intro, intro);
-      // theme switch: the old palette stays outside a front that grows from the centre
-      var fr = 9;
-      if (old) { var fk = Math.min((now - frontT0) / FRONT_MS, 1); fr = -0.25 + fk * fk * (3 - 2 * fk) * 2.1; if (fk >= 1) old = null; }
-      if (old) { ['u_o1', 'u_o2', 'u_o3', 'u_o4'].forEach(function (k, i) { gl.uniform3fv(U[k], old[i]); }); gl.uniform3fv(U.u_ot2, old[4]); }
-      gl.uniform1f(U.u_front, fr);
-      var flat = []; rips.forEach(function (rp) { flat.push(rp[0], rp[1], rp[2]); }); gl.uniform3fv(uRip, flat);
-      gl.uniform2f(U.u_mouse, mouse[0], mouse[1]);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    }
-    var lastDraw = 0, lastPtr = 0;
-    function busy(now) { return act > 0.02 || vel > 0.02 || old || intro < 1 || now - lastPtr < 1200 || rips.some(function (rp) { return rp[2] > 0 && now / 1000 - rp[2] < 4.5; }); }
-    function loop(now) {
-      var gap = now - lastDraw;
-      if (visible && (gap > 32 || (gap > 15 && busy(now)))) { lastDraw = now; draw(now); }
-      requestAnimationFrame(loop);
-    }
-    var host = canvas.classList.contains('page-shader') ? document.documentElement : canvas.parentElement;
-    host.addEventListener('pointermove', function (e) {
-      var r = canvas.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width, y = 1 - (e.clientY - r.top) / r.height;
-      lastPtr = performance.now();
-      if (act < 0.01) mouse = [x, y];
-      target = [x, y]; actTarget = 1;
-    });
-    host.addEventListener('pointerleave', function () { actTarget = 0; });
-    if (page && !reduce) host.addEventListener('pointerdown', function (e) {
-      if (e.target.closest('a, button, input, .addr')) return;
-      var r = canvas.getBoundingClientRect();
-      rips[ripN++ % 4] = [(e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height, performance.now() / 1000];
-    });
-    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(canvas);
-    addEventListener('resize', function () { size(); if (reduce) draw(performance.now()); });
-    size(); recolor();
-    if (reduce) draw(performance.now()); else requestAnimationFrame(loop);
-    requestAnimationFrame(function () { canvas.classList.add('on'); });
-    return { ripple: function (cx, cy, big) { var r = canvas.getBoundingClientRect(); rips[ripN++ % 4] = [(cx - r.left) / r.width, 1 - (cy - r.top) / r.height, performance.now() / 1000 - (big ? 0 : 0.35)]; }, recolor: recolor, morph: function () { if (shown.length) { old = shown.slice().concat([shownT2 || shown[0]]); frontT0 = performance.now(); } }, ms: FRONT_MS };
+    var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_mouse', 'u_act', 'u_band'].concat(names).forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
+    return U;
+  }
+  function hex(v) { var n = parseInt(v.trim().slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
+  // three colours read from CSS (or given), blended over 1.4s when the look changes
+  function Palette(keys) {
+    function read() { var c = getComputedStyle(root); return keys.map(function (k) { return hex(k.charAt(0) === '#' ? k : c.getPropertyValue(k)); }); }
+    var shown = read(), from = shown, to = shown, at = 0;
+    return {
+      set: function (instant) { to = read(); if (reduce || instant) shown = from = to; else { from = shown; at = performance.now(); } },
+      step: function (now) {
+        if (from === to) return shown;
+        var b = Math.min(1, (now - at) / 1400), e = b * b * (3 - 2 * b);
+        shown = b >= 1 ? to : from.map(function (c, i) { return c.map(function (v, j) { return v + (to[i][j] - v) * e; }); });
+        if (b >= 1) from = to;
+        return shown;
+      }
+    };
   }
 
-  [['bgShader', SMOKE, 0.6]].forEach(function (d) {
-    var s = Shader(document.getElementById(d[0]), d[1], d[2]); if (s) shaders.push(s);
-  });
+  function Sky(canvas) {
+    var gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
+    if (!gl) return null;
+    var U = program(gl, smokeShader('', 'gl_FragColor=vec4(smoke(gl_FragCoord.xy),1.);'), []);
+    if (!U) return null;
+    var pal = Palette(['--s1', '--s2', '--s3']), api = { after: null };
 
+    var mouse = [0.5, 0.5], aim = [0.5, 0.5], act = 0, actAim = 0, moved = 0;
+    function point(e) {
+      if (e.target.closest && e.target.closest('.bar')) return; // fingers on the buttons don't stir the smoke
+      var x = e.clientX / innerWidth, y = 1 - e.clientY / innerHeight;
+      if (act < 0.01) mouse = [x, y];
+      aim = [x, y]; actAim = 1; moved = performance.now(); kick();
+    }
+    function away() { actAim = 0; kick(); }
+    if (!reduce) {
+      root.addEventListener('pointermove', point, { passive: true });
+      root.addEventListener('pointerdown', point, { passive: true });
+      root.addEventListener('pointerleave', away);
+      addEventListener('pointerup', function (e) { if (e.pointerType !== 'mouse') away(); });
+      addEventListener('pointercancel', away);
+      addEventListener('blur', away);
+    }
 
+    // touch screens draw at 1.5x (the smoke is soft, the phone stays cool); big retina screens are capped near 2.4 million pixels
+    var d = 1;
+    function size() {
+      d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
+      canvas.width = Math.max(1, Math.round(canvas.clientWidth * d)); canvas.height = Math.max(1, Math.round(canvas.clientHeight * d));
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    var seed = Math.random() * 40, t0 = performance.now(), last = 0, raf = 0;
+    function draw(now) {
+      var t = (seed + (reduce ? 0 : (now - t0) / 1000)) * 0.4, c = pal.step(now);
+      gl.uniform2f(U.u_res, canvas.width, canvas.height); gl.uniform1f(U.u_time, t);
+      gl.uniform3fv(U.u_c1, c[0]); gl.uniform3fv(U.u_c2, c[1]); gl.uniform3fv(U.u_c3, c[2]);
+      gl.uniform2f(U.u_mouse, mouse[0], mouse[1]); gl.uniform1f(U.u_act, act); gl.uniform2f(U.u_band, 0.365, 0.915);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (!canvas.classList.contains('on')) canvas.classList.add('on');
+      if (api.after) api.after(now, t, mouse, act, canvas.width, canvas.height, d);
+    }
+    // 30 frames a second while calm (colour blends included), every frame while the smoke follows a pointer
+    function frame(now) {
+      raf = 0;
+      if (document.hidden) return;
+      var busy = Math.abs(actAim - act) > 0.002 || now - moved < 600;
+      if (now - last >= (busy ? 15 : 32)) {
+        var dt = last ? Math.min((now - last) / 1000, 0.1) : 0.016; last = now;
+        var k = 1 - Math.pow(0.92, dt * 60), ka = 1 - Math.pow(0.96, dt * 60);
+        mouse[0] += (aim[0] - mouse[0]) * k; mouse[1] += (aim[1] - mouse[1]) * k; act += (actAim - act) * ka;
+        draw(now);
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function kick() { if (reduce) { draw(performance.now()); return; } if (!raf) raf = requestAnimationFrame(frame); }
+    addEventListener('resize', function () { size(); kick(); });
+    document.addEventListener('visibilitychange', kick);
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); canvas.classList.remove('on'); });
+    size(); kick();
+    api.tint = function (instant) { pal.set(instant); kick(); };
+    api.kick = kick;
+    return api;
+  }
+
+  // "Januario." filled with the same smoke in a lighter teal and white: a small canvas inside the name draws
+  // the smoke only through the letters, at the same time and place as the background, so it runs on through
+  // them. Without WebGL the silver shine stays.
+  function NameFx(el) {
+    if (!el || !sky) return null;
+    var canvas = document.createElement('canvas'); canvas.className = 'name-fx'; canvas.setAttribute('aria-hidden', 'true');
+    var gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
+    if (!gl) return null;
+    var U = program(gl, smokeShader('uniform sampler2D u_mask;uniform vec2 u_size,u_org;uniform float u_dpr,u_bgd;',
+      'float a=texture2D(u_mask,gl_FragCoord.xy/u_size).a;if(a<.004){gl_FragColor=vec4(0.);return;}' +
+      'vec3 c=smoke((gl_FragCoord.xy/u_dpr+u_org)*u_bgd);gl_FragColor=vec4(min(c,1.)*a,a);'), ['u_mask', 'u_size', 'u_org', 'u_dpr', 'u_bgd']);
+    if (!U) return null;
+    el.appendChild(canvas);
+    var pal = Palette(['--fg', '#ffffff', '--name']);
+    var tex = gl.createTexture(), mask = document.createElement('canvas'), mx = mask.getContext('2d');
+    var dpr = Math.min(devicePixelRatio || 1, 2), w = 1, h = 1, org = [0, 0], ok = false, on = false;
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    // the letters, drawn exactly where the page set them, become the mask (once their own font is in, so
+    // the mask never uses a fallback face)
+    function build() {
+      var cs = getComputedStyle(el), face = cs.fontStyle + ' ' + cs.fontWeight + ' 100px ' + cs.fontFamily;
+      if (document.fonts && document.fonts.load) document.fonts.load(face).then(draw, draw); else draw();
+    }
+    function draw() {
+      var text = el.firstChild; if (!text || text.nodeType !== 3) return;
+      var cs = getComputedStyle(el), fs = parseFloat(cs.fontSize), box = el.getBoundingClientRect();
+      var rg = document.createRange(); rg.setStart(text, 0); rg.setEnd(text, text.length);
+      var tr = rg.getBoundingClientRect(), pad = fs * 0.1, left = tr.left - box.left - pad, top = -fs * 0.3;
+      var cw = tr.width + pad * 2, ch = box.height + fs * 0.6;
+      canvas.style.left = left.toFixed(1) + 'px'; canvas.style.top = top.toFixed(1) + 'px';
+      canvas.style.width = cw.toFixed(1) + 'px'; canvas.style.height = ch.toFixed(1) + 'px';
+      w = mask.width = canvas.width = Math.max(1, Math.round(cw * dpr)); h = mask.height = canvas.height = Math.max(1, Math.round(ch * dpr));
+      gl.viewport(0, 0, w, h);
+      mx.clearRect(0, 0, w, h); mx.fillStyle = '#fff'; mx.textBaseline = 'alphabetic';
+      mx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + (fs * dpr) + 'px ' + cs.fontFamily;
+      var asc = mx.measureText(text.data).fontBoundingBoxAscent;
+      if (!(asc > 0)) asc = fs * dpr * 0.93;
+      var ox = box.left + left, oy = box.top + top;
+      for (var i = 0; i < text.length; i++) {
+        rg.setStart(text, i); rg.setEnd(text, i + 1); var r = rg.getBoundingClientRect();
+        mx.fillText(text.data.charAt(i), (r.left - ox) * dpr, (r.top - oy) * dpr + asc);
+      }
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
+      locate(); ok = true; sky.kick();
+    }
+    // where the canvas sits on the screen (bottom-left origin), so its smoke lines up with the background
+    function locate() { var r = canvas.getBoundingClientRect(); org = [r.left, innerHeight - r.bottom]; }
+    sky.after = function (now, t, mouse, act, rw, rh, bgd) {
+      if (!ok || !on) return;
+      var c = pal.step(now), deep = c[2].map(function (v) { return v * 0.74; });
+      gl.uniform2f(U.u_res, rw, rh); gl.uniform1f(U.u_time, t); gl.uniform2f(U.u_band, 0.22, 0.74);
+      gl.uniform3fv(U.u_c1, c[0]); gl.uniform3fv(U.u_c2, c[1]); gl.uniform3fv(U.u_c3, deep);
+      gl.uniform2f(U.u_mouse, mouse[0], mouse[1]); gl.uniform1f(U.u_act, act);
+      gl.uniform1i(U.u_mask, 0); gl.uniform2f(U.u_size, w, h); gl.uniform2f(U.u_org, org[0], org[1]);
+      gl.uniform1f(U.u_dpr, dpr); gl.uniform1f(U.u_bgd, bgd);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (!root.classList.contains('namefx')) root.classList.add('namefx');
+    };
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); ok = false; root.classList.remove('namefx'); });
+    addEventListener('resize', function () { if (ok) build(); });
+    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', function () { if (ok) build(); });
+    return { build: build, locate: locate, tint: function (instant) { pal.set(instant); }, show: function (v) { on = v; if (v) sky.kick(); } };
+  }
 })();
 </script>
 </body>
