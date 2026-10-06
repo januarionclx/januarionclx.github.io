@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Januario Pinto | Software &amp; consulting</title>
-  <meta name="description" content="Januario Pinto designs organizations as living systems and the software that runs on them. Software and consulting from Lisbon.">
+  <meta name="description" content="Januario Pinto designs and consults companies as living systems and creates software, from Lisbon.">
   <meta name="author" content="Januario Pinto">
   <meta name="theme-color" content="#090909">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Januario Pinto">
-  <meta property="og:description" content="I design organizations as living systems and the software that runs on them.">
+  <meta property="og:description" content="I design and consult companies as living systems and create software, from Lisbon.">
   <meta property="og:image" content="https://januariopinto.com/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://januariopinto.com/">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://januariopinto.com/">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs organizations as living systems and the software that runs on them. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -43,8 +43,7 @@
 <header class="stage hero" id="top" data-look="ink" data-rest="0.7" aria-label="Intro">
   <div class="hero-in">
     <h1 class="title"><span class="l">Hey, I&rsquo;m</span> <span class="l name">Januario.</span></h1>
-    <p class="where l grp">Software and consulting, from <em>Lisbon.</em></p>
-    <p class="thesis grp"><span class="l">I design organizations as <em>living systems</em></span> <span class="l">and the software that runs on them.</span></p>
+    <p class="thesis grp"><span class="l">I design and consult companies as <em>living systems</em></span> <span class="l">and create <em>software</em>, from Lisbon.</span></p>
   </div>
 </header>
 
@@ -83,6 +82,7 @@
       <li class="grp"><span class="nm l">People</span> <span class="nm-d l">A human-centric CRM.</span></li>
       <li class="grp"><span class="nm l">Flows</span> <span class="nm-d l">Chat automations, built step by step.</span></li>
       <li class="grp"><span class="nm l">Artist OS</span> <span class="nm-d l">Presence, tooling and consulting for artists.</span></li>
+      <li class="grp more"><span class="nm l">and more.</span> <span class="nm-d l">Open to investors and buyers.</span> <a class="go l" href="#contact">Let&rsquo;s talk &rarr;</a></li>
     </ul>
   </section>
 </main>
@@ -91,7 +91,7 @@
   <h2 class="title" id="contact-title"><span class="l">Let&rsquo;s</span> <span class="l acc">talk.</span></h2>
   <p class="lead grp"><span class="l">Building something that has to grow?</span> <span class="l">Write to me.</span> <span class="l">I read everything myself.</span></p>
   <div class="mail l grp" data-rest="0.2">
-    <a class="addr" id="addr" href="mailto:contact@januariopinto.com">contact@januariopinto.com</a>
+    <a class="addr" id="addr" href="mailto:contact@januariopinto.com"><span class="hi">contact</span>@januariopinto.com</a>
     <button class="copy" id="copyBtn" type="button" aria-label="Copy email">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
       <svg class="ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
@@ -142,25 +142,28 @@
   }
   lookBtn.addEventListener('click', function () { setLook(LOOKS[(LOOKS.indexOf(root.dataset.look) + 1) % LOOKS.length]); });
 
-  // Section buttons. The lit one is a second copy of the row, clipped to the current button,
-  // so the highlight slides and the label colours swap exactly where it passes.
+  // Section buttons. The lit bubble is a second copy of the row clipped to the current button, so it slides
+  // and the labels swap colour exactly where it passes. It takes each section's colour on the way, glints
+  // when it lands (and now and then), and follows a finger dragged along the row.
   var bar = document.createElement('nav'); bar.className = 'bar'; bar.setAttribute('aria-label', 'Sections');
   var row = document.createElement('div'); row.className = 'bar-row';
   var lit = document.createElement('div'); lit.className = 'bar-lit'; lit.setAttribute('aria-hidden', 'true');
+  var glint = document.createElement('i'); glint.className = 'glint';
   var btns = NAMES.map(function (name, i) {
     var b = document.createElement('button'); b.type = 'button'; b.textContent = name;
     b.setAttribute('aria-controls', stages[i].id);
+    b.style.setProperty('--btn-c', 'var(--a-' + stages[i].dataset.look + ')');
     b.addEventListener('click', function () { go(i); });
     b.addEventListener('pointerdown', function () { if (i === cur) lit.classList.add('press'); });
     row.appendChild(b);
     var s = document.createElement('span'); s.textContent = name; lit.appendChild(s);
     return b;
   });
-  ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) { row.addEventListener(ev, function () { lit.classList.remove('press'); }); });
+  lit.appendChild(glint);
   bar.appendChild(row); bar.appendChild(lit); document.body.appendChild(bar);
   document.addEventListener('touchstart', function () {}, { passive: true }); // lets iOS show the pressed state
 
-  var cur = 0, timer = 0, started = false;
+  var cur = 0, timer = 0, started = false, drag = null;
   function place() {
     var r = row.getBoundingClientRect(), b = btns[cur].getBoundingClientRect();
     lit.style.setProperty('--cl', (b.left - r.left).toFixed(1) + 'px');
@@ -168,6 +171,52 @@
     lit.style.setProperty('--ox', (b.left - r.left + b.width / 2).toFixed(1) + 'px');
   }
   addEventListener('resize', place);
+  function shine(delay) {
+    if (reduce || !glint.animate) return;
+    var r = row.getBoundingClientRect(), b = btns[cur].getBoundingClientRect();
+    glint.animate([{ transform: 'translateX(' + Math.round(b.left - r.left - 64) + 'px)' }, { transform: 'translateX(' + Math.round(b.right - r.left + 8) + 'px)' }],
+      { duration: 800, delay: delay || 0, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'backwards' });
+  }
+  setInterval(function () { if (started && !drag && !document.hidden) shine(0); }, 7000);
+
+  // Dragging along the row: the bubble tracks the finger exactly, takes the colour of the button
+  // underneath, and settles on the nearest one when let go.
+  function nearest(x) {
+    var best = 0, d = Infinity;
+    btns.forEach(function (b, i) { var r = b.getBoundingClientRect(), e = Math.abs(r.left + r.width / 2 - x); if (e < d) { d = e; best = i; } });
+    return best;
+  }
+  row.addEventListener('pointerdown', function (e) { if (e.button === 0) drag = { id: e.pointerId, x: e.clientX, on: false }; });
+  row.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (!drag.on) {
+      if (Math.abs(e.clientX - drag.x) < 8) return;
+      drag.on = true; lit.classList.remove('press'); bar.classList.add('dragging');
+      try { row.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    var r = row.getBoundingClientRect(), w = btns[0].getBoundingClientRect().width;
+    var c = Math.max(w / 2, Math.min(r.width - w / 2, e.clientX - r.left));
+    lit.style.setProperty('--cl', (c - w / 2).toFixed(1) + 'px');
+    lit.style.setProperty('--cr', (r.width - c - w / 2).toFixed(1) + 'px');
+    lit.style.setProperty('--tint', 'var(--a-' + stages[nearest(e.clientX)].dataset.look + ')');
+  });
+  function letGo(e) {
+    lit.classList.remove('press');
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag; drag = null;
+    if (!d.on) return;
+    bar.classList.remove('dragging'); lit.style.removeProperty('--tint');
+    var i = e.type === 'pointercancel' ? cur : nearest(e.clientX);
+    if (i === cur) { place(); shine(380); } else go(i);
+  }
+  row.addEventListener('pointerup', letGo); row.addEventListener('pointercancel', letGo);
+  row.addEventListener('pointerleave', function () { lit.classList.remove('press'); });
+
+  // links to a section (like "Let's talk") switch screens instead of jumping
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+    for (var i = 0; i < stages.length; i++) if (a.getAttribute('href') === '#' + stages[i].id) { e.preventDefault(); go(i); return; }
+  });
 
   function show() {
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
@@ -181,7 +230,7 @@
     cur = i;
     setLook(stages[i].dataset.look, now);
     btns.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
-    place();
+    place(); if (!now) shine(380);
     try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
     from.classList.remove('in');
     clearTimeout(timer);
@@ -196,6 +245,7 @@
     if (started) return;
     started = true; root.classList.add('ready'); show();
     requestAnimationFrame(function () { bar.classList.add('armed'); });
+    setTimeout(function () { shine(0); }, 1500); // a first glint as the bar arrives
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
   setTimeout(begin, 1000);

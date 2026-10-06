@@ -1,6 +1,6 @@
 # Januario Pinto
 
-> Software developer and consultant in Lisbon. Designs organizations as living systems and the software that runs on them. Founder of The Unit Organization, an incubator and studio.
+> Software developer and consultant in Lisbon. Designs and consults companies as living systems and creates software. Founder of The Unit Organization, an incubator and studio.
 
 ## Services
 - Software development: web platforms, internal tools, AI features and automation. A working product, not a prototype.
@@ -11,6 +11,7 @@
 - People: the CRM for clients and patients, in one place.
 - Flows: build the chat bots a business runs on, step by step.
 - Artist OS: site, bookings and numbers for artists.
+- And more in the works. Open to investors and buyers: contact@januariopinto.com
 
 ## What I'm doing now
 - Automating systems for restaurants, shops and services.
