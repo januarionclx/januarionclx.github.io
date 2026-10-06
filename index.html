@@ -98,7 +98,7 @@
         <div class="cells now">
           <div data-depth="0.6">
             <p class="big" data-split data-letters style="--base: .6s">Large-scale software and organizational work, in a country rebuilding itself.</p>
-            <p>From Lisbon, I work alongside a small group of partners on projects where technology, institutions and people have to change together. The kind of work where getting the organization right is the project.</p>
+            <p>From Lisbon, with a small group of partners, where technology and institutions have to change together.</p>
           </div>
           <div data-depth="1.1">
             <ul class="products" id="products">
@@ -144,7 +144,7 @@
       <div class="cells">
         <div class="cell grow">
           <h2 data-depth="0.4" data-split>Let&rsquo;s <span class="accent sheen">talk.</span></h2>
-          <p class="lead" data-depth="0.7">If you are building something that has to grow, a company, a product or a team, write to me.<br>I read everything myself.</p>
+          <p class="lead" data-depth="0.7">Building something that has to grow? Write to me.<br>I read everything myself.</p>
           <div class="mail" data-depth="1">
             <a class="addr" id="addr" href="mailto:contact@januariopinto.com">contact@januariopinto.com</a>
             <button class="copy magnet" id="copyBtn" type="button">Copy</button>
@@ -390,13 +390,13 @@
   }
   function deckGo(i) {
     i = Math.max(0, Math.min(deckSteps.length - 1, i));
-    var y = Math.round(deckY(deckSteps[i])), from = scrollY, start = performance.now(), ms = reduce ? 1 : 1000;
+    var y = Math.round(deckY(deckSteps[i])), from = scrollY, start = performance.now(), ms = reduce ? 1 : 650;
     if (Math.abs(y - from) < 2) return;
     gliding = true; document.documentElement.style.scrollSnapType = 'none';
     (function f(now) {
       var k = Math.min((now - start) / ms, 1), e = 0.5 - 0.5 * Math.cos(Math.PI * k);
       scrollTo(0, from + (y - from) * e);
-      if (k < 1) requestAnimationFrame(f); else { gliding = false; coolUntil = performance.now() + 450; acc = 0; document.documentElement.style.scrollSnapType = ''; }
+      if (k < 1) requestAnimationFrame(f); else { gliding = false; coolUntil = performance.now() + 220; acc = 0; document.documentElement.style.scrollSnapType = ''; }
     })(start);
   }
   function deckOn() { return deckMq.matches && playAt !== null; }
