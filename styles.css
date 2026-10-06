@@ -687,3 +687,10 @@ h2 .accent { display: block; font-size: 1.25em; line-height: 1; margin-left: 0; 
 @media (min-width: 861px) { .fixed .hero .name { font-size: clamp(4.6rem, 11vw, 10.5rem); } }
 @media (max-width: 560px) { .fixed .coda h2 { font-size: clamp(2.3rem, 11vw, 3.1rem); } }
 .fixed .keys { display: none !important; }
+
+/* Januario. stays like the first version: heavy Geist with the teal gradient, bigger */
+h1 .accent { font-family: var(--f-display) !important; font-style: normal !important; font-weight: 900 !important; letter-spacing: -0.065em; padding-right: 0; margin-left: 0; }
+h1 .accent .ch { font-style: normal; }
+.fixed .hero .name { font-size: clamp(5rem, 13vw, 12rem); }
+@media (max-width: 560px) { .fixed .hero .name { font-size: 23vw; } }
+@media (max-width: 560px) { .fixed .hero .name { font-size: 20.5vw; } }
