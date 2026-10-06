@@ -155,12 +155,12 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .now .big em { font-style: normal; color: var(--ink-3); }
 .now p { color: color-mix(in srgb, var(--ink) 82%, transparent); font-size: 18px; font-weight: 500; line-height: 1.6; margin: 20px 0 0; max-width: 46ch; }
 .products { list-style: none; margin: 22px 0 0; padding: 0; }
-.products li { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 4px 24px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line-2); }
+.products li { display: block; padding: 16px 0; border-bottom: 1px solid var(--line-2); }
 .products li:first-child { border-top: 1px solid var(--line-2); }
 :root[data-theme="dark"] .products h3 { color: var(--ink); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme]) .products h3 { color: var(--ink) !important; } }
 #now .inner { max-width: 1320px; }
-.products h3 { margin: 0; font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 800; letter-spacing: -0.045em; line-height: 1; color: var(--c); }
+.products h3 { margin: 0; font-size: clamp(2rem, 3.6vw, 3.2rem); font-weight: 800; letter-spacing: -0.045em; line-height: 1; color: var(--c); }
 .now .products p { margin: 0; font-size: 16px; line-height: 1.5; max-width: none; }
 @media (max-width: 560px) { .products li { grid-template-columns: 1fr; } }
 
@@ -285,3 +285,6 @@ html.morphing .sheen .ch { transition-property: color !important; }
 
 /* highlight word in section titles: same voice as "Januario." */
 .head h2 .accent { color: var(--teal); font-weight: 900; }
+
+/* Right now: the statement is written out like the hero subline */
+.now .big[data-letters] { color: var(--ink); }
