@@ -74,15 +74,15 @@
       </div>
       <div class="svc-panels">
         <article class="panel" id="svc-dev" style="--c: var(--teal)">
-          <h3 data-split>Software development</h3>
+          <h3 data-split>Software <span class="accent sheen">development</span></h3>
           <p data-depth="0.8" data-split data-letters class="soft" style="--base: .5s">A working product, not a prototype.<br>Web platforms, internal tools and AI, built to last.</p>
         </article>
         <article class="panel" id="svc-consult" style="--c: var(--ochre)">
-          <h3 data-split>Consulting</h3>
+          <h3 data-split><span class="accent sheen">Consulting</span></h3>
           <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.7s">A fractional CTO, without the cost of a full-time hire.<br>Distributed systems that don&rsquo;t rely on you.<br>Self-managing teams that run on their own.</p>
         </article>
         <article class="panel" id="svc-ventures" style="--c: var(--clay)">
-          <h3 data-split>Ventures</h3>
+          <h3 data-split><span class="accent sheen">Ventures</span></h3>
           <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.3s">Companies built from the ground up.<br>Incubation and investment through The Unit.</p>
         </article>
       </div>
@@ -100,9 +100,9 @@
     <div class="bar"><div class="inner"><div class="cells"><div class="cell grow body-cell">
         <div class="building">
           <ol class="ex">
-            <li style="--n:0"><span class="ex-t" data-split>Fully automated systems for businesses.</span><span class="ex-d">Sales, customers, orders, messaging and delivery running on their own, with the owner watching it all live.</span></li>
-            <li style="--n:1"><span class="ex-t" data-split>Custom harnesses for professionals.</span><span class="ex-d">Like a tool that gives doctors their time back: patients, follow-ups and records in one place, with AI drafting the reports.</span></li>
-            <li style="--n:2"><span class="ex-t" data-split>Private clients.</span><span class="ex-d">A few at a time, built end to end. Ask me about it.</span></li>
+            <li style="--n:0"><span class="ex-t" data-split>Systems that <span class="accent sheen">run themselves.</span></span><span class="ex-d">Sales, orders, messages and delivery, for businesses.</span></li>
+            <li style="--n:1"><span class="ex-t" data-split>Harnesses for <span class="accent sheen">professionals.</span></span><span class="ex-d">Like giving doctors their time back.</span></li>
+            <li style="--n:2"><span class="ex-t" data-split>Private <span class="accent sheen">clients.</span></span><span class="ex-d">A few at a time. Ask me.</span></li>
           </ol>
         </div>
     </div></div></div></div>
@@ -256,7 +256,7 @@
 
   // scroll flow: everything eases toward its scroll position, nearer content leads, deeper content trails
   var flow = [].slice.call(document.querySelectorAll('[data-depth]')).map(function (el) {
-    return { el: el, box: el.closest('.panel, section, header, footer'), k: parseFloat(el.dataset.depth), scale: el.hasAttribute('data-scale'), p: null };
+    return { el: el, box: el.closest('.ex li, .panel, section, header, footer'), k: parseFloat(el.dataset.depth), scale: el.hasAttribute('data-scale'), p: null };
   });
   var flowRaf = 0;
   function flowStep() {
@@ -310,7 +310,7 @@
   var splitEls = [].slice.call(document.querySelectorAll('[data-split]'));
   splitEls.forEach(split);
   var stages = [];
-  splitEls.forEach(function (el) { var st = el.closest('.panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
+  splitEls.forEach(function (el) { var st = el.closest('.ex li, .panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
   var stageIO = new IntersectionObserver(function (en) {
     if (playAt === null) return;
     en.forEach(function (e) { if (e.isIntersecting && !e.target.classList.contains('in')) surface(e.target); e.target.classList.toggle('in', e.isIntersecting); });

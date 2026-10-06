@@ -508,3 +508,15 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
 .ex-d { opacity: 0; transition: opacity .7s ease; transition-delay: calc(.9s + var(--n) * 220ms); }
 .in .ex-d { opacity: 1; }
 #svc-dev p.soft { font-size: clamp(16px, 1.35vw, 19px); color: var(--ink-2); }
+
+/* examples read as a narrative: big lines, each its own scroll stage */
+.ex { gap: clamp(26px, 5vh, 52px); }
+.ex li { opacity: 1; transform: none; }
+.ex-t { font-size: clamp(1.9rem, 4vw, 3.6rem); font-weight: 900; letter-spacing: -0.055em; line-height: 1.02; }
+.ex-d { margin-top: 8px; transition-delay: .7s; }
+.ex li.in .ex-d { opacity: 1; }
+.in .ex-d { opacity: 0; } .ex li.in .ex-d { opacity: 1; }
+.panel h3, .ex-t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
+/* optical alignment: big heavy type carries a left side-bearing; nudge small text to match */
+.panel p.soft, .ex-d, .nm-d { padding-left: .06em; }
+@media (max-width: 860px) { .panel p.soft, .ex-d { padding-left: 4px; } }
