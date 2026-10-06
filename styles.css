@@ -293,3 +293,7 @@ html.morphing .sheen .ch { transition-property: color !important; }
 body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: default; }
 .mail .addr { -webkit-user-select: all; user-select: all; }
 a, button { cursor: pointer; }
+
+/* portfolio: each name opens on a highlight letter, same sheen as the highlight words */
+.work .ini { display: inline-block; background: linear-gradient(100deg, var(--teal) 0%, var(--acc2, var(--teal)) 45%, var(--teal) 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 9s ease-in-out infinite alternate; padding-right: .02em; }
+@media (prefers-reduced-motion: reduce) { .work .ini { animation: none; } }
