@@ -30,6 +30,12 @@
   </button>
 </div>
 <canvas id="bgShader" class="page-shader" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="surface" x="-10%" y="-30%" width="120%" height="160%">
+    <feTurbulence id="surfaceNoise" type="fractalNoise" baseFrequency="0.006 0.05" numOctaves="2" seed="4" result="n"/>
+    <feDisplacementMap id="surfaceMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 
 
 <header class="hero" id="top">
@@ -164,11 +170,26 @@
   document.documentElement.classList.add('js');
   // the intro starts on its own once the fonts are in (at most about a second), so words never rise in a fallback face
   var playAt = null;
+  // ripple: strong while the words break the surface, calming to still glass
+  var surfMap = document.getElementById('surfaceMap'), surfNoise = document.getElementById('surfaceNoise'), surfRaf = 0, surfStage = null;
+  function surface(stage) {
+    if (!surfMap || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (surfStage && surfStage !== stage) surfStage.classList.remove('surfacing');
+    surfStage = stage; stage.classList.add('surfacing');
+    var t0 = performance.now(), dur = 2600;
+    cancelAnimationFrame(surfRaf);
+    (function f(now) {
+      var k = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - k, 3);
+      surfMap.setAttribute('scale', (34 * (1 - e)).toFixed(2));
+      surfNoise.setAttribute('baseFrequency', (0.006 + 0.004 * Math.sin(now / 400)).toFixed(4) + ' ' + (0.05 + 0.012 * Math.cos(now / 330)).toFixed(4));
+      if (k < 1) surfRaf = requestAnimationFrame(f); else { stage.classList.remove('surfacing'); surfMap.setAttribute('scale', '0'); }
+    })(t0);
+  }
   function begin() {
     if (playAt !== null) return;
     playAt = performance.now();
     document.documentElement.classList.remove('gated');
-    document.querySelector('.hero').classList.add('in');
+    surface(document.querySelector('.hero')); document.querySelector('.hero').classList.add('in');
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
   setTimeout(begin, 1100);
@@ -314,7 +335,7 @@
   splitEls.forEach(function (el) { var st = el.closest('.panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
   var stageIO = new IntersectionObserver(function (en) {
     if (playAt === null) return;
-    en.forEach(function (e) { e.target.classList.toggle('in', e.isIntersecting); });
+    en.forEach(function (e) { if (e.isIntersecting && !e.target.classList.contains('in')) surface(e.target); e.target.classList.toggle('in', e.isIntersecting); });
   }, { threshold: 0.45 });
   stages.forEach(function (st) { stageIO.observe(st); });
 
