@@ -91,7 +91,7 @@
     </div>
   </section>
 
-  <section id="now" aria-labelledby="now-title" aria-label="Public portfolio: products you can open">
+  <section id="now" aria-labelledby="now-title" aria-label="Public portfolio: products you can open and try">
     <div class="bar head">
       <div class="inner">
         <div class="cells">
@@ -103,9 +103,9 @@
       <div class="inner">
         <div class="cells" style="display:block">
           <div class="work">
-            <a href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="t" data-split><span class="ini">P</span>eople</span><span class="d" data-split data-letters style="--base: 0.30s">The platform for self-managing teams. Roles, circles and decisions in one place.</span><span class="k" aria-hidden="true"><svg class="ic ic-orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.4"/><g class="spin"><circle cx="12" cy="4.5" r="1.8"/><circle cx="18.5" cy="16" r="1.8"/><circle cx="5.5" cy="16" r="1.8"/></g></svg><span class="arrow">&#8599;</span></span></a>
-            <a href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="t" data-split><span class="ini">F</span>lows</span><span class="d" data-split data-letters style="--base: 0.48s">Business automations the business can read.</span><span class="k" aria-hidden="true"><svg class="ic ic-flow" viewBox="0 0 24 24"><path d="M3 7h6c3 0 3 10 6 10h6M3 17h6"/><circle cx="21" cy="17" r="1.6"/></svg><span class="arrow">&#8599;</span></span></a>
-            <div class="row"><span class="t" data-split><span class="ini">R</span>estaurant CRM</span><span class="d" data-split data-letters style="--base: 0.66s">One system for a restaurant: orders, customers, deliveries and the numbers behind them.</span><span class="k" aria-hidden="true"><svg class="ic ic-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect class="pop" x="13" y="13" width="7" height="7"/></svg></span></div>
+            <a href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="t" data-split>People</span><span class="d" data-split data-letters style="--base: 0.30s">The platform for self-managing teams. Roles, circles and decisions in one place.</span><span class="k" aria-hidden="true"><span class="arrow">&#8599;</span></span></a>
+            <a href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="t" data-split>Flows</span><span class="d" data-split data-letters style="--base: 0.48s">Business automations the business can read.</span><span class="k" aria-hidden="true"><span class="arrow">&#8599;</span></span></a>
+            <div class="row"><span class="t" data-split>Restaurant CRM</span><span class="d" data-split data-letters style="--base: 0.66s">One system for a restaurant: orders, customers, deliveries and the numbers behind them.</span></div>
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@
     <div class="bar head">
       <div class="inner">
         <div class="cells">
-          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>Private <span class="accent sheen">work</span></h2></div>
+          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>What I&rsquo;ve done <span class="accent sheen">recently</span></h2></div>
         </div>
       </div>
     </div>
@@ -328,7 +328,7 @@
             if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
             var w = document.createElement('span'); w.className = 'w';
             var inner = document.createElement('span');
-            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen, .ini')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
+            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
             else part.split('').forEach(function (ch) { var l = document.createElement('span'); l.className = 'ch'; l.textContent = ch; l.style.setProperty('--i', i++); inner.appendChild(l); });
             w.appendChild(inner); frag.appendChild(w);
           });
