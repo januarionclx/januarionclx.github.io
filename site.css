@@ -104,9 +104,9 @@ button { font: inherit; color: inherit; }
 .more .nm { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
 
 /* contact opens with two questions in the 'doing now' size, in white */
-/* contact: five lines in one size, the questions in white, the promise in grey */
+/* contact: five lines in one size and one grey, so the email is the bright thing */
 .asks { margin: clamp(20px, 3svh, 36px) 0 0; }
-.asks p { margin: 0; font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--fg); }
+.asks p { margin: 0; font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
 .asks p + p { margin-top: .3em; }
 .asks .dim { color: var(--muted); }
 .asks .m { display: none; } /* phone-only line breaks */
@@ -226,6 +226,10 @@ button { font: inherit; color: inherit; }
   .doing { gap: clamp(14px, 3.6svh, 40px); }
   .asks p { font-size: clamp(1.55rem, 8.2vw, 2.6rem); line-height: 1.06; }
   .asks .m { display: inline; }
+  .mail { margin-top: clamp(22px, 5svh, 56px); }
+  .js #contact .asks { padding-top: clamp(16px, 2.6svh, 30px); }
+  /* services and contact sit a little above the middle, nearer their heading than the bar */
+  .js #services, .js #contact { padding-bottom: calc(var(--bar-b) + var(--bar-h) + 24px + clamp(0px, 14svh - 60px, 120px)); }
   .svc { gap: clamp(18px, 3.6svh, 48px); }
 }
 /* tall phones: services get a little more presence and air */
