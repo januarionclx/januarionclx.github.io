@@ -395,3 +395,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display:
 
 /* the work button never shows a selection ring or box */
 .cta, .cta:focus, .cta:focus-visible, .cta:active { outline: none; -webkit-tap-highlight-color: transparent; }
+
+/* the lens works on a small copy of the smoke under the button, above the page shader */
+.lens-src { position: fixed; z-index: -1; pointer-events: none; overflow: hidden; opacity: 0; transition: opacity 1.2s ease .3s; }
+html:not(.gated) .lens-src { opacity: 1; }
