@@ -12,7 +12,7 @@
 - Flows (via https://theunitorganization.com): business automations the business can read.
 - Restaurant CRM: orders, customers, deliveries and the numbers behind them, in one system.
 
-## Private work (with clients; described, not linked)
+## What I have done recently (with clients; described, not linked)
 - A restaurant platform: point of sale, a WhatsApp ordering bot, an ordering website, delivery through transport-partner API integrations, cloud sales dashboards.
 - A clinic platform: CRM for a medical practice with AI-drafted reports for doctors.
 - Holacracy tooling: an AI assistant for self-management, used by teams in practice.
