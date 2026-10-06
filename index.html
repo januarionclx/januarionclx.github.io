@@ -437,6 +437,8 @@
   var cur = 0, busyUntil = 0;
   document.documentElement.classList.add('stage-mode');
   stageEls.forEach(function (el) { el.setAttribute('data-stage', ''); });
+  var FIXED = false; // true = GIPX fixed screen; false = scroll with the same look
+  if (FIXED) { document.documentElement.classList.add('fixed');
   stageCheck = function () {};
   window.__stages = stageEls.length; window.__stage = 0;
   function show(i) {
@@ -466,6 +468,7 @@
     var dy = ty - e.changedTouches[0].clientY; ty = null;
     if (Math.abs(dy) > 40) deckGo(cur + (dy > 0 ? 1 : -1));
   }, { passive: true });
+  }
 
   // copy email
   var btn = document.getElementById('copyBtn');

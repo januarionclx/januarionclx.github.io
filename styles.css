@@ -592,9 +592,10 @@ h2 .dots { width: 1.2em; color: var(--teal); }
 .dots3 { display: none; }
 
 /* ---------- stage mode: one fixed screen, steps swap in place ---------- */
-html.stage-mode, html.stage-mode body { height: 100%; overflow: hidden; overscroll-behavior: none; }
-.stage-mode [data-stage] { position: fixed; inset: 0; z-index: 2; min-height: 0 !important; display: flex; flex-direction: column; justify-content: center; opacity: 0; visibility: hidden; transition: opacity .38s ease, visibility 0s .38s; }
-.stage-mode [data-stage].cur { opacity: 1; visibility: visible; transition: opacity .25s ease; }
+html.fixed, html.fixed body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+.fixed [data-stage] { position: fixed; inset: 0; z-index: 2; min-height: 0 !important; opacity: 0; visibility: hidden; transition: opacity .38s ease, visibility 0s .38s; }
+.stage-mode [data-stage] { display: flex; flex-direction: column; min-height: 100svh; }
+.fixed [data-stage].cur { opacity: 1; visibility: visible; transition: opacity .25s ease; }
 .stage-mode .svc-index { display: none; }
 .stage-mode .svc-grid { display: block; }
 .stage-mode .panel { padding-block: 0; padding-inline: calc(max(0px, (100vw - var(--col)) / 2) + var(--gut) + clamp(18px, 3vw, 36px)); justify-content: center; }
@@ -609,6 +610,6 @@ html.stage-mode, html.stage-mode body { height: 100%; overflow: hidden; overscro
 .stage-mode .coda .cell { padding-bottom: clamp(40px, 8vh, 90px) !important; }
 .stage-mode .foot { display: none; }
 /* leaving: the whole step fades at once, quickly; arriving: same order, a bit faster */
-.stage-mode [data-stage] { transition: opacity .28s ease, visibility 0s .28s; }
+.fixed [data-stage] { transition: opacity .28s ease, visibility 0s .28s; }
 .stage-mode [data-stage]:not(.in) [data-split] .ch, .stage-mode [data-stage]:not(.in) .nm-d, .stage-mode [data-stage]:not(.in) .ex-d { transition-duration: .01s !important; transition-delay: 0s !important; }
 .stage-mode .in [data-split] .ch { transition-duration: .45s, .7s, .6s !important; }
