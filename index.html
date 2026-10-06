@@ -43,10 +43,9 @@
 <header class="stage hero" id="top" data-look="teal" data-rest="0.7" aria-label="Intro">
   <div class="hero-in">
     <h1 class="title"><span class="l">Hey, I&rsquo;m</span> <span class="l name">Januario.</span></h1>
-    <div class="thesis">
-      <p class="l grp">I design and consult <em>companies.</em></p>
-      <p class="l grp">I create <span class="swap" aria-hidden="true"><em class="on">software.</em><em>products.</em><em>platforms.</em><em>automations.</em></span><span class="sr-only">software, products, platforms and automations.</span></p>
-      <p class="l grp">Based in <em>Porto.</em></p>
+    <div class="say">
+      <p class="l grp"><span class="sr-only">I design and consult companies, and create products and software.</span><span class="morph" aria-hidden="true">I design companies.</span></p>
+      <p class="l grp">Based in <span class="k">Porto.</span></p>
     </div>
   </div>
 </header>
@@ -86,14 +85,18 @@
       <li class="grp"><span class="nm l">People</span> <span class="nm-d l">A human-centric CRM.</span></li>
       <li class="grp"><span class="nm l">Flows</span> <span class="nm-d l">Chat automations, built step by step.</span></li>
       <li class="grp"><span class="nm l">Artist OS</span> <span class="nm-d l">Presence, tooling and consulting for artists.</span></li>
-      <li class="grp more"><span class="nm l">and more.</span> <span class="nm-d l">Open to investors and buyers.</span> <a class="go l" href="#contact">Let&rsquo;s talk &rarr;</a></li>
+      <li class="grp more"><span class="nm l">and more.</span> <span class="nm-d l">Open to investors and buyers.</span></li>
     </ul>
   </section>
 </main>
 
 <footer class="stage" id="contact" data-look="ember" aria-labelledby="contact-title">
   <h2 class="title" id="contact-title"><span class="l">Let&rsquo;s</span> <span class="l acc">talk.</span></h2>
-  <p class="lead grp"><span class="l">Building something that has to grow?</span> <span class="l">Write to me.</span> <span class="l">I read everything myself.</span></p>
+  <div class="asks grp">
+    <p class="l">Have an idea?</p>
+    <p class="l">Building something that has to grow?</p>
+  </div>
+  <p class="lead grp"><span class="l">Write to me.</span> <span class="l">I read everything myself.</span></p>
   <div class="mail l grp" data-rest="0.2">
     <a class="addr" id="addr" href="mailto:contact@januariopinto.com"><span class="hi">contact@</span><wbr>januariopinto.com</a>
     <button class="copy" id="copyBtn" type="button" aria-label="Copy email">
@@ -246,27 +249,64 @@
     for (var i = 0; i < stages.length; i++) if (a.getAttribute('href') === '#' + stages[i].id) { e.preventDefault(); go(i); return; }
   });
 
-  // The intro's second line switches its last word, quickly, while the intro is on screen.
-  var swap = document.querySelector('.swap'), words = swap ? [].slice.call(swap.children) : [], wi = 0, swapT = 0, swapWait = 0;
-  function swapStop() { clearTimeout(swapWait); clearInterval(swapT); swapT = 0; }
-  function swapReset() { swapStop(); wi = 0; words.forEach(function (w, j) { w.classList.toggle('on', j === 0); w.classList.remove('off'); }); }
-  function swapStart() {
-    swapStop();
-    if (!words.length || reduce) return;
-    swapWait = setTimeout(function () {
-      swapT = setInterval(function () {
-        var prev = words[wi]; wi = (wi + 1) % words.length;
-        prev.classList.remove('on'); prev.classList.add('off');
-        words[wi].classList.remove('off'); words[wi].classList.add('on');
-      }, 1700);
-    }, 2400);
+  // The intro's first line turns from one thing I do into the next while the intro is on screen (Porto stays).
+  // Words both phrases share stay, sliding into place if they must; the others lift away and the new ones rise in.
+  var PHRASES = ['I design companies.', 'I consult companies.', 'I create products.', 'I create software.'];
+  var line = document.querySelector('.morph'), pi = 0, morphT = 0, morphWait = 0;
+  function wordEl(w) { var s = document.createElement('span'); s.className = 'w'; s.textContent = w; return s; }
+  // on a phone the last word always takes the second line, so every phrase has the same shape
+  function gap(last) { var f = document.createDocumentFragment(); f.appendChild(document.createTextNode(' ')); if (last) { var br = document.createElement('br'); br.className = 'cut'; f.appendChild(br); } return f; }
+  function markKey() { var ws = line.querySelectorAll('.w:not(.ghost)'); [].forEach.call(ws, function (w, i) { w.classList.toggle('k', i === ws.length - 1); }); }
+  function setLine(text) {
+    line.textContent = '';
+    var ws = text.split(' ');
+    ws.forEach(function (w, i) { if (i) line.appendChild(gap(i === ws.length - 1)); line.appendChild(wordEl(w)); });
+    markKey();
   }
+  function morphTo(text) {
+    var base = line.getBoundingClientRect(), olds = [].slice.call(line.querySelectorAll('.w:not(.ghost)'));
+    var at = olds.map(function (w) { var r = w.getBoundingClientRect(); return [r.left - base.left, r.top - base.top]; });
+    var next = text.split(' '), kept = [], used = [], from = 0;
+    next.forEach(function (w, i) { for (var k = from; k < olds.length; k++) if (olds[k].textContent === w) { kept[i] = olds[k]; used[k] = true; from = k + 1; return; } });
+    // each word that goes leaves a copy where it stood, which lifts away
+    olds.forEach(function (w, k) {
+      if (used[k]) return;
+      var g = w.cloneNode(true); g.classList.add('ghost'); g.style.left = at[k][0] + 'px'; g.style.top = at[k][1] + 'px';
+      line.appendChild(g);
+      g.animate(reduce ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 1, transform: 'none', filter: 'blur(0)' }, { opacity: 0, transform: 'translateY(-.3em)', filter: 'blur(.12em)' }],
+        { duration: 300, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'forwards' }).onfinish = function () { g.remove(); };
+    });
+    // the new line reuses the words it keeps
+    [].slice.call(line.childNodes).forEach(function (n) { if (!(n.classList && n.classList.contains('ghost'))) line.removeChild(n); });
+    var els = next.map(function (w, i) { return kept[i] || wordEl(w); });
+    els.forEach(function (el, i) { if (i) line.appendChild(gap(i === els.length - 1)); line.appendChild(el); });
+    markKey();
+    var n = 0;
+    els.forEach(function (el, i) {
+      if (kept[i]) {
+        var j = olds.indexOf(el), r = el.getBoundingClientRect(), dx = at[j][0] - (r.left - base.left), dy = at[j][1] - (r.top - base.top);
+        if ((Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) && !reduce) el.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 360, easing: 'cubic-bezier(.645, .045, .355, 1)' });
+      } else {
+        el.animate(reduce ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: 'translateY(.35em)', filter: 'blur(.12em)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
+          { duration: 520, delay: 230 + 60 * n++, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'backwards' });
+      }
+    });
+  }
+  function morphStop() { clearTimeout(morphWait); clearInterval(morphT); }
+  function morphReset() { morphStop(); pi = 0; setLine(PHRASES[0]); }
+  function morphStart() {
+    morphStop();
+    morphWait = setTimeout(function () {
+      morphT = setInterval(function () { pi = (pi + 1) % PHRASES.length; morphTo(PHRASES[pi]); }, 2200);
+    }, 2000);
+  }
+  morphReset();
 
   function show() {
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
     if (!started) return;
     var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
-    if (cur === 0) swapStart(); else swapReset();
+    if (cur === 0) morphStart(); else morphReset();
     if (nameFx) { nameFx.show(cur === 0); if (cur === 0) setTimeout(nameFx.locate, 950); }
   }
   // Leaving fades everything at once; the next screen starts as soon as the old one is gone.
@@ -279,7 +319,7 @@
     btns.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     place(); if (!now) shine(1600);
     try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
-    from.classList.remove('in'); swapStop();
+    from.classList.remove('in'); morphStop();
     clearTimeout(timer);
     if (now || reduce) show(); else timer = setTimeout(show, 170);
   }
