@@ -20,6 +20,12 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="themes" role="group" aria-label="Theme">
+  <button type="button" data-set-theme="light" aria-label="Paper" style="--a: #eceee8; --b: #0d6a61"></button>
+  <button type="button" data-set-theme="dark" aria-label="Ink" style="--a: #0b1110; --b: #63cfbf"></button>
+  <button type="button" data-set-theme="gold" aria-label="Gold" style="--a: #0d0c0a; --b: #e3b955"></button>
+  <button type="button" data-set-theme="white" aria-label="White" style="--a: #fbfaf7; --b: #9a7215"></button>
+</div>
 <div class="gate" id="gate">
   <button class="play magnet" id="play" type="button" aria-label="Play the introduction">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
@@ -151,7 +157,7 @@
     <div class="inner">
       <div class="links label">
         <span>&copy; <span id="year">2026</span> Januario Pinto</span>
-        <nav aria-label="Elsewhere"><a href="https://x.com/januario_xyz" target="_blank" rel="noopener">X</a><a href="https://github.com/januarionclx" target="_blank" rel="noopener">GitHub</a><a href="https://theunitorganization.com" target="_blank" rel="noopener">The Unit</a><button type="button" id="themeToggle" class="theme-link">Light / Dark</button></nav>
+        <nav aria-label="Elsewhere"><a href="https://x.com/januario_xyz" target="_blank" rel="noopener">X</a><a href="https://github.com/januarionclx" target="_blank" rel="noopener">GitHub</a><a href="https://theunitorganization.com" target="_blank" rel="noopener">The Unit</a></nav>
       </div>
     </div>
   </div>
@@ -177,14 +183,20 @@
   // theme toggle; stored choice wins, else system
   var root = document.documentElement;
   try { var t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
-  document.getElementById('themeToggle').addEventListener('click', function () {
+  var pick = [].slice.call(document.querySelectorAll('[data-set-theme]'));
+  function markTheme() {
     var cur = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    var next = cur === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
-    try { localStorage.setItem('theme', next); } catch (e) {}
-    shaders.forEach(function (s) { s.recolor(); });
+    pick.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === cur)); });
+  }
+  pick.forEach(function (b) {
+    b.addEventListener('click', function () {
+      root.dataset.theme = b.dataset.setTheme;
+      try { localStorage.setItem('theme', b.dataset.setTheme); } catch (e) {}
+      markTheme(); shaders.forEach(function (s) { s.recolor(); });
+    });
   });
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { shaders.forEach(function (s) { s.recolor(); }); });
+  markTheme();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { markTheme(); shaders.forEach(function (s) { s.recolor(); }); });
 
 
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
