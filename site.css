@@ -10,13 +10,13 @@
   --fade: 1.2s ease;                           /* colour moving between looks */
   --out: .16s;                                 /* leaving: everything at once, quickly */
   --pad: 20px;
-  --top: calc(env(safe-area-inset-top, 0px) + clamp(96px, 18vh, 190px));
+  --top: calc(env(safe-area-inset-top, 0px) + clamp(64px, 11vh, 140px)); /* titles sit high; the content gets the room */
   --bar-b: calc(env(safe-area-inset-bottom, 0px) + clamp(24px, 7vh, 72px));
   --bar-h: 44px;
   color-scheme: dark;
 }
 @media (min-width: 640px) { :root { --pad: 40px; } }
-@media (min-width: 900px) { :root { --top: calc(env(safe-area-inset-top, 0px) + clamp(72px, 13vh, 150px)); } }
+@media (min-width: 900px) { :root { --top: calc(env(safe-area-inset-top, 0px) + clamp(56px, 9vh, 120px)); } }
 
 /* looks: GIPX's teal, ink, violet and ember (its red), and a gold one built the same way. One accent per look;
    descriptions are always grey. Teal opens the site, as on the share image; the intro lines are grey with white
@@ -69,8 +69,9 @@ button { font: inherit; color: inherit; }
 @keyframes sheen { 0% { background-position: 100% 0; } 34%, 100% { background-position: 0% 0; } }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
-.thesis { margin: clamp(26px, 3.8vh, 44px) 0 0; font-size: clamp(1.1rem, 5.6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); }
+.thesis { margin: clamp(28px, 5vh, 56px) 0 0; font-size: clamp(1.1rem, 5.6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); }
 .thesis p { margin: 0; white-space: nowrap; }
+.thesis p + p { margin-top: clamp(4px, 2vh, 20px); }
 .thesis em { font-style: normal; white-space: nowrap; color: var(--fg); }
 /* the switching word: the next one rises out of a blur as the last one lifts away */
 .swap { display: inline-grid; }
@@ -80,15 +81,14 @@ button { font: inherit; color: inherit; }
 
 .svc { display: grid; gap: clamp(22px, 3.4vh, 38px); margin-top: clamp(20px, 3vh, 36px); }
 /* service names read like the portfolio names: big, light and white, with the grey description under them */
-.svc h3 { margin: 0; font-size: clamp(1.9rem, 8.4vw, 3.2rem); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
+.svc h3 { margin: 0; font-size: clamp(1.9rem, 9vw, 3.2rem); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
 .svc p, .lead { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
 .svc p { margin-top: .6em; }
 .svc p .l, .lead .l, .thesis .l { display: block; }
 .svc p .l, .lead .l, .thesis .l, .nm-d { text-wrap: balance; }
 
-.doing { list-style: none; margin: clamp(20px, 3vh, 36px) 0 0; padding: 0; }
+.doing { list-style: none; margin: clamp(20px, 3vh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 4vh, 44px); }
 .doing li { font-size: clamp(1.55rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
-.doing li + li { margin-top: .4em; }
 
 .names { list-style: none; margin: clamp(20px, 3vh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 2.2vh, 26px); }
 .nm { display: block; font-size: clamp(2.7rem, 5.2vw, 4.2rem); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
@@ -182,11 +182,11 @@ button { font: inherit; color: inherit; }
 
 /* ---------- wider screens ---------- */
 @media (min-width: 900px) {
-  /* each service is a row, the name beside its description, like the portfolio */
-  .svc { max-width: 1180px; gap: clamp(22px, 3.2vh, 34px); }
-  .svc article { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: clamp(28px, 4vw, 64px); align-items: baseline; }
-  .svc p { margin-top: 0; max-width: 36ch; }
-  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); }
+  /* each service is a row: the names right-aligned on one axis, each beside its description */
+  .svc { grid-template-columns: max-content minmax(0, 50ch); column-gap: clamp(28px, 3.4vw, 56px); row-gap: clamp(22px, 3.2vh, 34px); }
+  .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: baseline; }
+  .svc p { margin-top: 0; max-width: none; }
+  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); text-align: right; }
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d, .go { margin-top: 0; }
 }
@@ -194,10 +194,18 @@ button { font: inherit; color: inherit; }
 @media (max-width: 420px) {
   .bar { left: 12px; width: calc(100vw - 24px); gap: 4px; }
 }
-@media (max-height: 720px) {
-  :root { --top: calc(env(safe-area-inset-top, 0px) + 84px); }
-  .svc { gap: 16px; }
+/* tall phone screens have room to spare: the intro and the 'doing now' list spread further down */
+@media (max-aspect-ratio: 3/4) {
+  .doing { gap: clamp(14px, 6.4vh, 64px); }
+  .svc { gap: clamp(22px, 4.6vh, 48px); }
+  .thesis { margin-top: clamp(32px, 9vh, 88px); }
+  .thesis p + p { margin-top: clamp(8px, 4vh, 40px); }
 }
+@media (max-height: 720px) {
+  .svc { gap: 16px; }
+  .doing { gap: clamp(12px, 4vh, 28px); }
+}
+@media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: min(1.75rem, 8.4vw); } }
 
 @media (prefers-reduced-motion: reduce) {
   .hero.in .name { animation: none; }
