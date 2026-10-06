@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'gold' ? 'gold' : 'dark';</script>
+  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = ['light', 'gold', 'purple'].indexOf(t) >= 0 ? t : 'dark';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,300..400&display=swap">
@@ -21,8 +21,10 @@
 </head>
 <body>
 <div class="themes" role="group" aria-label="Theme">
-  <button type="button" data-set-theme="dark" aria-label="Ink" style="--a: #0b1110; --b: #63cfbf"></button>
+  <button type="button" data-set-theme="light" aria-label="Light" style="--a: #eceee8; --b: #0d6a61"></button>
+  <button type="button" data-set-theme="dark" aria-label="Teal" style="--a: #0b1110; --b: #63cfbf"></button>
   <button type="button" data-set-theme="gold" aria-label="Gold" style="--a: #0d0c0a; --b: #e3b955"></button>
+  <button type="button" data-set-theme="purple" aria-label="Purple" style="--a: #0f0c16; --b: #b8a2ff"></button>
 </div>
 <div class="gate" id="gate">
   <button class="play magnet" id="play" type="button" aria-label="Play the introduction">
@@ -32,7 +34,6 @@
   <span class="gate-hint">Press play</span>
 </div>
 <canvas id="bgShader" class="page-shader" aria-hidden="true"></canvas>
-<canvas id="blobs" class="blobs" aria-hidden="true"></canvas>
 
 
 <header class="hero" id="top">
@@ -186,11 +187,36 @@
     var cur = root.dataset.theme;
     pick.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === cur)); });
   }
+  // each switch uncovers the new theme with a different reveal (view transitions)
+  var revealN = 0;
+  function reveal(e) {
+    var w = innerWidth, h = innerHeight, cx = w / 2, cy = h / 2, R = Math.hypot(w, h);
+    var bx = e && e.clientX ? e.clientX : w - 60, by = e && e.clientY ? e.clientY : 30;
+    var bands = function (k) { var p = [], n = 7, bh = 100 / n; for (var i = 0; i < n; i++) { var t = i * bh, b2 = t + bh * k; p.push('0% ' + t + '%', '100% ' + t + '%', '100% ' + b2 + '%', '0% ' + b2 + '%', '0% ' + t + '%'); } return 'polygon(evenodd, ' + p.join(', ') + ')'; };
+    var kinds = [
+      { clipPath: ['inset(0 0 100% 0)', 'inset(0)'], ms: 800 },
+      { clipPath: ['circle(0px at ' + cx + 'px ' + cy + 'px)', 'circle(' + R + 'px at ' + cx + 'px ' + cy + 'px)'], ms: 900 },
+      { clipPath: ['circle(0px at ' + bx + 'px ' + by + 'px)', 'circle(' + R * 1.1 + 'px at ' + bx + 'px ' + by + 'px)'], ms: 1000 },
+      { clipPath: ['polygon(0 0, 0 0, 0 0)', 'polygon(0 0, 200% 0, 0 200%)'], ms: 900 },
+      { clipPath: [bands(0), bands(1)], ms: 900 }
+    ];
+    return kinds[revealN++ % kinds.length];
+  }
+  function applyTheme(name) {
+    root.dataset.theme = name;
+    try { localStorage.setItem('theme', name); } catch (e) {}
+    markTheme(); shaders.forEach(function (s) { s.recolor(); s.redraw(); });
+  }
   pick.forEach(function (b) {
-    b.addEventListener('click', function () {
-      root.dataset.theme = b.dataset.setTheme;
-      try { localStorage.setItem('theme', b.dataset.setTheme); } catch (e) {}
-      markTheme(); shaders.forEach(function (s) { s.recolor(); });
+    b.addEventListener('click', function (e) {
+      var name = b.dataset.setTheme;
+      if (name === root.dataset.theme) return;
+      if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) { applyTheme(name); return; }
+      var r = reveal(e);
+      var vt = document.startViewTransition(function () { applyTheme(name); });
+      vt.ready.then(function () {
+        document.documentElement.animate({ clipPath: r.clipPath }, { pseudoElement: '::view-transition-new(root)', duration: r.ms, easing: 'cubic-bezier(.65, 0, .35, 1)' });
+      });
     });
   });
   markTheme();
@@ -527,45 +553,13 @@
     size(); recolor();
     if (reduce) draw(performance.now()); else requestAnimationFrame(loop);
     requestAnimationFrame(function () { canvas.classList.add('on'); });
-    return { recolor: recolor };
+    return { recolor: recolor, redraw: function () { draw(performance.now()); } };
   }
 
   [['bgShader', SMOKE, 0.6]].forEach(function (d) {
     var s = Shader(document.getElementById(d[0]), d[1], d[2]); if (s) shaders.push(s);
   });
 
-  // manchas: small fluid blobs drift over the page; inside them everything shows inverted, x-ray style
-  (function blobs() {
-    var cv = document.getElementById('blobs');
-    var gl = cv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false });
-    if (!gl || reduce) { cv.remove(); return; }
-    var FS = 'precision highp float;uniform vec2 u_res;uniform float u_time;uniform vec3 u_col;uniform float u_on;' + NOISE +
-      'void main(){vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;float asp=u_res.x/u_res.y;float t=u_time;' +
-      'vec2 w=uv*2.2;uv+=.075*vec2(fbm(w+vec2(t*.07,0.))-.5,fbm(w+vec2(5.2,t*.06))-.5)+.02*vec2(noise(uv*9.+t*.4)-.5,noise(uv*9.-t*.37+3.)-.5);float f=0.;' +
-      'for(int i=0;i<7;i++){float k=float(i);vec2 c=vec2(sin(t*(.045+.012*k)+k*1.9)*.46*asp,cos(t*(.037+.01*k)+k*2.7)*.4);' +
-      'float r=.05+.026*sin(k*3.1+t*.21);vec2 d=(uv-c)*vec2(1.+.25*sin(t*.3+k),1.+.25*cos(t*.27+k*1.3));f+=r*r/(dot(d,d)+.0001);}' +
-      'float a=smoothstep(.92,1.02,f)*u_on;gl_FragColor=vec4(u_col*a,a);}';
-    function sh(type, src) { var x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; }
-    var pr = gl.createProgram();
-    gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr);
-    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { cv.remove(); return; }
-    gl.useProgram(pr);
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-    var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    var uRes = gl.getUniformLocation(pr, 'u_res'), uTime = gl.getUniformLocation(pr, 'u_time'), uCol = gl.getUniformLocation(pr, 'u_col'), uOn = gl.getUniformLocation(pr, 'u_on');
-    var on = 0, t0 = performance.now() - 40000, col = null, lastCol = 0;
-    function size() { var d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(innerWidth * d); cv.height = Math.round(innerHeight * d); gl.viewport(0, 0, cv.width, cv.height); }
-    function frame(now) {
-      if (playAt !== null) on += (1 - on) * 0.02;
-      if (!col || now - lastCol > 500) { lastCol = now; col = rgb(getComputedStyle(document.documentElement).getPropertyValue('--xray') || '#ffffff'); }
-      gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform2f(uRes, cv.width, cv.height); gl.uniform1f(uTime, (now - t0) / 1000); gl.uniform3fv(uCol, col); gl.uniform1f(uOn, on);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      requestAnimationFrame(frame);
-    }
-    size(); addEventListener('resize', size); requestAnimationFrame(frame);
-  })();
 })();
 </script>
 </body>
