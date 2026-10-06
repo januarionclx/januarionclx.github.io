@@ -7,10 +7,10 @@
 - Consulting: strategy, technology and organization. Fractional CTO without the cost of a full-time hire. Distributed systems that don't rely on the founder. Self-managing teams (Teal, Holacracy).
 - Ventures: companies built from the ground up, incubated and funded through The Unit Organization.
 
-## Public portfolio (products you can open)
-- People (via https://theunitorganization.com): the platform for self-managing teams (roles, circles, decisions).
-- Flows (via https://theunitorganization.com): business automations the business can read.
-- Restaurant CRM: orders, customers, deliveries and the numbers behind them, in one system.
+## Public portfolio
+- People: the platform for self-managing teams.
+- Flows: business automations the business can read.
+- Artist OS: websites and tools for musicians, on their own domain.
 
 ## Current work (with clients; described, not linked)
 - A restaurant platform: point of sale, a WhatsApp ordering bot, an ordering website, delivery through transport-partner API integrations, cloud sales dashboards.
