@@ -442,3 +442,7 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
 .stmt-t em { font-style: normal; color: var(--teal); }
 .stmt-s { margin: 10px 0 0; font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 .stmt::before { top: calc(clamp(16px, 2.6vh, 26px) + .9rem); }
+
+.stmt-s { font-family: var(--f-display); font-size: clamp(15px, 1.25vw, 17px); letter-spacing: -0.005em; text-transform: none; line-height: 1.6; color: var(--ink-2); max-width: 64ch; margin-top: 12px; }
+.stmt-t { max-width: 22ch; }
+.stmt-s { font-weight: 450; }
