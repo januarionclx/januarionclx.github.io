@@ -104,7 +104,7 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .head .cells { align-items: stretch; }
 .head .cell { padding: 22px clamp(18px, 3vw, 36px); display: flex; align-items: baseline; }
 .head .tag { width: clamp(64px, 9vw, 104px); flex: none; justify-content: center; }
-.head h2 { margin: 0; font-size: clamp(1.9rem, 4.6vw, 3.4rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
+.head h2 { margin: 0; font-size: clamp(2.3rem, 5.6vw, 4.4rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1; }
 .head h2 .serif { font-weight: 400; color: var(--teal); }
 .head .aside { margin-left: auto; padding-left: 16px; }
 
@@ -141,7 +141,7 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 #portfolio .work .yr { padding-left: 0; }
 #portfolio .work > :first-child { border-top: 1px solid var(--line); }
 
-.svc .panel p.lead em { color: var(--ink-3); }
+.svc .panel p.lead em { color: var(--teal); }
 #svc-dev p.lead { font-size: clamp(2.2rem, 4vw, 3.6rem); }
 #svc-dev p.lead em { color: var(--hi); }
 .svc .label { color: var(--ink-3); }
@@ -282,3 +282,6 @@ html.js.gated .themes { opacity: 0; pointer-events: none; }
 /* theme switch: colours follow the front outward from the centre */
 html.morphing *, html.morphing *::before, html.morphing *::after { transition-property: color, background-color, border-color, -webkit-text-fill-color !important; transition-duration: 1s !important; transition-timing-function: ease !important; transition-delay: var(--md, 0s) !important; }
 html.morphing .sheen .ch { transition-property: color !important; }
+
+/* highlight word in section titles: same voice as "Januario." */
+.head h2 .accent { color: var(--teal); font-weight: 900; }
