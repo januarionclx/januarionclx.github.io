@@ -77,7 +77,7 @@
     </ul>
   </section>
 
-  <section class="stage" id="portfolio" data-look="violet" aria-labelledby="portfolio-title">
+  <section class="stage" id="portfolio" data-look="violet" data-pace="0.7" aria-labelledby="portfolio-title">
     <h2 class="title" id="portfolio-title"><span class="l">Public</span> <span class="l acc">portfolio</span></h2>
     <ul class="names">
       <li class="grp"><span class="nm l">People</span> <span class="nm-d l">A human-centric CRM.</span></li>
@@ -125,14 +125,16 @@
   // then the text line by line, with a short breath before each new group.
   var BEAT = 0.14, REST = 0.42, LINE = 0.16, BREATH = 0.18;
   stages.forEach(function (stage) {
-    var t = 0, prev = null;
+    var t = 0, prev = null, pace = parseFloat(stage.dataset.pace || 1); // a pace under 1 plays a screen faster
     [].forEach.call(stage.querySelectorAll('.l'), function (l) {
       var group = l.closest('.title, .grp') || l;
       if (prev) {
-        if (group === prev) t += group.classList.contains('title') ? BEAT : LINE;
-        else if (prev.classList.contains('title')) t += parseFloat(stage.dataset.rest || REST);
-        else t += LINE + BREATH;
-        if (group !== prev && group.dataset.rest) t += parseFloat(group.dataset.rest);
+        var step;
+        if (group === prev) step = group.classList.contains('title') ? BEAT : LINE;
+        else if (prev.classList.contains('title')) step = parseFloat(stage.dataset.rest || REST);
+        else step = LINE + BREATH;
+        if (group !== prev && group.dataset.rest) step += parseFloat(group.dataset.rest);
+        t += step * pace;
       }
       l.style.setProperty('--d', t.toFixed(2) + 's');
       prev = group;
@@ -274,7 +276,7 @@
       var g = w.cloneNode(true); g.classList.add('ghost'); g.style.left = at[k][0] + 'px'; g.style.top = at[k][1] + 'px';
       line.appendChild(g);
       g.animate(reduce ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 1, transform: 'none', filter: 'blur(0)' }, { opacity: 0, transform: 'translateY(-.3em)', filter: 'blur(.12em)' }],
-        { duration: 300, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'forwards' }).onfinish = function () { g.remove(); };
+        { duration: 240, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'forwards' }).onfinish = function () { g.remove(); };
     });
     // the new line reuses the words it keeps
     [].slice.call(line.childNodes).forEach(function (n) { if (!(n.classList && n.classList.contains('ghost'))) line.removeChild(n); });
@@ -285,10 +287,10 @@
     els.forEach(function (el, i) {
       if (kept[i]) {
         var j = olds.indexOf(el), r = el.getBoundingClientRect(), dx = at[j][0] - (r.left - base.left), dy = at[j][1] - (r.top - base.top);
-        if ((Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) && !reduce) el.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 360, easing: 'cubic-bezier(.645, .045, .355, 1)' });
+        if ((Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) && !reduce) el.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.645, .045, .355, 1)' });
       } else {
         el.animate(reduce ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: 'translateY(.35em)', filter: 'blur(.12em)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
-          { duration: 520, delay: 230 + 60 * n++, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'backwards' });
+          { duration: 440, delay: 170 + 50 * n++, easing: 'cubic-bezier(.2, .7, .2, 1)', fill: 'backwards' });
       }
     });
   }
@@ -297,8 +299,8 @@
   function morphStart() {
     morphStop();
     morphWait = setTimeout(function () {
-      morphT = setInterval(function () { pi = (pi + 1) % PHRASES.length; morphTo(PHRASES[pi]); }, 2200);
-    }, 2000);
+      morphT = setInterval(function () { pi = (pi + 1) % PHRASES.length; morphTo(PHRASES[pi]); }, 1500);
+    }, 900);
   }
   morphReset();
 
