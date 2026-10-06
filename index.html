@@ -313,6 +313,20 @@
   splitEls.forEach(split);
   var stages = [];
   splitEls.forEach(function (el) { var st = el.closest('.panel, section, header, footer'); if (stages.indexOf(st) < 0) stages.push(st); });
+  // one timeline per screen: everything reveals top to bottom, left to right, each piece after the one before
+  stages.forEach(function (st) {
+    var t = 0.15;
+    st.querySelectorAll('[data-split], .nm-d, .ex-d').forEach(function (el) {
+      if (el.matches('.nm-d, .ex-d')) { el.style.setProperty('--d', t.toFixed(2) + 's'); t += 0.3; return; }
+      var chs = el.querySelectorAll('.ch');
+      var letters = el.hasAttribute('data-letters'), soft = el.classList.contains('soft') || el.closest('.panel, .coda') && letters && !el.closest('header');
+      if (letters && soft) { chs.forEach(function (ch) { ch.style.setProperty('--d', t.toFixed(2) + 's'); }); t += 0.45; return; }
+      var step = letters ? 0.022 : 0.06;
+      chs.forEach(function (ch, i) { ch.style.setProperty('--d', (t + i * step).toFixed(3) + 's'); });
+      t += chs.length * step + (letters ? 0.15 : 0.3);
+    });
+  });
+
   // a stage is "in" while it crosses the middle band of the screen. Measured on scroll, not with
   // IntersectionObserver margins, which browsers ignore inside embedded frames (the preview).
   var stageRaf = 0;

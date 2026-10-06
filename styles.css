@@ -585,3 +585,8 @@ h2 .dots { width: 1.2em; color: var(--teal); }
 .nm { font-size: clamp(3.4rem, 9vw, 8.6rem); }
 @media (max-width: 560px) { .nm { font-size: 17vw; } }
 @media (prefers-reduced-motion: reduce) { .js .ex-d, .js .nm-d { opacity: 1; filter: none; transform: none; } .dots3 i { opacity: 1; transform: none; } }
+
+/* the timeline wins over every earlier delay: in = play in order, out = sink at once */
+.js [data-split] .ch, .js .nm-d, .js .ex-d { transition-delay: 0s !important; }
+.js .in [data-split] .ch, .js [data-split].in .ch, .js .in .nm-d, .js .in .ex-d { transition-delay: var(--d, 0s) !important; }
+.dots3 { display: none; }
