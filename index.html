@@ -13,18 +13,15 @@
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = ['light', 'gold', 'purple'].indexOf(t) >= 0 ? t : 'dark';</script>
+  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,300..400&display=swap">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="themes" role="group" aria-label="Theme">
-  <button type="button" data-set-theme="light" aria-label="Light" style="--a: #eceee8; --b: #0d6a61"></button>
-  <button type="button" data-set-theme="dark" aria-label="Teal" style="--a: #0b1110; --b: #63cfbf"></button>
-  <button type="button" data-set-theme="gold" aria-label="Gold" style="--a: #0d0c0a; --b: #e3b955"></button>
-  <button type="button" data-set-theme="purple" aria-label="Purple" style="--a: #0f0c16; --b: #b8a2ff"></button>
+<div class="themes">
+  <button type="button" id="themeBtn" aria-label="Switch to light"><span></span></button>
 </div>
 <div class="gate" id="gate">
   <button class="play magnet" id="play" type="button" aria-label="Play the introduction">
@@ -182,11 +179,8 @@
 
   // theme toggle; stored choice wins, else system
   var root = document.documentElement;
-  var pick = [].slice.call(document.querySelectorAll('[data-set-theme]'));
-  function markTheme() {
-    var cur = root.dataset.theme;
-    pick.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === cur)); });
-  }
+  var themeBtn = document.getElementById('themeBtn');
+  function markTheme() { themeBtn.setAttribute('aria-label', root.dataset.theme === 'light' ? 'Switch to dark' : 'Switch to light'); }
   // a theme switch spreads from a dot in the centre; words change colour as the front reaches them
   var morphEls = null, morphTimer = 0;
   function applyTheme(name) {
@@ -207,9 +201,7 @@
     try { localStorage.setItem('theme', name); } catch (e) {}
     markTheme(); shaders.forEach(function (s) { s.recolor(); });
   }
-  pick.forEach(function (b) {
-    b.addEventListener('click', function () { if (b.dataset.setTheme !== root.dataset.theme) applyTheme(b.dataset.setTheme); });
-  });
+  themeBtn.addEventListener('click', function () { applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light'); });
   markTheme();
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { markTheme(); shaders.forEach(function (s) { s.recolor(); }); });
 
