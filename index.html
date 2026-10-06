@@ -320,10 +320,10 @@
       if (el.matches('.nm-d, .ex-d')) { el.style.setProperty('--d', t.toFixed(2) + 's'); t += 0.3; return; }
       var chs = el.querySelectorAll('.ch');
       var letters = el.hasAttribute('data-letters'), soft = el.classList.contains('soft') || el.closest('.panel, .coda') && letters && !el.closest('header');
-      if (letters && soft) { chs.forEach(function (ch) { ch.style.setProperty('--d', t.toFixed(2) + 's'); }); t += 0.45; return; }
-      var step = letters ? 0.022 : 0.06;
+      if (letters && soft) { chs.forEach(function (ch) { ch.style.setProperty('--d', t.toFixed(2) + 's'); }); t += 0.3; return; }
+      var step = letters ? 0.016 : 0.045;
       chs.forEach(function (ch, i) { ch.style.setProperty('--d', (t + i * step).toFixed(3) + 's'); });
-      t += chs.length * step + (letters ? 0.15 : 0.3);
+      t += chs.length * step + (letters ? 0.1 : 0.2);
     });
   });
 
@@ -451,10 +451,10 @@
     i = Math.max(0, Math.min(stageEls.length - 1, i));
     var now = performance.now();
     if (i === cur || now < busyUntil) return;
-    busyUntil = now + 700; gliding = true;
+    busyUntil = now + 450; gliding = true;
     stageEls[cur].classList.remove('in');
     var next = i; cur = i;
-    setTimeout(function () { show(next); gliding = false; coolUntil = performance.now() + 250; }, reduce ? 0 : 380);
+    setTimeout(function () { show(next); gliding = false; coolUntil = performance.now() + 250; }, reduce ? 0 : 260);
   };
   stageEls[0].classList.add('cur');
   // swipe on touch screens
