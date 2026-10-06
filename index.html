@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <script>try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'gold' ? 'gold' : 'dark';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,300..400&display=swap">
@@ -21,10 +21,8 @@
 </head>
 <body>
 <div class="themes" role="group" aria-label="Theme">
-  <button type="button" data-set-theme="light" aria-label="Paper" style="--a: #eceee8; --b: #0d6a61"></button>
   <button type="button" data-set-theme="dark" aria-label="Ink" style="--a: #0b1110; --b: #63cfbf"></button>
   <button type="button" data-set-theme="gold" aria-label="Gold" style="--a: #0d0c0a; --b: #e3b955"></button>
-  <button type="button" data-set-theme="white" aria-label="White" style="--a: #fbfaf7; --b: #9a7215"></button>
 </div>
 <div class="gate" id="gate">
   <button class="play magnet" id="play" type="button" aria-label="Play the introduction">
@@ -42,7 +40,7 @@
       <div class="cell grow" data-depth="0.9" data-scale>
         <h1 class="name" data-split>
           <span class="line"><span>Hey, I&rsquo;m</span></span>
-          <span class="line"><span class="accent">Januario.</span></span>
+          <span class="line"><span class="accent sheen">Januario.</span></span>
         </h1>
         <p class="where">Software and consulting, from <em>Lisbon.</em></p>
         <p class="thesis">I design organizations, and the software they run on, as <em>living systems.</em></p>
@@ -143,7 +141,7 @@
     <div class="inner">
       <div class="cells">
         <div class="cell grow">
-          <h2 data-depth="0.4" data-split>Let&rsquo;s talk.</h2>
+          <h2 data-depth="0.4" data-split>Let&rsquo;s <span class="accent sheen">talk.</span></h2>
           <p class="lead" data-depth="0.7">If you are building something that has to grow, a company, a product or a team, write to me.<br>I read everything myself.</p>
           <div class="mail" data-depth="1">
             <a class="addr" id="addr" href="mailto:contact@januariopinto.com">contact@januariopinto.com</a>
@@ -182,10 +180,9 @@
 
   // theme toggle; stored choice wins, else system
   var root = document.documentElement;
-  try { var t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
   var pick = [].slice.call(document.querySelectorAll('[data-set-theme]'));
   function markTheme() {
-    var cur = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var cur = root.dataset.theme;
     pick.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === cur)); });
   }
   pick.forEach(function (b) {
@@ -450,7 +447,14 @@
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_c4', 'u_mouse', 'u_act', 'u_amt', 'u_clock', 'u_intro'].forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
-    var base = [], alt = [], tone = 0, svcEl = document.querySelector('.svc');
+    var base = [], alt = [], tone = 0, svcEl = document.querySelector('.svc'), lastAcc = 0, accA = null, accB = null;
+    // text accent follows the drift, so highlights breathe with the background
+    function accent(k) {
+      var rs2 = document.documentElement.style;
+      if (!accA) { rs2.removeProperty('--teal'); var cs2 = getComputedStyle(document.documentElement); accA = rgb(cs2.getPropertyValue('--teal')); accB = rgb(cs2.getPropertyValue('--acc2') || cs2.getPropertyValue('--teal')); }
+      var c = accA.map(function (v, i) { return Math.round((v + (accB[i] - v) * k * 0.6) * 255); });
+      rs2.setProperty('--teal', 'rgb(' + c.join(',') + ')');
+    }
     var page = canvas.classList.contains('page-shader'), sim = Math.random() * 20, last = 0, vel = 0, lastY = scrollY, intro = reduce || !page ? 1 : 0, born = performance.now();
     var rips = [[0, 0, -1], [0, 0, -1], [0, 0, -1], [0, 0, -1]], ripN = 0;
     var uRip = gl.getUniformLocation(pr, 'u_rip');
@@ -462,8 +466,9 @@
     }
     function recolor() {
       var cs = getComputedStyle(canvas);
+      accA = null;
       base = ['--sh-body', '--sh-vein', '--sh-field', '--sh-warm'].map(function (k) { return rgb(cs.getPropertyValue(k)); });
-      alt = ['--sh2-body', '--sh2-vein', '--sh2-field', '--sh2-warm'].map(function (k) { var v = cs.getPropertyValue(k); return v ? rgb(v) : null; });
+      alt = ['--sh3-body', '--sh3-vein', '--sh3-field', '--sh3-warm'].map(function (k) { var v = cs.getPropertyValue(k); return v ? rgb(v) : null; });
       if (reduce) draw(performance.now());
     }
     function draw(now) {
@@ -472,12 +477,13 @@
       act += (actTarget - act) * 0.025;
       gl.uniform1f(U.u_act, act);
       // page-wide smoke: full on the hero, quieter behind reading sections
-      if (canvas.classList.contains('page-shader')) amt += ((tone > 0.5 || scrollY < innerHeight * 0.5 || scrollY > document.documentElement.scrollHeight - innerHeight * 1.5 ? 1 : 0.38) - amt) * 0.04;
+      if (canvas.classList.contains('page-shader')) amt += ((inSvc > 0.5 || scrollY < innerHeight * 0.5 || scrollY > document.documentElement.scrollHeight - innerHeight * 1.5 ? 1 : 0.38) - amt) * 0.04;
       gl.uniform1f(U.u_amt, amt);
-      // inside Services the smoke eases into a deep teal palette
+      // the palette drifts slowly between the theme's two tones (about 50s a cycle)
       var inSvc = 0;
-      if (svcEl && alt[0]) { var sr = svcEl.getBoundingClientRect(); inSvc = sr.top < innerHeight / 2 && sr.bottom > innerHeight / 2 ? 1 : 0; }
-      tone += (inSvc - tone) * (reduce ? 1 : 0.045);
+      if (svcEl) { var sr = svcEl.getBoundingClientRect(); inSvc = sr.top < innerHeight / 2 && sr.bottom > innerHeight / 2 ? 1 : 0; }
+      tone = reduce ? 0 : 0.5 - 0.5 * Math.cos(now / 1000 * Math.PI * 2 / 50);
+      if (page && now - lastAcc > 120) { lastAcc = now; accent(tone); }
       ['u_c1', 'u_c2', 'u_c3', 'u_c4'].forEach(function (k, i) {
         var a = base[i], b = alt[i] || a;
         gl.uniform3f(U[k], a[0] + (b[0] - a[0]) * tone, a[1] + (b[1] - a[1]) * tone, a[2] + (b[2] - a[2]) * tone);
