@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Meta -->
+  <title>Januario Pinto | Resume</title>
+  <meta name="robots" content="noindex, nofollow">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.ico">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Theme init (before paint, prevents flash) -->
+  <script>
+    (function () {
+      var stored = localStorage.getItem('theme');
+      document.documentElement.dataset.theme = stored || 'dark';
+    })();
+  </script>
+
+  <!-- Shared Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* Resume-specific styles */
+
+    /* Reading-width layout for the resume */
+    .container {
+      max-width: 760px;
+      padding-top: 3rem;
+    }
+
+    /* Override name font size for resume */
+    .name {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .title {
+      font-size: 1.125rem;
+    }
+
+    /* Override section styling for resume */
+    header {
+      margin-bottom: 4rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* section title as a full-bleed bar (same boxing as the landing) */
+    .section-title {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-bottom: 2rem;
+      padding: 0.8rem max(1.25rem, calc(50vw - 348px));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      color: var(--accent-strong);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+    }
+
+    .skill-category h4 {
+      color: var(--accent);
+    }
+
+    .social-card:hover {
+      border-color: var(--accent);
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    /* Intro */
+    .summary {
+      font-size: 1.125rem;
+      line-height: 1.8;
+    }
+
+    /* Timeline — line-separated rows */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 2rem;
+      padding: 1.75rem 0;
+      position: relative;
+    }
+
+    /* full-bleed horizontal rules between entries */
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(50% - 50vw);
+      width: 100vw;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item:last-child::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: calc(50% - 50vw);
+      width: 100vw;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .timeline-year {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 5rem;
+      box-sizing: border-box;
+      font-size: 1.5rem;
+      color: var(--accent);
+      font-weight: 700;
+      font-style: italic;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.25rem 0.6rem;
+    }
+
+    .timeline-content h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-content .company {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-content p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .timeline-content ul {
+      margin-top: 0.75rem;
+      padding-left: 1.5rem;
+    }
+
+    .timeline-content li {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      margin-bottom: 0.375rem;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+
+    .skill-category h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-category ul {
+      list-style: none;
+    }
+
+    .skill-category li {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      padding: 0.375rem 0;
+      line-height: 1.5;
+    }
+
+    /* Interests */
+    .interests-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .interest-tag {
+      font-size: 0.8125rem;
+      padding: 0.375rem 0.75rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+    }
+
+    /* Print styles (Resume-specific) */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      body::before {
+        display: none;
+      }
+
+      .back-link {
+        display: none;
+      }
+
+      .container {
+        max-width: 100%;
+        padding: 0;
+      }
+
+      .name {
+        color: black;
+      }
+
+      .section-title {
+        color: black;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+
+      .name {
+        font-size: 2rem;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .timeline-year {
+        padding-top: 0;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to Home
+    </a>
+
+    <header>
+      <h1 class="name">Januario Pinto</h1>
+      <p class="title">Software Developer & Organizational Consultant</p>
+    </header>
+
+    <section>
+      <h2 class="section-title">Intro</h2>
+      <p class="summary">
+        Currently 32. Started coding at 13, building businesses at 15. Since 23, heavily invested in
+        marketing, startups and product management. Today I work where modernity, wholeness and
+        self-management meet — across e-commerce, AI, SaaS and the organizational structures that hold
+        them together.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h4>Engineering</h4>
+          <ul>
+            <li>TypeScript / JavaScript</li>
+            <li>React / Next.js / Vue</li>
+            <li>Node.js / Bun / Python</li>
+            <li>Lua / C / C++</li>
+            <li>PostgreSQL / SQL & NoSQL</li>
+            <li>REST & GraphQL APIs</li>
+            <li>Auth & sessions</li>
+            <li>Monorepos / Turborepo</li>
+            <li>Linux / Git / CI/CD</li>
+            <li>Performance & accessibility</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4>AI & Automation</h4>
+          <ul>
+            <li>LLM application design</li>
+            <li>OpenAI & Anthropic APIs</li>
+            <li>AI agents & tool use</li>
+            <li>RAG & retrieval</li>
+            <li>Prompt engineering</li>
+            <li>Chat assistants & GPTs</li>
+            <li>Workflow automation</li>
+            <li>Browser automation & scraping</li>
+            <li>Back-office automation</li>
+            <li>AI product development</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4>Product & Business</h4>
+          <ul>
+            <li>Product strategy</li>
+            <li>Roadmapping</li>
+            <li>UX & interface design</li>
+            <li>Conversion optimization</li>
+            <li>E-commerce</li>
+            <li>Growth & marketing</li>
+            <li>Pricing & positioning</li>
+            <li>Analytics & experimentation</li>
+            <li>Technical consulting</li>
+            <li>Organizational design</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">History</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2005</div>
+          <div class="timeline-content">
+            <ul>
+              <li>Started coding in Lua</li>
+              <li>Taught myself MySQL</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2006</div>
+          <div class="timeline-content">
+            <ul>
+              <li>Taught myself C++</li>
+              <li>Launched Zeldenia, a private game server with hundreds of players online</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2007</div>
+          <div class="timeline-content">
+            <ul>
+              <li>Taught myself HTML, CSS and PHP</li>
+              <li>Built my first website on a self-made custom PHP CMS for the games I was developing</li>
+              <li>Launched another private server, bigger than the last — hundreds of active players daily</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2009</div>
+          <div class="timeline-content">
+            <div class="company">Universidad Católica Andrés Bello (UCAB)</div>
+            <ul>
+              <li>Joined UCAB as a software engineer</li>
+              <li>Started independent work for small clients and companies, such as Redservicio</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2011</div>
+          <div class="timeline-content">
+            <p>Launched EmpresarioConciente, a startup and small-business consulting firm for Latin American entrepreneurs. Became interested in mass communications.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2015</div>
+          <div class="timeline-content">
+            <ul>
+              <li>Consulting and blogs; building sites with WordPress, WooCommerce and custom solutions when required</li>
+              <li>Proficient across marketing and analytics tooling — Google Analytics, Mailchimp, Google Tag Manager and many more</li>
+              <li>Developed TheBaum, a small social-media platform for creators</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2016</div>
+          <div class="timeline-content">
+            <p>Began building and managing teams around the globe using modern self-management methods and structures — where my work in Teal organizations and self-management begins.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2017</div>
+          <div class="timeline-content">
+            <p>Where my journey in e-commerce begins.</p>
+            <ul>
+              <li>Building and managing stores for myself and clients, such as BidMath</li>
+              <li>Running marketing and social-media campaigns at scale (Instagram, Facebook), mostly for e-commerce</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2018</div>
+          <div class="timeline-content">
+            <ul>
+              <li>Developed automation and networking tools for games in Node.js</li>
+              <li>Data-science projects for my own research — an AliExpress scraper and analyzer, social-media analysis tools</li>
+              <li>Machine-learning projects — mostly GANs and sentiment-analysis tools</li>
+              <li>Taught myself Python</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2020</div>
+          <div class="timeline-content">
+            <ul>
+              <li>Learning Vue</li>
+              <li>Developing JavaScript and Node.js apps for clients</li>
+              <li>Developing Bekko, an e-commerce store</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">2023</div>
+          <div class="timeline-content">
+            <p>Building automation, monitoring and reporting systems for DataLithe's private clients — including an importer and distributor of fresh-cut flowers, part of a multinational operating across Colombia, Ecuador and the US with access to 50+ farms and 550+ flower varieties.</p>
+            <ul>
+              <li>Websites, brand and social strategy for clients across Portugal — car dealerships, electrical and security companies, and NGOs</li>
+              <li>Learning and developing smart contracts on Ethereum, written in Solidity</li>
+              <li>Bekko, an e-commerce store, nearing launch</li>
+              <li>Shifted focus from Vue to the React and Next.js ecosystem</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">Now</div>
+          <div class="timeline-content">
+            <h3>Independent Developer & Consultant</h3>
+            <div class="company">The Unit Organization</div>
+            <p>Consulting private clients around the world, and developing web apps for them. Independent for The Unit Organization, where we build AI web apps for the public — including Strange Artefacts and Proposals with AI.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Public Portfolio</h2>
+      <div class="work-list">
+        <a href="https://theunitorganization.com" target="_blank" rel="noopener" class="work-item">
+          <span class="work-index">01</span>
+          <span class="work-name">The Unit Organization</span>
+          <span class="work-desc">Development &amp; consulting firm</span>
+          <span class="pill pill-teal">Active</span>
+          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+
+        <a href="https://strangeartefacts.com" target="_blank" rel="noopener" class="work-item">
+          <span class="work-index">02</span>
+          <span class="work-name">Strange Artefacts</span>
+          <span class="work-desc">AI-powered creative tools</span>
+          <span class="pill pill-teal">Active</span>
+          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+
+        <a href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener" class="work-item">
+          <span class="work-index">03</span>
+          <span class="work-name">Holacracy Assistant</span>
+          <span class="work-desc">AI guide to self-management</span>
+          <span class="pill pill-teal">Active</span>
+          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+
+        <a href="https://proposalswithai.com" target="_blank" rel="noopener" class="work-item">
+          <span class="work-index">04</span>
+          <span class="work-name">Proposals with AI</span>
+          <span class="work-desc">AI proposal generation</span>
+          <span class="pill pill-amber">For Sale</span>
+          <svg class="work-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+
+        <div class="work-item">
+          <span class="work-index">05</span>
+          <span class="work-name">Cinema Assistant</span>
+          <span class="work-desc">Smart film discovery</span>
+          <span class="pill pill-amber">Rebuilding</span>
+          <span></span>
+        </div>
+
+        <div class="work-item">
+          <span class="work-index">06</span>
+          <span class="work-name">EmpresarioConciente</span>
+          <span class="work-desc">Startup &amp; small-business consulting · LATAM</span>
+          <span class="pill pill-muted">Archived</span>
+          <span></span>
+        </div>
+
+        <div class="work-item">
+          <span class="work-index">07</span>
+          <span class="work-name">Bekko</span>
+          <span class="work-desc">E-commerce store</span>
+          <span class="pill pill-muted">Archived</span>
+          <span></span>
+        </div>
+
+        <div class="work-item">
+          <span class="work-index">08</span>
+          <span class="work-name">Feldora, Zeldenia &amp; More</span>
+          <span class="work-desc">Open Tibia game servers · Lua, C++</span>
+          <span class="pill pill-muted">Archived</span>
+          <span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" style="margin-top: 6rem;">
+      <h2 class="section-title">Get in Touch</h2>
+
+      <div class="social-grid">
+        <a href="https://x.com/januario_xyz" target="_blank" rel="noopener" class="social-card">
+          <div class="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="social-name">X / Twitter</span>
+        </a>
+
+        <a href="mailto:contact@januariopinto.com" class="social-card">
+          <div class="social-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span class="social-name">Email</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <p>© <span id="year"></span> Januario Pinto</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
