@@ -19,9 +19,9 @@
 @media (min-width: 900px) { :root { --top: calc(env(safe-area-inset-top, 0px) + clamp(72px, 13vh, 150px)); } }
 
 /* looks: GIPX's ink, teal, violet and ember (its red), and a gold one built the same way.
-   One accent per look (white on black, as on GIPX; the name keeps the brand teal there); descriptions are always grey. */
+   One accent per look (white on black, as on GIPX, where the name is GIPX's silver); descriptions are always grey. */
 :root { --a-ink: #ececea; --a-teal: #7fd1c4; --a-gold: #e6c27a; --a-violet: #c3a8ff; --a-ember: #ff6a57; }
-:root, :root[data-look="ink"] { --bg: #090909; --fg: #f5f5f3; --muted: #a9a8a4; --accent: var(--a-ink); --name: var(--a-teal); --s1: #404040; --s2: #c9c9c9; --s3: #090909; }
+:root, :root[data-look="ink"] { --bg: #090909; --fg: #f5f5f3; --muted: #a9a8a4; --accent: var(--a-ink); --name: #c4c3bf; --s1: #404040; --s2: #c9c9c9; --s3: #090909; }
 :root[data-look="teal"] { --bg: #071615; --fg: #eaf6f3; --muted: #b1b5b3; --accent: var(--a-teal); --s1: #1f5f5b; --s2: #7fd1c4; --s3: #071615; }
 :root[data-look="gold"] { --bg: #120d05; --fg: #f7f0e1; --muted: #b8b4ab; --accent: var(--a-gold); --s1: #5c471a; --s2: #e6c27a; --s3: #120d05; }
 :root[data-look="violet"] { --bg: #0b0716; --fg: #f3eeff; --muted: #b4b2bb; --accent: var(--a-violet); --s1: #3b2a7a; --s2: #c3a8ff; --s3: #0b0716; }
@@ -59,9 +59,14 @@ button { font: inherit; color: inherit; }
 .title .l { display: block; }
 .title .acc { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.025em; padding-left: .06em; color: var(--accent); }
 
-.hero .title { font-size: clamp(4.2rem, min(19.5vw, 19vh), 12.5rem); }
-/* the name is cut out in the background colour with a light edge */
-.hero .name { color: var(--bg); -webkit-text-stroke: .04em var(--fg); paint-order: stroke fill; letter-spacing: -.035em; }
+.hero .title { font-size: clamp(4.4rem, min(20.5vw, 19vh), 12.5rem); }
+/* the name shines now and then, like light passing over metal; only while the intro is on screen */
+.hero .name {
+  background: linear-gradient(100deg, var(--name) 40%, #fff 50%, var(--name) 60%) 100% 0 / 250% 100% no-repeat;
+  -webkit-background-clip: text; background-clip: text; color: var(--name); -webkit-text-fill-color: transparent;
+}
+.hero.in .name { animation: sheen 4.8s cubic-bezier(.4, 0, .2, 1) 1.3s infinite; }
+@keyframes sheen { 0% { background-position: 100% 0; } 34%, 100% { background-position: 0% 0; } }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
 .thesis { margin: clamp(26px, 3.8vh, 44px) 0 0; font-size: clamp(1.1rem, 5.6vw, 3rem); font-weight: 700; line-height: 1.24; letter-spacing: -.035em; color: var(--muted); }
@@ -192,6 +197,7 @@ button { font: inherit; color: inherit; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero.in .name { animation: none; }
   .js .l, .js .in .l { transform: none; filter: none; }
   .js .in .l { transition: opacity .4s ease; }
   .bar-row button, .bubble { transition: none; }
