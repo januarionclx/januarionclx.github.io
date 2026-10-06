@@ -43,7 +43,7 @@
 <header class="stage hero" id="top" data-look="ink" data-rest="0.7" aria-label="Intro">
   <div class="hero-in">
     <h1 class="title"><span class="l">Hey, I&rsquo;m</span> <span class="l name">Januario.</span></h1>
-    <p class="thesis grp"><span class="l">I design and consult companies as <em>living systems</em></span> <span class="l">and create <em>software</em>, from Lisbon.</span></p>
+    <p class="thesis grp"><span class="l">I design and consult companies as <em>living systems</em> and create <em>software</em>,</span> <span class="l">from Lisbon.</span></p>
   </div>
 </header>
 
@@ -91,7 +91,7 @@
   <h2 class="title" id="contact-title"><span class="l">Let&rsquo;s</span> <span class="l acc">talk.</span></h2>
   <p class="lead grp"><span class="l">Building something that has to grow?</span> <span class="l">Write to me.</span> <span class="l">I read everything myself.</span></p>
   <div class="mail l grp" data-rest="0.2">
-    <a class="addr" id="addr" href="mailto:contact@januariopinto.com"><span class="hi">contact</span>@januariopinto.com</a>
+    <a class="addr" id="addr" href="mailto:contact@januariopinto.com"><span class="hi">contact@</span><wbr>januariopinto.com</a>
     <button class="copy" id="copyBtn" type="button" aria-label="Copy email">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
       <svg class="ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
@@ -160,7 +160,7 @@
     return b;
   });
   lit.appendChild(glint);
-  bar.appendChild(row); bar.appendChild(lit); document.body.appendChild(bar);
+  row.appendChild(lit); bar.appendChild(row); bar.appendChild(lookBtn); document.body.appendChild(bar); // the emblem ends the row
   document.addEventListener('touchstart', function () {}, { passive: true }); // lets iOS show the pressed state
 
   var cur = 0, timer = 0, started = false, drag = null;

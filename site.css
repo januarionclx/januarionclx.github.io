@@ -60,13 +60,16 @@ button { font: inherit; color: inherit; }
 .title .l { display: block; }
 .title .acc { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.025em; padding-left: .06em; color: var(--accent); }
 
-.hero .title { font-size: clamp(4.4rem, min(20.5vw, 19vh), 12.5rem); }
-.hero .name { color: var(--name); }
-.thesis { margin: clamp(22px, 3.2vh, 36px) 0 0; max-width: 24ch; font-size: clamp(1.32rem, 2.3vw, 2.1rem); font-weight: 700; line-height: 1.16; letter-spacing: -.035em; color: var(--muted); transition: color var(--fade); }
-.thesis em { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: 1.08em; letter-spacing: -.01em; color: var(--accent); transition: color var(--fade); }
+.hero .title { font-size: clamp(4.2rem, min(19.5vw, 19vh), 12.5rem); }
+/* the name is cut out in the background colour with a light edge */
+.hero .name { color: var(--bg); -webkit-text-stroke: .04em var(--fg); paint-order: stroke fill; letter-spacing: -.035em; }
+/* three lines: the sentence balanced over two, then 'from Lisbon.' */
+.thesis { margin: clamp(22px, 3.2vh, 36px) 0 0; max-width: 21em; font-size: clamp(1.05rem, 4.6vw, 2.1rem); font-weight: 700; line-height: 1.2; letter-spacing: -.035em; color: var(--muted); transition: color var(--fade); }
+.thesis em { font-style: normal; white-space: nowrap; color: var(--fg); transition: color var(--fade); }
 
-.svc { display: grid; gap: clamp(18px, 2.6vh, 30px); margin-top: clamp(20px, 3vh, 36px); }
-.svc h3 { margin: 0; font-size: clamp(1.35rem, 2vw, 1.9rem); font-weight: 800; line-height: 1.1; letter-spacing: -.035em; color: color-mix(in srgb, var(--accent) 45%, #fff); }
+.svc { display: grid; gap: clamp(20px, 3.2vh, 36px); margin-top: clamp(20px, 3vh, 36px); }
+/* service names share the 'doing now' style */
+.svc h3 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
 .svc p, .lead { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; transition: color var(--fade); }
 .svc p .l, .lead .l, .thesis .l { display: block; }
 .svc p .l, .lead .l, .thesis .l, .nm-d { text-wrap: balance; }
@@ -83,8 +86,9 @@ button { font: inherit; color: inherit; }
 @media (hover: hover) and (pointer: fine) { .go:hover { color: var(--accent); } }
 
 .lead { font-size: clamp(1.15rem, 1.6vw, 1.45rem); font-weight: 600; line-height: 1.3; letter-spacing: -.02em; margin-top: clamp(20px, 3vh, 36px); }
-.mail { display: flex; align-items: center; gap: 2px; margin-top: clamp(22px, 3.4vh, 40px); }
-.addr { font-size: clamp(1.3rem, 2.6vw, 2.3rem); font-weight: 800; letter-spacing: -.04em; text-decoration: none; color: color-mix(in srgb, var(--accent) 15%, #d8d1cd); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
+.mail { display: flex; align-items: flex-end; gap: 4px; margin-top: clamp(22px, 3.4vh, 40px); }
+/* the address reads like the portfolio names: big and light */
+.addr { font-size: clamp(2.2rem, 9.4vw, 4.2rem); font-weight: 500; line-height: 1; letter-spacing: -.055em; text-decoration: none; color: var(--fg); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
 .addr .hi { color: var(--accent); transition: color var(--fade); }
 .copy { position: relative; flex: none; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), color .2s ease; }
 .copy svg { grid-area: 1 / 1; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: opacity .2s ease, transform .3s var(--reel), filter .2s ease; }
@@ -116,23 +120,22 @@ button { font: inherit; color: inherit; }
 }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
-.js .hero { padding-top: calc(env(safe-area-inset-top, 0px) + 64px); }
-.js .hero-in { margin-block: auto; }
+.js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
 .js .foot { display: none; }
 
 /* lines rise out of a soft blur, one after another; on leaving they all fade at once */
 .js .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); transition: opacity var(--out) var(--reel), transform 0s var(--out), filter 0s var(--out); }
 .js .in .l { opacity: 1; transform: none; filter: none; transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
 /* lines that carry their own colour keep the colour fade in both states */
-.js :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity var(--out) var(--reel), transform 0s var(--out), filter 0s var(--out), color var(--fade); }
-.js .in :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color var(--fade); }
+.js :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity var(--out) var(--reel), transform 0s var(--out), filter 0s var(--out), color var(--fade), -webkit-text-stroke-color var(--fade); }
+.js .in :is(.acc, .name, .svc h3, .doing li, .nm-d, .more .nm, .go).l { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color var(--fade), -webkit-text-stroke-color var(--fade); }
 
 /* ---------- section buttons: one row; the lit bubble slides, takes each section's colour on the way,
    glints when it lands and follows a finger dragged along the row ---------- */
-.bar { position: fixed; z-index: 5; left: var(--pad); bottom: var(--bar-b); width: min(540px, calc(100vw - 2 * var(--pad))); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .6s var(--reel) 1s, transform .6s var(--reel) 1s; }
+.bar { position: fixed; z-index: 5; left: var(--pad); bottom: var(--bar-b); width: min(590px, calc(100vw - 2 * var(--pad))); display: flex; gap: 6px; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .6s var(--reel) 1s, transform .6s var(--reel) 1s; }
 .ready .bar { opacity: 1; transform: none; pointer-events: auto; }
 .bar-row, .bar-lit { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.bar-row { touch-action: none; }
+.bar-row { position: relative; flex: 1; min-width: 0; touch-action: none; }
 .bar button, .bar-lit span { height: var(--bar-h); display: grid; place-items: center; padding: 0; border-radius: 999px; font: 500 10.5px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .bar button {
   appearance: none; border: 1px solid var(--line); background: rgba(0, 0, 0, .24); color: var(--muted); cursor: pointer;
@@ -154,9 +157,9 @@ button { font: inherit; color: inherit; }
 .bar-lit .glint { position: absolute; top: 0; bottom: 0; left: 0; width: 56px; background: linear-gradient(100deg, transparent 15%, rgba(255, 255, 255, .6) 50%, transparent 85%); transform: translateX(-120px); }
 
 /* ---------- colour button: one emblem per look ---------- */
-.js .look { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 14px); right: calc(var(--pad) - 12px); width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; background: none; color: var(--fg); cursor: pointer; opacity: 0; -webkit-tap-highlight-color: transparent; transition: opacity .6s var(--reel) 1.2s, transform .15s var(--press); }
-.ready .look { opacity: .85; }
-.look:active { transform: scale(.92); }
+/* ---------- the emblem ends the row: it changes shape and colour with the section, and tapping it plays through the looks ---------- */
+.js .look { flex: none; width: var(--bar-h); height: var(--bar-h); display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 999px; background: rgba(0, 0, 0, .24); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); color: var(--accent); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), box-shadow .15s var(--press), color .42s var(--move), border-color var(--fade); }
+.js .look:active { transform: translateY(1px) scale(.94); box-shadow: 0 1px 0 rgba(0, 0, 0, .35); }
 .look svg { width: 20px; height: 20px; overflow: visible; }
 .look .em { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; transform-box: fill-box; transform-origin: center; opacity: 0; transform: scale(.6) rotate(-40deg); transition: opacity .25s ease, transform .5s var(--reel); }
 .look .em .fill { fill: currentColor; stroke: none; }
@@ -166,15 +169,22 @@ button { font: inherit; color: inherit; }
 @media (min-width: 900px) {
   .svc { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(28px, 3vw, 56px); max-width: 1180px; }
   .svc p { max-width: 30ch; }
+  .svc h3 { font-size: clamp(1.55rem, 2.2vw, 2.1rem); }
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d, .go { margin-top: 0; }
-  .thesis { max-width: none; }
 }
 
 @media (max-width: 420px) {
-  .bar { left: 16px; width: calc(100vw - 32px); }
-  .bar-row, .bar-lit { gap: 5px; }
-  .bar button, .bar-lit span { font-size: 10px; letter-spacing: .03em; }
+  .bar { left: 12px; width: calc(100vw - 24px); gap: 4px; }
+  .bar-row, .bar-lit { gap: 4px; }
+  .bar button, .bar-lit span { font-size: 9.5px; letter-spacing: .02em; }
+}
+@media (max-width: 370px) {
+  .bar button, .bar-lit span { font-size: 9px; letter-spacing: 0; }
+}
+@media (max-height: 720px) {
+  :root { --top: calc(env(safe-area-inset-top, 0px) + 84px); }
+  .svc { gap: 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
