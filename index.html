@@ -321,7 +321,9 @@
             if (!part) return;
             if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
             var w = document.createElement('span'); w.className = 'w';
-            var inner = document.createElement('span'); inner.textContent = part; inner.style.setProperty('--i', i++);
+            var inner = document.createElement('span');
+            if (n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i); i += part.length; }
+            else part.split('').forEach(function (ch) { var l = document.createElement('span'); l.className = 'ch'; l.textContent = ch; l.style.setProperty('--i', i++); inner.appendChild(l); });
             w.appendChild(inner); frag.appendChild(w);
           });
           n.parentNode.replaceChild(frag, n);
