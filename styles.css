@@ -625,3 +625,24 @@ html:not(.gated) .stagebar { opacity: 1; }
 .fixed [data-stage] { padding-bottom: clamp(120px, 22vh, 220px) !important; }
 @media (max-width: 560px) { .stagebar { left: clamp(18px, 3vw, 36px); right: 12px; gap: 6px; } .stagebar button { padding: 9px 11px; font-size: 10px; letter-spacing: .1em; } }
 @media (max-width: 560px) { .stagebar { flex-wrap: nowrap; gap: 4px; right: 8px; } .stagebar button { padding: 9px 9px; letter-spacing: .04em; font-size: 10px; } }
+
+/* GIPX type: the accent word turns into a serif italic, normal weight, in the accent colour */
+h1 .accent, h2 .accent { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.025em; padding-right: .04em; }
+h1 .accent .ch, h2 .accent .ch { font-style: italic; }
+
+/* buttons: one row, equal size, a real press */
+.stagebar { display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)); width: min(560px, calc(100vw - 2 * clamp(18px, 3vw, 36px))); gap: 6px; flex-wrap: nowrap; }
+.stagebar button { -webkit-tap-highlight-color: transparent; user-select: none; touch-action: manipulation; padding: 11px 0; text-align: center; letter-spacing: .1em;
+  transition: color .25s, background .25s, border-color .25s, transform .18s cubic-bezier(.3, 1.6, .5, 1), box-shadow .18s; box-shadow: 0 2px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
+.stagebar button:active { transform: translateY(2px) scale(.96); box-shadow: 0 0 0 transparent; transition-duration: .06s; }
+.stagebar button:focus { outline: none; }
+.stagebar button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.stagebar button.on { box-shadow: 0 0 0 transparent, inset 0 1px 0 rgba(255,255,255,.25); }
+@media (max-width: 560px) { .stagebar { right: auto; } .stagebar button { padding: 10px 0; letter-spacing: .02em; font-size: 9.5px; } }
+
+/* copy: just an icon next to the email */
+.copy { width: 38px; height: 38px; padding: 0; border-radius: 10px; display: inline-grid; place-items: center; background: none !important; border: 0; color: var(--ink-3); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color .2s, transform .15s; }
+.copy svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; }
+.copy:hover { color: var(--ink); } .copy:active { transform: scale(.9); }
+.copy.done { color: var(--teal); }
+h1 .accent, h2 .accent { margin-left: .06em; }
