@@ -119,9 +119,9 @@
     </div>
     <div class="bar"><div class="inner"><div class="cells"><div class="cell grow body-cell">
         <ul class="names">
-          <li style="--n:0"><span class="nm" data-split>People</span><span class="nm-d">The CRM for clients and patients.</span></li>
-          <li style="--n:1"><span class="nm" data-split>Flows</span><span class="nm-d">Chat bots, built step by step.</span></li>
-          <li style="--n:2"><span class="nm" data-split>Artist OS</span><span class="nm-d">Site, bookings and numbers for artists.</span></li>
+          <li style="--n:0"><span class="nm" data-split>People</span><span class="nm-d">A human-centric CRM.</span></li>
+          <li style="--n:1"><span class="nm" data-split>Flows</span><span class="nm-d">Chat automations, built step by step.</span></li>
+          <li style="--n:2"><span class="nm" data-split>Artist OS</span><span class="nm-d">Presence, tooling and consulting for artists.</span></li>
         </ul>
     </div></div></div></div>
   </section>
@@ -442,7 +442,7 @@
   stageCheck = function () {};
   window.__stages = stageEls.length; window.__stage = 0;
   function show(i) {
-    window.__stage = i;
+    window.__stage = i; if (typeof markBar === 'function') markBar(i);
     stageEls.forEach(function (el, j) { el.classList.toggle('cur', j === i); if (j !== i) el.classList.remove('in'); });
     var el = stageEls[i]; surface(el);
     requestAnimationFrame(function () { el.classList.add('in'); });
@@ -459,20 +459,16 @@
     setTimeout(function () { show(next); gliding = false; coolUntil = performance.now() + 250; }, reduce ? 0 : 260);
   };
   stageEls[0].classList.add('cur');
-  // jump links under each step (GIPX-style mono labels): click and the step swaps in place
-  var LINKS = [['Services', 2 - 1], ['Now', 4], ['Portfolio', 5], ['Contact', 6]];
-  stageEls.forEach(function (el, j) {
-    var nav = document.createElement('nav'); nav.className = 'jumps'; nav.setAttribute('aria-label', 'Go to');
-    LINKS.forEach(function (l) {
-      var on = j === l[1] || (l[0] === 'Services' && j >= 1 && j <= 3);
-      if (on) return;
-      var b = document.createElement('button'); b.type = 'button'; b.textContent = l[0];
-      b.addEventListener('click', function () { deckGo(l[1]); }); nav.appendChild(b);
-    });
-    if (j === stageEls.length - 1) { var t = document.createElement('button'); t.type = 'button'; t.textContent = 'Start over'; t.addEventListener('click', function () { deckGo(0); }); nav.appendChild(t); }
-    var cells = el.querySelectorAll('.body-cell, .cell.grow');
-    (el.classList.contains('panel') ? el : (cells[cells.length - 1] || el)).appendChild(nav);
+  // one bar of buttons, always in the same place; the active one stays lit
+  var GROUPS = [['Intro', [0]], ['Services', [1, 2, 3]], ['Now', [4]], ['Portfolio', [5]], ['Contact', [6]]];
+  var bar = document.createElement('nav'); bar.className = 'stagebar'; bar.setAttribute('aria-label', 'Sections');
+  GROUPS.forEach(function (g) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = g[0]; b.dataset.first = g[1][0];
+    b.addEventListener('click', function () { deckGo(g[1][0]); }); bar.appendChild(b);
   });
+  document.body.appendChild(bar);
+  function markBar(i) { [].forEach.call(bar.children, function (b, k) { var on = GROUPS[k][1].indexOf(i) >= 0; b.classList.toggle('on', on); b.setAttribute('aria-current', on ? 'true' : 'false'); }); }
+  markBar(0);
   // swipe on touch screens
   var ty = null;
   addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
