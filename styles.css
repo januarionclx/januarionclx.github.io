@@ -1,6 +1,6 @@
 /* gradient colours as typed properties so a theme switch can ease them like plain colours */
-@property --ga { syntax: '<color>'; inherits: true; initial-value: #63cfbf; }
-@property --gb { syntax: '<color>'; inherits: true; initial-value: #7cc6e6; }
+@property --ga { syntax: '<color>'; inherits: false; initial-value: #63cfbf; }
+@property --gb { syntax: '<color>'; inherits: false; initial-value: #7cc6e6; }
 /* Layout: a 1120px column framed by full-bleed hairlines; every band is a row of boxed cells, like the nav. */
 :root {
   --barh: 0px;
@@ -218,13 +218,13 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .js [data-split] .w { display: inline-block; vertical-align: top; }
 .js [data-split] .w > span { display: inline-block; }
 /* titles surface word by word, quickly */
-.js [data-split] .ch { display: inline-block; opacity: 0; filter: blur(14px); transform: translate(-.2em, .2em) scale(.88); transform-origin: 50% 85%; text-shadow: 0 0 .6em var(--teal); transition: opacity .9s ease, filter 1.1s cubic-bezier(.2, .7, .2, 1), transform 1.3s cubic-bezier(.16, 1, .3, 1), text-shadow 1.8s ease; transition-delay: calc(var(--i, 0) * 55ms); }
+.js [data-split] .ch { display: inline-block; opacity: 0; transform: translate(-.2em, .22em) scale(.84); transform-origin: 50% 85%; transition: opacity .8s ease, transform 1.2s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--i, 0) * 55ms); will-change: opacity, transform; }
 /* short sublines are written out slowly, letter by letter, once the title has landed */
-.js [data-letters] .ch { filter: blur(6px); transform: translate(-.35em, 0); text-shadow: none; transition: opacity .7s ease, filter .9s ease, transform 1s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 30ms); }
-.js .in [data-split] .ch, .js [data-split].in .ch { opacity: 1; filter: blur(0); transform: none; text-shadow: 0 0 0 transparent; }
+.js [data-letters] .ch { transform: translate(-.35em, 0); transition: opacity .7s ease, transform 1s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 30ms); will-change: auto; }
+.js .in [data-split] .ch, .js [data-split].in .ch { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .js [data-split] .ch { opacity: 1; filter: none; transform: none; text-shadow: none; transition: none; } }
 /* the water surface: a ripple bends the words while they come through it */
-.surfacing [data-split], [data-split].surfacing { filter: url(#surface); }
+.surfacing h1[data-split], .surfacing h2[data-split], .surfacing .lead[data-split], h1[data-split].surfacing { filter: url(#surface); }
 
 .magnet { transition: transform .5s cubic-bezier(.16, 1, .3, 1); will-change: transform; }
 
@@ -283,8 +283,8 @@ a, button { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .work .ini .ch, .work .ini { animation: none; } }
 
 /* paragraphs come out of the smoke too, lighter and quicker than the sublines */
-.js .soft[data-letters] .ch { filter: none; transform: translate(-.25em, 0); transition: opacity .55s ease, transform .7s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 14ms); }
-.js .work .d[data-letters] .ch { filter: none; transform: translate(-.2em, 0); transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 11ms); }
+.js .soft[data-letters] .ch { transform: translate(-.25em, 0); transition: opacity .55s ease, transform .7s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 14ms); }
+.js .work .d[data-letters] .ch { transform: translate(-.2em, 0); transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 11ms); }
 
 /* sun and moon: the rays spin in and fold away while the disc swells into a crescent; stars blink in */
 .themes button { width: 44px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; color: var(--ink); -webkit-tap-highlight-color: transparent; }
@@ -307,9 +307,6 @@ a, button { cursor: pointer; }
 :root[data-theme="dark"] .sunmoon .stars .s1 { animation: twinkle 3.2s ease-in-out 1s infinite; }
 @keyframes twinkle { 50% { opacity: .35; } }
 
-/* a quiet line that implies the private work behind the public list */
-#portfolio .private { margin: 26px clamp(18px, 3vw, 36px) 0; max-width: 70ch; font-size: 15px; line-height: 1.6; color: var(--ink-3); }
-.js #portfolio .private .ch { filter: none; transform: translate(-.2em, 0); transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 9ms); }
 
 /* services index: the inactive services sit deep in the smoke, blurred; the active one surfaces */
 .wheel a, .wheel li.on a { color: var(--ink); }
@@ -339,8 +336,6 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display:
 .themes { display: flex; align-items: center; gap: 10px; }
 .cta { font-weight: 700; font-size: 14px; letter-spacing: -0.01em; text-decoration: none; color: var(--bg); background: var(--ink); padding: 11px 18px; border-radius: 99px; white-space: nowrap; transition: background .3s ease, transform .3s cubic-bezier(.16, 1, .3, 1); }
 .cta:hover { background: var(--teal); transform: translateY(-1px); }
-.cta .short { display: none; }
-@media (max-width: 560px) { .cta { font-size: 13px; padding: 9px 14px; } .cta .long { display: none; } .cta .short { display: inline; } }
 
 /* portfolio icons: a small line drawing hints at each project and comes alive on hover */
 .work .k { justify-content: flex-end; gap: 8px; padding-right: 0; }
@@ -380,22 +375,23 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display:
 @keyframes wave { to { stroke-dashoffset: 6; } }
 @media (prefers-reduced-motion: reduce) { .ic, .ic * { animation: none !important; } }
 
-/* the button is a drop in the water: a lens over the smoke, a teal light breathing beneath it */
-.cta { position: relative; isolation: isolate; border: 0; }
-.cta-glass { color: var(--ink); background: transparent; box-shadow: none; text-shadow: 0 1px 14px color-mix(in srgb, var(--bg) 75%, transparent); transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
-.cta-glass::before {
-  content: ''; position: absolute; inset: -6px -10px; z-index: -1; border-radius: 99px; pointer-events: none;
-  background: radial-gradient(60% 70% at 50% 60%, color-mix(in srgb, var(--teal) 45%, transparent), transparent 70%);
-  filter: blur(10px); opacity: .35; animation: breathe 4.5s ease-in-out infinite;
-}
-@keyframes breathe { 50% { opacity: .6; transform: scale(1.06); } }
-.cta-glass:active { transform: scale(.97); }
-.cta-glass.no-lens { background: color-mix(in srgb, var(--bg) 28%, transparent); backdrop-filter: blur(14px) brightness(1.12); -webkit-backdrop-filter: blur(14px) brightness(1.12); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25); }
-@media (prefers-reduced-motion: reduce) { .cta-glass::before { animation: none; } }
-
 /* the work button never shows a selection ring or box */
 .cta, .cta:focus, .cta:focus-visible, .cta:active { outline: none; -webkit-tap-highlight-color: transparent; }
 
-/* the lens works on a small copy of the smoke under the button, above the page shader */
-.lens-src { position: fixed; z-index: -1; pointer-events: none; overflow: hidden; opacity: 0; transition: opacity 1.2s ease .3s; }
-html:not(.gated) .lens-src { opacity: 1; }
+
+/* Let's work together: a frosted pill at the end of the story, next to the email */
+.work-cta { margin: 26px 0 0; }
+.cta { display: inline-block; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; text-decoration: none; color: var(--ink); padding: 13px 22px; border-radius: 99px; white-space: nowrap; position: relative; isolation: isolate; border: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02) 55%), color-mix(in srgb, var(--bg) 35%, transparent);
+  backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1), background .3s ease; }
+.cta::before { content: ''; position: absolute; inset: -14px -18px; z-index: -1; border-radius: 99px; pointer-events: none; background: radial-gradient(50% 60% at 50% 60%, color-mix(in srgb, var(--teal) 40%, transparent), transparent 70%); opacity: .35; animation: breathe 4.5s ease-in-out infinite; will-change: opacity; }
+@keyframes breathe { 50% { opacity: .65; } }
+@media (prefers-reduced-motion: reduce) { .cta::before { animation: none; } }
+.cta:hover { transform: translateY(-1px); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 55%), color-mix(in srgb, var(--bg) 50%, transparent); }
+.cta:hover::before { opacity: .7; }
+.mail { margin-top: 22px; }
+.private { margin: 28px clamp(18px, 3vw, 36px) 0; max-width: 72ch; }
+.private h3 { margin: 0 0 8px; }
+.private p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
