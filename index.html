@@ -4,28 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Januario Pinto | Software &amp; consulting</title>
-  <meta name="description" content="Januario Pinto designs organizations, and the software they run on, as living systems. Software and consulting from Lisbon.">
+  <meta name="description" content="Januario Pinto designs organizations as living systems and the software that runs on them. Software and consulting from Lisbon.">
   <meta name="author" content="Januario Pinto">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Januario Pinto">
-  <meta property="og:description" content="Organizations, and the software they run on, designed as living systems.">
-  <meta property="og:image" content="https://januariopinto.com/img/thumbnail.png">
+  <meta property="og:description" content="I design organizations as living systems and the software that runs on them.">
+  <meta property="og:image" content="https://januariopinto.com/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://januariopinto.com/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script>var t = null; try { t = localStorage.getItem('theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,300..400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800;900&family=Geist+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="themes">
   <button type="button" id="themeBtn" aria-label="Switch to light">
     <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
-      <mask id="moon-cut"><rect x="0" y="0" width="24" height="24" fill="white"/><circle class="cut" cx="24" cy="10" r="6" fill="black"/></mask>
-      <circle class="core" cx="12" cy="12" r="5" mask="url(#moon-cut)" fill="currentColor"/>
-      <g class="rays" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M4.6 19.4L6 18M18 6l1.4-1.4"/></g>
+      <mask id="moon-cut"><rect x="-4" y="-4" width="32" height="32" fill="white"/><circle class="cut" cx="26" cy="4" r="7.2" fill="black"/></mask>
+      <g class="rays" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(0 12 12)" style="--r:0"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(45 12 12)" style="--r:1"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(90 12 12)" style="--r:2"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(135 12 12)" style="--r:3"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(180 12 12)" style="--r:4"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(225 12 12)" style="--r:5"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(270 12 12)" style="--r:6"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(315 12 12)" style="--r:7"/></g>
+      <circle class="core" cx="12" cy="12" r="4.6" mask="url(#moon-cut)" fill="currentColor"/>
+      <g class="stars" fill="currentColor"><path class="s1" d="M19.2 3.2l.55 1.25 1.25.55-1.25.55-.55 1.25-.55-1.25-1.25-.55 1.25-.55z"/><circle class="s2" cx="21.4" cy="9.6" r=".75"/></g>
     </svg>
   </button>
 </div>
@@ -47,7 +52,7 @@
           <span class="line"><span class="accent sheen">Januario.</span></span>
         </h1>
         <p class="where" data-split data-letters style="--base: .55s">Software and consulting, from <em>Lisbon.</em></p>
-        <p class="thesis" data-split data-letters style="--base: 1.5s">I design organizations, and the software they run on, as <em>living systems.</em></p>
+        <p class="thesis" data-split data-letters style="--base: 1.5s">I design organizations as <em>living systems</em> and the software that runs on them.</p>
         <p class="keys" aria-hidden="true"><kbd>&darr;</kbd> or scroll to continue</p>
       </div>
     </div>
@@ -61,8 +66,8 @@
         <span class="label">Services</span>
         <ol class="wheel" id="wheel">
           <li style="--c: var(--teal)"><a href="#svc-dev">Software development</a></li>
-          <li style="--c: var(--ochre)"><a href="#svc-tech">Technical consulting</a></li>
-          <li style="--c: var(--clay)"><a href="#svc-org">Organizational consulting</a></li>
+          <li style="--c: var(--ochre)"><a href="#svc-consult">Consulting</a></li>
+          <li style="--c: var(--clay)"><a href="#svc-ventures">Ventures</a></li>
         </ol>
       </div>
       <div class="svc-panels">
@@ -70,45 +75,16 @@
           <h3>Software development</h3>
           <p class="lead" data-depth="0.5" data-split>A working product, <em>not a prototype.</em></p>
         </article>
-        <article class="panel" id="svc-tech" style="--c: var(--ochre)">
-          <h3>Technical consulting</h3>
-          <p class="lead" data-depth="0.5" data-split>A fractional CTO for the decisions <em>you can&rsquo;t get wrong.</em></p>
-          <p data-depth="0.8">Senior judgment on architecture, infrastructure and AI, without the cost of a full-time hire.</p>
+        <article class="panel" id="svc-consult" style="--c: var(--ochre)">
+          <h3>Consulting</h3>
+          <p class="lead" data-depth="0.5" data-split>Strategy, technology and organization, <em>for the decisions you can&rsquo;t get wrong.</em></p>
+          <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.7s">A fractional CTO, without the cost of a full-time hire.<br>Distributed systems that don&rsquo;t rely on you.<br>Self-managing teams that run on their own.</p>
         </article>
-        <article class="panel" id="svc-org" style="--c: var(--clay)">
-          <h3>Organizational consulting</h3>
-          <p class="lead" data-depth="0.5" data-split>A company that runs <em>without a boss</em> in every loop.</p>
-          <p data-depth="0.8">Clear roles. Distributed authority. Systems people can run without you.</p>
+        <article class="panel" id="svc-ventures" style="--c: var(--clay)">
+          <h3>Ventures</h3>
+          <p class="lead" data-depth="0.5" data-split>Companies built <em>from the ground up.</em></p>
+          <p data-depth="0.8" data-split data-letters class="soft" style="--base: 1.3s">Incubation and investment through The Unit.</p>
         </article>
-      </div>
-    </div>
-  </section>
-
-  <section id="now" aria-labelledby="now-title">
-    <div class="bar head">
-      <div class="inner">
-        <div class="cells">
-          <div class="cell tag"><span class="label">II</span></div>
-          <div class="cell grow" data-depth="0.3"><h2 id="now-title" data-split>Right <span class="accent sheen">now</span></h2></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar">
-      <div class="inner">
-        <div class="cells now">
-          <div data-depth="0.6">
-            <p class="big" data-split data-letters style="--base: .6s">Large-scale software and organizational work, in a country rebuilding itself.</p>
-            <p>From Lisbon, with a small group of partners, where technology and institutions have to change together.</p>
-          </div>
-          <div data-depth="1.1">
-            <ul class="products" id="products">
-              <li style="--c: var(--teal)"><h3>People</h3></li>
-              <li style="--c: var(--ochre)"><h3>Flows</h3></li>
-              <li style="--c: var(--clay)"><h3>Verbal</h3></li>
-              <li style="--c: var(--ink)"><h3>Artist OS</h3></li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -118,7 +94,7 @@
       <div class="inner">
         <div class="cells">
           <div class="cell tag"><span class="label">III</span></div>
-          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>Public <span class="accent sheen">portfolio</span></h2></div>
+          <div class="cell grow" data-depth="0.3"><h2 id="work-title" data-split>Right <span class="accent sheen">now</span></h2></div>
         </div>
       </div>
     </div>
@@ -126,11 +102,21 @@
       <div class="inner">
         <div class="cells" style="display:block">
           <div class="work">
-            <a data-depth="0.40" href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="yr">2019</span><span class="t"><span class="ini">T</span>he Unit Organization</span><span class="d">Incubator and studio. Products, companies, consulting.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <a href="https://restaurantesabasnieves.com" target="_blank" rel="noopener"><span class="yr">2026</span><span class="t"><span class="ini">S</span>abas Nieves</span><span class="d">Point of sale and owner&rsquo;s portal for a restaurant in Venezuela.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <a data-depth="0.58" href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t"><span class="ini">H</span>olacracy Assistant</span><span class="d">An AI guide to self-management, used by teams in practice.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <a data-depth="0.76" href="https://strangeartefacts.com" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t"><span class="ini">S</span>trange Artefacts</span><span class="d">AI-powered creative tools and film concepts.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <div class="row"><span class="yr">2023</span><span class="t"><span class="ini">S</span>elf-run communities</span><span class="d">Governance for coliving and coworking spaces, run by the people who live and work in them.</span><span class="k"></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">A</span>rtist OS</span><span class="d" data-split data-letters style="--base: 0.30s">Websites and tools for musicians, on their own domain.</span><span class="k" aria-hidden="true"><svg class="ic ic-eq" viewBox="0 0 24 24"><path d="M5 18V12M9.5 18V7M14 18V10M18.5 18V5"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">F</span>lows</span><span class="d" data-split data-letters style="--base: 0.46s">Business automations the business can read.</span><span class="k" aria-hidden="true"><svg class="ic ic-flow" viewBox="0 0 24 24"><path d="M3 7h6c3 0 3 10 6 10h6M3 17h6"/><circle cx="21" cy="17" r="1.6"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">P</span>eople</span><span class="d" data-split data-letters style="--base: 0.62s">The platform for self-managing teams.</span><span class="k" aria-hidden="true"><svg class="ic ic-orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.4"/><g class="spin"><circle cx="12" cy="4.5" r="1.8"/><circle cx="18.5" cy="16" r="1.8"/><circle cx="5.5" cy="16" r="1.8"/></g></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">P</span>ersonal OS</span><span class="d" data-split data-letters style="--base: 0.78s">A home for work and life.</span><span class="k" aria-hidden="true"><svg class="ic ic-home" viewBox="0 0 24 24"><path d="M4 11l8-6.5 8 6.5V20H4z"/><path class="glow" d="M10 20v-5h4v5"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">U</span>nitStack</span><span class="d" data-split data-letters style="--base: 0.94s">The shared platform under every Unit product.</span><span class="k" aria-hidden="true"><svg class="ic ic-stack" viewBox="0 0 24 24"><path class="l1" d="M12 4l8 4-8 4-8-4z"/><path class="l2" d="M4 12l8 4 8-4"/><path class="l3" d="M4 16l8 4 8-4"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">S</span>trange Artefacts</span><span class="d" data-split data-letters style="--base: 1.10s">AI-powered creative tools and film concepts.</span><span class="k" aria-hidden="true"><svg class="ic ic-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">T</span>he Unit Organization</span><span class="d" data-split data-letters style="--base: 1.26s">Incubator and studio. Products, companies, consulting.</span><span class="k" aria-hidden="true"><svg class="ic ic-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect class="pop" x="13" y="13" width="7" height="7"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">U</span>mbrella</span><span class="d" data-split data-letters style="--base: 1.42s">The holding company behind the ventures.</span><span class="k" aria-hidden="true"><svg class="ic ic-umbrella" viewBox="0 0 24 24"><path class="canopy" d="M3 12a9 8 0 0 1 18 0z"/><path d="M12 12v6.5a2 2 0 0 1-4 0"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">W</span>orkstation</span><span class="d" data-split data-letters style="--base: 1.58s">An Arch Linux desktop that reinstalls itself.</span><span class="k" aria-hidden="true"><svg class="ic ic-term" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10l3 2-3 2"/><path class="cursor" d="M12 15h5"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">S</span>elf-run communities</span><span class="d" data-split data-letters style="--base: 1.74s">Governance for coliving and coworking spaces, run by the people inside.</span><span class="k" aria-hidden="true"><svg class="ic ic-net" viewBox="0 0 24 24"><path d="M6 7l12 0M6 7l6 11M18 7l-6 11"/><circle cx="6" cy="7" r="2"/><circle cx="18" cy="7" r="2"/><circle cx="12" cy="18" r="2"/></svg></span></div>
+            <div class="row"><span class="t" data-split><span class="ini">V</span>erbal</span><span class="d" data-split data-letters style="--base: 1.90s">Voice-first dictation. Speak, and it is written.</span><span class="k" aria-hidden="true"><svg class="ic ic-wave" viewBox="0 0 24 24"><path d="M4 12h1M7.5 9v6M11 6v12M14.5 9v6M18 11v2M20 12h0"/></svg></span></div>
+          </div>
+          <div class="private" data-depth="0.9">
+            <h3 class="label">Private work</h3>
+            <p data-split data-letters class="soft" style="--base: 1.8s">A restaurant platform: point of sale, CRM, WhatsApp ordering, website and live dashboards.<br>A clinic assistant that organizes patients and drafts reports for doctors.<br>Private assistants for entrepreneurs, built on People.<br>Governance for coliving and coworking communities. Holacracy tooling.</p>
           </div>
         </div>
       </div>
@@ -144,7 +130,8 @@
       <div class="cells">
         <div class="cell grow">
           <h2 data-depth="0.4" data-split>Let&rsquo;s <span class="accent sheen">talk.</span></h2>
-          <p class="lead" data-depth="0.7">Building something that has to grow? Write to me.<br>I read everything myself.</p>
+          <p class="lead soft" data-depth="0.7" data-split data-letters style="--base: .5s">Building something that has to grow? Write to me.<br>I read everything myself.</p>
+          <p class="work-cta" data-depth="0.85"><a class="cta" href="mailto:contact@januariopinto.com">Let&rsquo;s work together</a></p>
           <div class="mail" data-depth="1">
             <a class="addr" id="addr" href="mailto:contact@januariopinto.com">contact@januariopinto.com</a>
             <button class="copy magnet" id="copyBtn" type="button">Copy</button>
@@ -187,7 +174,12 @@
     if (playAt !== null) return;
     playAt = performance.now();
     document.documentElement.classList.remove('gated');
-    surface(document.querySelector('.hero')); document.querySelector('.hero').classList.add('in');
+    // whatever is already on screen when the intro starts comes up right away
+    var vh = innerHeight;
+    (stages.length ? stages : [document.querySelector('.hero')]).forEach(function (st) {
+      var r = st.getBoundingClientRect();
+      if (r.top < vh * 0.62 && r.bottom > vh * 0.38) { surface(st); st.classList.add('in'); }
+    });
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
   setTimeout(begin, 1100);
@@ -203,12 +195,13 @@
     var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!calm) {
       shaders.forEach(function (s) { s.morph(); });
-      if (!morphEls) morphEls = [].slice.call(document.querySelectorAll('[data-split] .w > span, p, h1, h2, h3, li, a, .label, .t, .d, .yr, .k, button'));
+      if (!morphEls) morphEls = [].slice.call(document.querySelectorAll('.ch, [data-split] .w > span, p, h1, h2, h3, li, a, .label, .t, .d, .k, button, .ini'));
       var cx = innerWidth / 2, cy = innerHeight / 2, far = Math.hypot(cx, cy), ms = shaders[0] ? shaders[0].ms : 2800;
       morphEls.forEach(function (el) {
         var r = el.getBoundingClientRect();
         var d = Math.hypot(r.left + r.width / 2 - cx, r.top + r.height / 2 - cy) / far;
-        el.style.setProperty('--md', (Math.min(d, 1.2) * ms * 0.55 / 1000).toFixed(2) + 's');
+        // the shader front passes this point about 0.55s + 1.05s x distance after the switch
+        el.style.setProperty('--md', (0.55 + Math.min(d, 1.2) * 1.05).toFixed(2) + 's');
       });
       root.classList.add('morphing');
       clearTimeout(morphTimer); morphTimer = setTimeout(function () { root.classList.remove('morphing'); }, ms + 1400);
@@ -224,7 +217,7 @@
 
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // services wheel: the index turns with the panels
-  var wheel = document.getElementById('wheel');
+  var wheel = document.getElementById('wheel'), svcEl = document.querySelector('.svc');
   var items = [].slice.call(wheel.children);
   var panels = [].slice.call(document.querySelectorAll('.panel'));
   var wheelPos = 0, wheelTarget = 0, wheelRaf = 0;
@@ -240,13 +233,17 @@
     if (!wheelRaf) wheelRaf = requestAnimationFrame(wheelStep);
   }
   function wheelStep() {
+    var sr = svcEl.getBoundingClientRect();
+    if (sr.bottom < -innerHeight || sr.top > innerHeight * 2) { wheelRaf = 0; return; }
     wheelPos += (wheelTarget - wheelPos) * (reduce ? 1 : 0.14);
     var h = items[0].offsetHeight;
     wheel.style.transform = 'translateY(' + (((items.length - 1) / 2 - wheelPos) * h) + 'px)';
     items.forEach(function (li, i) {
       var d = i - wheelPos, a = Math.min(Math.abs(d), 1.6);
       li.style.transform = 'perspective(800px) rotateX(' + (-Math.max(-1.2, Math.min(1.2, d)) * 24) + 'deg) scale(' + (1 - Math.min(a, 1) * 0.5) + ')';
-      li.style.opacity = String(1 - a * 0.5);
+      li.style.opacity = String(1 - a * 0.42);
+      var bl = Math.round(Math.min(a, 1.4) * 2.5) * 2; // 0, 2, 4 or 6px
+      var fv = bl ? 'blur(' + bl + 'px)' : 'none'; if (li._fv !== fv) { li._fv = fv; li.style.filter = fv; }
       li.classList.toggle('on', Math.abs(d) < 0.5);
     });
     wheelRaf = Math.abs(wheelTarget - wheelPos) > 0.001 ? requestAnimationFrame(wheelStep) : 0;
@@ -262,10 +259,11 @@
   var flowRaf = 0;
   function flowStep() {
     var vh = innerHeight, moving = false;
-    flow.forEach(function (f) {
-      var r = f.box.getBoundingClientRect();
+    var rects = flow.map(function (f) { return [f.box.getBoundingClientRect(), f.box.offsetHeight]; });
+    flow.forEach(function (f, fi) {
+      var r = rects[fi][0];
       var target = Math.max(-1.2, Math.min(1.2, (r.top + r.height / 2 - vh / 2) / vh));
-      if (f.box.offsetHeight > vh * 1.2) target = Math.max(-1.2, Math.min(1.2, (r.top) / vh)) * (r.top > 0 ? 1 : 0);
+      if (rects[fi][1] > vh * 1.2) target = Math.max(-1.2, Math.min(1.2, (r.top) / vh)) * (r.top > 0 ? 1 : 0);
       if (f.p === null) f.p = target;
       f.p += (target - f.p) * 0.1;
       if (Math.abs(target - f.p) > 0.0005) moving = true;
@@ -310,7 +308,7 @@
 
   // word reveal: split text into masked words, play when the screen is in view
   function split(el) {
-    var i = 0;
+    var i = 0, label = el.textContent.replace(/\s+/g, ' ').trim();
     (function walk(node) {
       [].slice.call(node.childNodes).forEach(function (n) {
         if (n.nodeType === 3) {
@@ -320,7 +318,7 @@
             if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
             var w = document.createElement('span'); w.className = 'w';
             var inner = document.createElement('span');
-            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
+            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen, .ini')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
             else part.split('').forEach(function (ch) { var l = document.createElement('span'); l.className = 'ch'; l.textContent = ch; l.style.setProperty('--i', i++); inner.appendChild(l); });
             w.appendChild(inner); frag.appendChild(w);
           });
@@ -328,6 +326,11 @@
         } else if (n.nodeType === 1) walk(n);
       });
     })(el);
+    // the animated letters are hidden from screen readers; they read one plain copy instead
+    var shown = document.createElement('span'); shown.setAttribute('aria-hidden', 'true'); shown.className = 'split-view';
+    while (el.firstChild) shown.appendChild(el.firstChild);
+    el.appendChild(shown);
+    var sr = document.createElement('span'); sr.className = 'sr-only'; sr.textContent = label; el.appendChild(sr);
   }
   var splitEls = [].slice.call(document.querySelectorAll('[data-split]'));
   splitEls.forEach(split);
@@ -336,7 +339,7 @@
   var stageIO = new IntersectionObserver(function (en) {
     if (playAt === null) return;
     en.forEach(function (e) { if (e.isIntersecting && !e.target.classList.contains('in')) surface(e.target); e.target.classList.toggle('in', e.isIntersecting); });
-  }, { threshold: 0.45 });
+  }, { rootMargin: '-38% 0px -38% 0px' });
   stages.forEach(function (st) { stageIO.observe(st); });
 
   // magnetic: the element leans toward the cursor and eases back
@@ -376,7 +379,7 @@
   var productsFocus = focusList(document.getElementById('products'), 'li', 'h3', 'p', 1, 1.12, 0.92);
 
   // deck: on desktop every key press or scroll gesture moves exactly one step
-  var deckSteps = ['#top', '#svc-dev', '#svc-tech', '#svc-org', '#now', '#portfolio', '#contact'];
+  var deckSteps = ['#top', '#svc-dev', '#svc-consult', '#svc-ventures', '#portfolio', '#contact'];
   var deckMq = matchMedia('(min-width: 861px) and (pointer: fine)');
   var gliding = false, coolUntil = 0, acc = 0, accT = 0;
   function deckY(sel) {
@@ -443,8 +446,8 @@
   var HEAD = 'precision highp float;uniform vec2 u_res;uniform float u_time;uniform vec3 u_c1,u_c2,u_c3,u_c4;uniform vec2 u_mouse;uniform float u_act;uniform float u_amt;uniform float u_clock;uniform float u_intro;uniform vec3 u_rip[4];uniform vec3 u_t1,u_t2;uniform vec3 u_o1,u_o2,u_o3,u_o4,u_ot2;uniform float u_front;';
   var NOISE = 'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}' +
     'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);}' +
-    'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<5;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}';
-  var WAVES = 'vec2 waves(vec2 uv){float wt=u_time*.034;vec2 wp=uv*.8+vec2(wt*.9,-wt*.55);float w1=fbm(wp+vec2(3.1,1.7));float w2=fbm(wp*1.25+vec2(7.3,2.2)-vec2(wt*.4,wt*.7));float b1=0.;float b2=smoothstep(.55,.85,w2)*.75;return vec2(b1,b2);}';
+    'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<4;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}';
+  var WAVES = 'vec2 waves(vec2 uv){float wt=u_time*.034;vec2 wp=uv*.8+vec2(wt*.9,-wt*.55);float w2=fbm(wp*1.25+vec2(7.3,2.2)-vec2(wt*.4,wt*.7));float b1=0.;float b2=smoothstep(.55,.85,w2)*.75;return vec2(b1,b2);}';
   // hero: slow smoke with teal veins, pulled toward the cursor
   // one palette's paint, written out for the new and the old theme so a front can blend between them
   function paint(v, c1, c2, c3, c4, t2) {
@@ -453,14 +456,17 @@
   }
   var SMOKE = HEAD + NOISE + WAVES +
     'void main(){vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;float t=u_time*.045;vec2 p=uv*1.9;p.x+=t*.4;p.y-=t*.3;' +
-    'float act=u_act;float asp=u_res.x/u_res.y;vec2 m=((u_mouse-.5)*vec2(asp,1.))*1.9;float md=length(uv*1.9-m);p+=act*(m-uv*1.9)*.28*exp(-md*1.8);' +
-    'float glow=0.;for(int i=0;i<4;i++){vec3 rp=u_rip[i];float age=u_clock-rp.z;if(rp.z>0.&&age>0.&&age<4.5){vec2 rc=(rp.xy-.5)*vec2(asp,1.);vec2 dv=uv-rc;float d=length(dv);float ring=d-age*.42;float w=exp(-ring*ring*55.)*exp(-age*.9);p+=dv/(d+.001)*w*.55;glow+=w;}}' +
+    'float act=u_act;float asp=u_res.x/u_res.y;vec2 m=((u_mouse-.5)*vec2(asp,1.))*1.9;float md=length(uv*1.9-m);p+=act*(m-uv*1.9)*.2*exp(-md*1.8);' +
+    'float glow=0.;for(int i=0;i<4;i++){vec3 rp=u_rip[i];float age=u_clock-rp.z;if(rp.z>0.&&age>0.&&age<4.5){vec2 rc=(rp.xy-.5)*vec2(asp,1.);vec2 dv=uv-rc;float d=length(dv);float ring=d-age*.42;float w=exp(-ring*ring*55.)*exp(-age*.9);p+=dv/(d+.001)*w*.4;glow+=w;}}' +
     'vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)+t*.35));vec2 r=vec2(fbm(p+3.2*q+vec2(1.7,9.2)),fbm(p+3.2*q+vec2(8.3,2.8)-t*.25));float f=fbm(p+3.*r);' +
     'float body=smoothstep(.38,.92,f);float vein=pow(1.-abs(2.*f-1.),10.);float warm=smoothstep(.55,1.,r.x)*body;' +
     'vec2 bw=waves(uv);float b2=bw.y;float vig=smoothstep(1.35,.2,length(uv*vec2(.8,1.)));' +
-    paint('col', 'u_c1', 'u_c2', 'u_c3', 'u_c4', 'u_t2') + paint('old', 'u_o1', 'u_o2', 'u_o3', 'u_o4', 'u_ot2') +
-    'float front=length(uv)+(fbm(uv*2.6+u_clock*.25)-.5)*.32;col=mix(old,col,smoothstep(u_front,u_front-.22,front));' +
-    'vec2 o=(vec2(.3,.56)-.5)*vec2(asp,1.);float R=u_intro*2.4;float edge=fbm(uv*3.+u_clock*.2)*.35;col=mix(u_c3,col,smoothstep(R,R-.4,length(uv-o)+edge));gl_FragColor=vec4(col,1.);}';
+    paint('col', 'u_c1', 'u_c2', 'u_c3', 'u_c4', 'u_t2') +
+    // only while a theme switch is spreading: paint the old palette and blend at the front
+    'if(u_front<5.){' + paint('old', 'u_o1', 'u_o2', 'u_o3', 'u_o4', 'u_ot2') + 'float front=length(uv)+(fbm(uv*2.6+u_clock*.25)-.5)*.32;col=mix(old,col,smoothstep(u_front,u_front-.22,front));}' +
+    // only during the intro: the ink-drop edge
+    'if(u_intro<1.){vec2 o=(vec2(.3,.56)-.5)*vec2(asp,1.);float R=u_intro*2.4;float edge=fbm(uv*3.+u_clock*.2)*.35;col=mix(u_c3,col,smoothstep(R,R-.4,length(uv-o)+edge));}' +
+    'gl_FragColor=vec4(col,1.);}';
 
   function rgb(v) {
     v = v.trim();
@@ -484,24 +490,17 @@
     var shown = [], shownT2 = null, old = null, frontT0 = 0, FRONT_MS = 2800;
     var base = [], alt = [], tone = 0, svcEl = document.querySelector('.svc'), lastAcc = 0, accA = null, accB = null;
     // text accent follows the drift, so highlights breathe with the background
-    function accent(k) {
-      var rs2 = document.documentElement.style;
-      if (!accA) { rs2.removeProperty('--teal'); var cs2 = getComputedStyle(document.documentElement); accA = rgb(cs2.getPropertyValue('--teal')); accB = rgb(cs2.getPropertyValue('--acc2') || cs2.getPropertyValue('--teal')); }
-      var c = accA.map(function (v, i) { return Math.round((v + (accB[i] - v) * k * 0.6) * 255); });
-      rs2.setProperty('--teal', 'rgb(' + c.join(',') + ')');
-    }
     var page = canvas.classList.contains('page-shader'), sim = Math.random() * 20, last = 0, vel = 0, lastY = scrollY, intro = reduce || !page ? 1 : 0, born = performance.now();
     var rips = [[0, 0, -1], [0, 0, -1], [0, 0, -1], [0, 0, -1]], ripN = 0;
     var uRip = gl.getUniformLocation(pr, 'u_rip');
     var mouse = [0.5, 0.5], target = [0.5, 0.5], act = 0, actTarget = 0, amt = 1, visible = true, t0 = performance.now() - Math.random() * 20000;
     function size() {
-      var r = canvas.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 1.5) * scale;
+      var r = canvas.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 1) * scale * (matchMedia('(pointer: coarse)').matches ? 0.85 : 1);
       canvas.width = Math.max(1, Math.round(r.width * d)); canvas.height = Math.max(1, Math.round(r.height * d));
       gl.viewport(0, 0, canvas.width, canvas.height);
     }
     function recolor() {
       var cs = getComputedStyle(canvas);
-      accA = null;
       gl.uniform3fv(U.u_t1, rgb(cs.getPropertyValue('--tint1') || cs.getPropertyValue('--sh-body')));
       shownT2 = rgb(cs.getPropertyValue('--tint2') || cs.getPropertyValue('--sh-body')); gl.uniform3fv(U.u_t2, shownT2);
       base = ['--sh-body', '--sh-vein', '--sh-field', '--sh-warm'].map(function (k) { return rgb(cs.getPropertyValue(k)); });
@@ -520,7 +519,7 @@
       var inSvc = 0;
       if (svcEl) { var sr = svcEl.getBoundingClientRect(); inSvc = sr.top < innerHeight / 2 && sr.bottom > innerHeight / 2 ? 1 : 0; }
       tone = reduce ? 0 : 0.5 - 0.5 * Math.cos(now / 1000 * Math.PI * 2 / 50);
-      if (page && now - lastAcc > 120) { lastAcc = now; accent(tone); }
+      
       ['u_c1', 'u_c2', 'u_c3', 'u_c4'].forEach(function (k, i) {
         var a = base[i], b = alt[i] || a;
         var v = [a[0] + (b[0] - a[0]) * tone, a[1] + (b[1] - a[1]) * tone, a[2] + (b[2] - a[2]) * tone];
@@ -546,11 +545,18 @@
       gl.uniform2f(U.u_mouse, mouse[0], mouse[1]);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
-    function loop(now) { if (visible) draw(now); requestAnimationFrame(loop); }
+    var lastDraw = 0, lastPtr = 0;
+    function busy(now) { return act > 0.02 || vel > 0.02 || old || intro < 1 || now - lastPtr < 1200 || rips.some(function (rp) { return rp[2] > 0 && now / 1000 - rp[2] < 4.5; }); }
+    function loop(now) {
+      var gap = now - lastDraw;
+      if (visible && (gap > 32 || (gap > 15 && busy(now)))) { lastDraw = now; draw(now); }
+      requestAnimationFrame(loop);
+    }
     var host = canvas.classList.contains('page-shader') ? document.documentElement : canvas.parentElement;
     host.addEventListener('pointermove', function (e) {
       var r = canvas.getBoundingClientRect();
       var x = (e.clientX - r.left) / r.width, y = 1 - (e.clientY - r.top) / r.height;
+      lastPtr = performance.now();
       if (act < 0.01) mouse = [x, y];
       target = [x, y]; actTarget = 1;
     });
@@ -565,12 +571,13 @@
     size(); recolor();
     if (reduce) draw(performance.now()); else requestAnimationFrame(loop);
     requestAnimationFrame(function () { canvas.classList.add('on'); });
-    return { recolor: recolor, morph: function () { if (shown.length) { old = shown.slice().concat([shownT2 || shown[0]]); frontT0 = performance.now(); } }, ms: FRONT_MS };
+    return { ripple: function (cx, cy, big) { var r = canvas.getBoundingClientRect(); rips[ripN++ % 4] = [(cx - r.left) / r.width, 1 - (cy - r.top) / r.height, performance.now() / 1000 - (big ? 0 : 0.35)]; }, recolor: recolor, morph: function () { if (shown.length) { old = shown.slice().concat([shownT2 || shown[0]]); frontT0 = performance.now(); } }, ms: FRONT_MS };
   }
 
   [['bgShader', SMOKE, 0.6]].forEach(function (d) {
     var s = Shader(document.getElementById(d[0]), d[1], d[2]); if (s) shaders.push(s);
   });
+
 
 })();
 </script>

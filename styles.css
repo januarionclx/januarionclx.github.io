@@ -1,14 +1,17 @@
+/* gradient colours as typed properties so a theme switch can ease them like plain colours */
+@property --ga { syntax: '<color>'; inherits: false; initial-value: #63cfbf; }
+@property --gb { syntax: '<color>'; inherits: false; initial-value: #7cc6e6; }
 /* Layout: a 1120px column framed by full-bleed hairlines; every band is a row of boxed cells, like the nav. */
 :root {
   --barh: 0px;
   --bg: #eceee8;          /* stone paper, a hair of green */
   --surface: #f5f6f1;
-  --ink: #131c1a;         /* teal-black */
-  --ink-2: rgba(19, 28, 26, 0.72);
-  --ink-3: rgba(19, 28, 26, 0.5);
+  --ink: #111514;
+  --ink-2: rgba(17, 21, 20, 0.74);
+  --ink-3: rgba(17, 21, 20, 0.5);
   --line: rgba(19, 28, 26, 0.12);
   --line-2: rgba(19, 28, 26, 0.26);
-  --teal: #0d6a61;
+  --teal: #00826f;
   --ochre: #a8701c;
   --clay: #a34a3a;
   --teal-soft: rgba(13, 106, 97, 0.09);
@@ -25,7 +28,6 @@
   --glass-shadow: rgba(19, 40, 36, 0.35);
 
   --f-display: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --f-serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
   --f-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   --col: 1120px;
   --gut: clamp(16px, 4vw, 40px);
@@ -44,7 +46,7 @@
 }
 
 
-:root[data-theme="light"] { --tint2: #b9d2e0; --acc2: #1e6f93; --sh3-body: #c3dbe6; --sh3-vein: #1f6f8a; --sh3-field: #e8eeed; --sh3-warm: #d9a650; }
+:root[data-theme="light"] { --tint2: #c4dcd3; --acc2: #0aa58d; --sh3-body: #c6ddd4; --sh3-vein: #0a5f57; --sh3-field: #e9eee9; --sh3-warm: #d9a650; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -61,7 +63,6 @@ body::after {
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
 
-.serif { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
 .label { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); }
 
 /* ---------- bars: full-bleed hairlines with a boxed inner column ---------- */
@@ -87,7 +88,6 @@ a { color: inherit; }
 .name .line { display: block; }
 .name .line + .line { margin-top: 0.03em; }
 .name .accent { color: var(--teal); }
-.name .serif { font-weight: 300; color: var(--teal); letter-spacing: -0.04em; font-size: 1.04em; padding-right: 0.06em; }
 .where { margin: clamp(26px, 3.4vw, 40px) 0 0; font-weight: 600; font-size: clamp(1rem, 1.4vw, 1.2rem); letter-spacing: -0.015em; color: var(--ink-2); }
 .thesis { margin: clamp(10px, 1.2vw, 14px) 0 0; max-width: 34ch; font-weight: 500; font-size: clamp(1.4rem, 2.5vw, 2.1rem); line-height: 1.22; letter-spacing: -0.035em; text-wrap: balance; }
 .thesis em, .where em { font-style: normal; color: var(--teal); }
@@ -105,7 +105,6 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .head .cell { padding: 22px clamp(18px, 3vw, 36px); display: flex; align-items: baseline; }
 .head .tag { width: clamp(64px, 9vw, 104px); flex: none; justify-content: center; }
 .head h2 { margin: 0; font-size: clamp(2.3rem, 5.6vw, 4.4rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1; }
-.head h2 .serif { font-weight: 400; color: var(--teal); }
 .head .aside { margin-left: auto; padding-left: 16px; }
 
 /* ---------- services: sticky wheel index + one panel per screen ---------- */
@@ -116,7 +115,6 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .wheel { list-style: none; margin: 0; padding: 0; will-change: transform; }
 .wheel li { transform-origin: left center; will-change: transform, opacity; }
 .wheel a { display: block; text-decoration: none; padding-block: 0.12em; font-size: clamp(2rem, 4.4vw, 3.9rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1.05; color: var(--ink-3); transition: color .4s; }
-.wheel li.on a { color: var(--ink); }
 .panel { min-height: calc(100svh - var(--barh)); display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: clamp(48px, 8vh, 96px) clamp(18px, 3vw, 44px); scroll-snap-align: center; scroll-snap-stop: always; }
 .panel h3 { display: none; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; color: var(--ink); }
 .panel p.lead { color: var(--ink); max-width: 17ch; margin: 0; font-weight: 800; font-size: clamp(1.9rem, 3.3vw, 3rem); line-height: 1.02; letter-spacing: -0.05em; text-wrap: balance; }
@@ -165,12 +163,12 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 @media (max-width: 560px) { .products li { grid-template-columns: 1fr; } }
 
 /* ---------- work ---------- */
-.work a, .work .row { display: grid; grid-template-columns: clamp(56px, 7vw, 84px) minmax(0, 1.7fr) minmax(0, 1.1fr) auto; align-items: center; text-decoration: none; border-bottom: 1px solid var(--line); transition: background .25s; }
+.work a, .work .row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.3fr) 64px; align-items: center; text-decoration: none; border-bottom: 1px solid var(--line); transition: background .25s; }
 .work > :last-child { border-bottom: 0; }
 .work .yr { font-family: var(--f-mono); font-size: 15px; color: var(--ink-3); padding: 22px 0; text-align: center; border-right: 1px solid var(--line); align-self: stretch; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
-.work .t { padding: 14px clamp(14px, 2.4vw, 28px) 14px 0; font-size: clamp(1.9rem, 3.5vw, 3.1rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1.02; white-space: nowrap; transform-origin: left center; will-change: transform; }
+.work .t { padding: 7px clamp(14px, 2.4vw, 28px) 7px 0; font-size: clamp(1.5rem, 2.5vw, 2.3rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1.02; white-space: nowrap; transform-origin: left center; will-change: transform; }
 .work .yr, .work .d, .work .k { will-change: opacity; }
-.work .d { color: var(--ink-2); font-size: 16px; padding-right: 16px; }
+.work .d { color: var(--ink-2); font-size: 15px; line-height: 1.45; padding-right: 16px; }
 .work .k { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); padding-right: clamp(14px, 2.4vw, 28px); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
 .work .arrow { color: var(--teal); transition: transform .25s cubic-bezier(.2, .8, .2, 1); }
 .work .on .arrow { transform: translate(3px, -3px); }
@@ -180,7 +178,6 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .coda { position: relative; overflow: hidden; isolation: isolate; }
 .coda .cell { padding: clamp(40px, 6vw, 80px) clamp(18px, 3vw, 36px) 80px; }
 .coda h2 { margin: 0; font-size: clamp(2.6rem, 8vw, 6.6rem); font-weight: 900; letter-spacing: -0.065em; line-height: 0.88; }
-.coda h2 .serif { font-weight: 300; color: var(--teal); }
 .coda .lead { margin: 24px 0 0; max-width: 44ch; color: var(--ink-2); font-size: 17px; }
 .mail { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .mail .addr { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.3rem, 3vw, 2.1rem); letter-spacing: -0.035em; user-select: all; text-decoration: none;  overflow-wrap: anywhere; }
@@ -206,9 +203,9 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
   .now { grid-template-columns: 1fr; }
   .now > div { border-right: 0; border-bottom: 1px solid var(--line); }
   .now > div:last-child { border-bottom: 0; }
-  .work a, .work .row { grid-template-columns: 56px minmax(0, 1fr) auto; }
-  .work .d { grid-column: 2 / 4; grid-row: 2; padding: 0 clamp(14px, 2.4vw, 28px) 20px; margin-top: -10px; }
-  .work .yr { grid-row: 1 / 3; }
+  .work a, .work .row { grid-template-columns: minmax(0, 1fr) 28px; }
+  .work .d { grid-column: 1 / 2; grid-row: 2; padding: 0 0 18px; margin-top: -6px; }
+  .work .k { grid-column: 2; grid-row: 1; }
 }
 @media (max-width: 560px) {
   .head .tag { display: none; }
@@ -221,13 +218,13 @@ main > section > .bar:last-child { border-bottom: 1px solid var(--line); }
 .js [data-split] .w { display: inline-block; vertical-align: top; }
 .js [data-split] .w > span { display: inline-block; }
 /* titles surface word by word, quickly */
-.js [data-split] .ch { display: inline-block; opacity: 0; filter: blur(14px); transform: translate(-.2em, .2em) scale(.88); transform-origin: 50% 85%; text-shadow: 0 0 .6em var(--teal); transition: opacity .9s ease, filter 1.1s cubic-bezier(.2, .7, .2, 1), transform 1.3s cubic-bezier(.16, 1, .3, 1), text-shadow 1.8s ease; transition-delay: calc(var(--i, 0) * 55ms); }
+.js [data-split] .ch { display: inline-block; opacity: 0; transform: translate(-.2em, .22em) scale(.84); transform-origin: 50% 85%; transition: opacity .8s ease, transform 1.2s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--i, 0) * 55ms); will-change: opacity, transform; }
 /* short sublines are written out slowly, letter by letter, once the title has landed */
-.js [data-letters] .ch { filter: blur(6px); transform: translate(-.35em, 0); text-shadow: none; transition: opacity .7s ease, filter .9s ease, transform 1s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 30ms); }
-.js .in [data-split] .ch, .js [data-split].in .ch { opacity: 1; filter: blur(0); transform: none; text-shadow: 0 0 0 transparent; }
+.js [data-letters] .ch { transform: translate(-.35em, 0); transition: opacity .7s ease, transform 1s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 30ms); will-change: auto; }
+.js .in [data-split] .ch, .js [data-split].in .ch { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .js [data-split] .ch { opacity: 1; filter: none; transform: none; text-shadow: none; transition: none; } }
 /* the water surface: a ripple bends the words while they come through it */
-.surfacing [data-split], [data-split].surfacing { filter: url(#surface); }
+.surfacing h1[data-split], .surfacing h2[data-split], .surfacing .lead[data-split], h1[data-split].surfacing { filter: url(#surface); }
 
 .magnet { transition: transform .5s cubic-bezier(.16, 1, .3, 1); will-change: transform; }
 
@@ -252,27 +249,14 @@ html.js.gated .keys { animation-play-state: paused; }
 
 
 /* light / dark toggle, top right */
-.themes { position: fixed; z-index: 45; top: calc(env(safe-area-inset-top, 0px) + 16px); right: clamp(12px, 2vw, 24px); display: flex; gap: 6px; padding: 6px; border-radius: 99px; background: var(--glass); border: 1px solid var(--glass-line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: opacity .6s ease .4s; }
+.themes { position: fixed; z-index: 45; top: calc(env(safe-area-inset-top, 0px) + 14px); right: clamp(10px, 2vw, 22px); transition: opacity .6s ease .4s; }
 html.js.gated .themes { opacity: 0; pointer-events: none; }
-.themes button { width: 30px; height: 30px; padding: 0; border-radius: 50%; border: 0; cursor: pointer; background: none; display: grid; place-items: center; }
-.sunmoon { width: 20px; height: 20px; color: var(--ink); overflow: visible; }
-.sunmoon .core { transform-origin: center; transition: r .6s cubic-bezier(.16, 1, .3, 1); }
-.sunmoon .cut { transition: cx .6s cubic-bezier(.16, 1, .3, 1), cy .6s cubic-bezier(.16, 1, .3, 1); }
-.sunmoon .rays { transform-origin: 12px 12px; transition: transform .6s cubic-bezier(.16, 1, .3, 1), opacity .4s ease; }
-/* dark theme shows the moon: a bigger disc with a bite, no rays */
-:root[data-theme="dark"] .sunmoon .core { r: 9px; }
-:root[data-theme="dark"] .sunmoon .cut { cx: 17px; cy: 7px; }
-:root[data-theme="dark"] .sunmoon .rays { transform: rotate(-60deg) scale(.4); opacity: 0; }
-.themes button:hover .sunmoon .rays { transform: rotate(45deg); }
-:root[data-theme="dark"] .themes button:hover .sunmoon .cut { cx: 16px; cy: 8px; }
-.themes { padding: 4px; }
-.themes button { width: 38px; height: 38px; }
 
 /* ---------- two themes; the palette drifts slowly between two related tones ---------- */
 .svc { --hi: var(--teal); color: var(--ink); }
 :root[data-theme="dark"] { --tint1: #dbe9e3; --tint2: #24577a; --acc2: #7cc6e6; --sh3-body: #142b3a; --sh3-vein: #74c2e4; --sh3-field: #0a0f14; --sh3-warm: #2b5f6e; }
 /* sheen: a couple of big words carry both tones */
-.sheen .ch { background: linear-gradient(100deg, var(--teal) 0%, var(--acc2, var(--teal)) 45%, var(--teal) 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 9s ease-in-out infinite alternate; }
+.sheen .ch { background: linear-gradient(100deg, var(--ga) 0%, var(--gb) 45%, var(--ga) 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 9s ease-in-out infinite alternate; }
 @keyframes sheen { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 @media (prefers-reduced-motion: reduce) { .sheen .ch { animation: none; } }
 
@@ -280,8 +264,8 @@ html.js.gated .themes { opacity: 0; pointer-events: none; }
 
 
 /* theme switch: colours follow the front outward from the centre */
-html.morphing *, html.morphing *::before, html.morphing *::after { transition-property: color, background-color, border-color, -webkit-text-fill-color !important; transition-duration: 1s !important; transition-timing-function: ease !important; transition-delay: var(--md, 0s) !important; }
-html.morphing .sheen .ch { transition-property: color !important; }
+html.morphing *, html.morphing *::before, html.morphing *::after { transition-property: color, background-color, border-color, -webkit-text-fill-color, --ga, --gb !important; transition-duration: 1.1s !important; transition-timing-function: ease !important; transition-delay: var(--md, 0s) !important; }
+html.morphing .sheen .ch, html.morphing .ini { transition-property: --ga, --gb, color !important; }
 
 /* highlight word in section titles: same voice as "Januario." */
 .head h2 .accent { color: var(--teal); font-weight: 900; }
@@ -295,5 +279,119 @@ body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none
 a, button { cursor: pointer; }
 
 /* portfolio: each name opens on a highlight letter, same sheen as the highlight words */
-.work .ini { display: inline-block; background: linear-gradient(100deg, var(--teal) 0%, var(--acc2, var(--teal)) 45%, var(--teal) 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 9s ease-in-out infinite alternate; padding-right: .02em; }
-@media (prefers-reduced-motion: reduce) { .work .ini { animation: none; } }
+.work .ini .ch, .work .ini { display: inline-block; background: linear-gradient(100deg, var(--ga) 0%, var(--gb) 45%, var(--ga) 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 9s ease-in-out infinite alternate; padding-right: .02em; }
+@media (prefers-reduced-motion: reduce) { .work .ini .ch, .work .ini { animation: none; } }
+
+/* paragraphs come out of the smoke too, lighter and quicker than the sublines */
+.js .soft[data-letters] .ch { transform: translate(-.25em, 0); transition: opacity .55s ease, transform .7s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 14ms); }
+.js .work .d[data-letters] .ch { transform: translate(-.2em, 0); transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--base, 0s) + var(--i, 0) * 11ms); }
+
+/* sun and moon: the rays spin in and fold away while the disc swells into a crescent; stars blink in */
+.themes button { width: 44px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; color: var(--ink); -webkit-tap-highlight-color: transparent; }
+.sunmoon { width: 26px; height: 26px; overflow: visible; transition: transform .9s cubic-bezier(.34, 1.4, .5, 1); }
+.sunmoon .rays line { transition: opacity .35s ease; transition-delay: calc(var(--r) * 35ms); }
+.sunmoon .rays { transform-origin: 12px 12px; transition: transform .9s cubic-bezier(.16, 1, .3, 1); }
+.sunmoon .core { transition: r .7s cubic-bezier(.34, 1.5, .5, 1); }
+.sunmoon .cut { transition: cx .7s cubic-bezier(.16, 1, .3, 1), cy .7s cubic-bezier(.16, 1, .3, 1); }
+.sunmoon .stars > * { opacity: 0; transform-origin: center; transform-box: fill-box; transform: scale(0); transition: opacity .4s ease, transform .5s cubic-bezier(.34, 1.6, .5, 1); }
+.themes button:hover .sunmoon { transform: rotate(22deg) scale(1.08); }
+.themes button:active .sunmoon { transform: scale(.9); }
+:root[data-theme="dark"] .sunmoon { transform: rotate(-30deg); }
+:root[data-theme="dark"] .themes button:hover .sunmoon { transform: rotate(-12deg) scale(1.08); }
+:root[data-theme="dark"] .sunmoon .rays { transform: rotate(140deg) scale(.35); }
+:root[data-theme="dark"] .sunmoon .rays line { opacity: 0; }
+:root[data-theme="dark"] .sunmoon .core { r: 8.6px; }
+:root[data-theme="dark"] .sunmoon .cut { cx: 16.6px; cy: 7.4px; }
+:root[data-theme="dark"] .sunmoon .stars > * { opacity: 1; transform: scale(1); transition-delay: .35s; }
+:root[data-theme="dark"] .sunmoon .stars .s2 { transition-delay: .5s; }
+:root[data-theme="dark"] .sunmoon .stars .s1 { animation: twinkle 3.2s ease-in-out 1s infinite; }
+@keyframes twinkle { 50% { opacity: .35; } }
+
+
+/* services index: the inactive services sit deep in the smoke, blurred; the active one surfaces */
+.wheel a, .wheel li.on a { color: var(--ink); }
+
+/* theme button: no box after a tap, a ring only for keyboard focus */
+.themes button:focus { outline: none; }
+.themes button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; border-radius: 50%; }
+
+/* no scrollbar: the page moves in steps */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+.sheen .ch, .work .ini, .work .ini .ch { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
+
+/* ---- 2. theme button: never a ring or box */
+.themes button, .themes button:focus, .themes button:focus-visible, .themes button:active { outline: none; border-radius: 0; box-shadow: none; -webkit-appearance: none; appearance: none; }
+
+/* ---- 3. accessibility: screen readers get whole sentences; motion off means everything is simply there */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-split] .ch { opacity: 1 !important; transform: none !important; filter: none !important; text-shadow: none !important; transition: none !important; }
+  [data-depth] { transform: none !important; opacity: 1 !important; }
+  .surfacing [data-split], [data-split].surfacing { filter: none !important; }
+}
+
+/* ---- 4. work with me: a friendly, firm button beside the theme toggle */
+.themes { display: flex; align-items: center; gap: 10px; }
+.cta { font-weight: 700; font-size: 14px; letter-spacing: -0.01em; text-decoration: none; color: var(--bg); background: var(--ink); padding: 11px 18px; border-radius: 99px; white-space: nowrap; transition: background .3s ease, transform .3s cubic-bezier(.16, 1, .3, 1); }
+.cta:hover { background: var(--teal); transform: translateY(-1px); }
+
+/* portfolio icons: a small line drawing hints at each project and comes alive on hover */
+.work .k { justify-content: flex-end; gap: 8px; padding-right: 0; }
+.ic { width: 26px; height: 26px; fill: none; stroke: var(--teal); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .75; transition: opacity .3s; overflow: visible; }
+.on .ic { opacity: 1; }
+.ic circle { fill: var(--teal); stroke: none; }
+.ic-term rect, .ic-grid rect:not(.pop) { fill: none; stroke: var(--teal); }
+.ic-grid .pop { fill: var(--teal); stroke: none; transform-box: fill-box; transform-origin: center; }
+.ic-eq path { stroke-dasharray: 2 0; }
+.on .ic-eq path { animation: eq .8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: bottom; }
+.on .ic-eq path:nth-child(1) { animation-delay: -.2s; }
+@keyframes eq { from { transform: scaleY(.45); } to { transform: scaleY(1); } }
+.ic-flow path { stroke-dasharray: 3 3; }
+.on .ic-flow path { animation: flow 1s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -12; } }
+.ic-orbit .spin { transform-origin: 12px 12px; }
+.on .ic-orbit .spin { animation: spin 4s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.on .ic-home .glow { animation: blink 1.4s ease-in-out infinite; }
+.ic-stack path { transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
+.on .ic-stack .l1 { transform: translateY(-2.5px); }
+.on .ic-stack .l3 { transform: translateY(2.5px); }
+.ic-spark { transform-origin: center; transform-box: fill-box; }
+.on .ic-spark { animation: spark 2.4s cubic-bezier(.4, 0, .2, 1) infinite; }
+@keyframes spark { 50% { transform: rotate(45deg) scale(1.15); } }
+.on .ic-grid .pop { animation: pop 1.6s ease-in-out infinite; }
+@keyframes pop { 50% { transform: scale(.55); } }
+.ic-umbrella .canopy { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .5s cubic-bezier(.34, 1.6, .5, 1); transform: scaleX(.55); }
+.on .ic-umbrella .canopy { transform: scaleX(1); }
+.on .ic-term .cursor { animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .15; } }
+.on .ic-net circle { animation: pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.on .ic-net circle:nth-of-type(2) { animation-delay: .25s; }
+.on .ic-net circle:nth-of-type(3) { animation-delay: .5s; }
+@keyframes pulse { 50% { transform: scale(1.35); } }
+.on .ic-wave path { animation: wave .9s ease-in-out infinite alternate; stroke-dasharray: 2 1; }
+@keyframes wave { to { stroke-dashoffset: 6; } }
+@media (prefers-reduced-motion: reduce) { .ic, .ic * { animation: none !important; } }
+
+/* the work button never shows a selection ring or box */
+.cta, .cta:focus, .cta:focus-visible, .cta:active { outline: none; -webkit-tap-highlight-color: transparent; }
+
+
+/* Let's work together: a frosted pill at the end of the story, next to the email */
+.work-cta { margin: 26px 0 0; }
+.cta { display: inline-block; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; text-decoration: none; color: var(--ink); padding: 13px 22px; border-radius: 99px; white-space: nowrap; position: relative; isolation: isolate; border: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02) 55%), color-mix(in srgb, var(--bg) 35%, transparent);
+  backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1), background .3s ease; }
+.cta::before { content: ''; position: absolute; inset: -14px -18px; z-index: -1; border-radius: 99px; pointer-events: none; background: radial-gradient(50% 60% at 50% 60%, color-mix(in srgb, var(--teal) 40%, transparent), transparent 70%); opacity: .35; animation: breathe 4.5s ease-in-out infinite; will-change: opacity; }
+@keyframes breathe { 50% { opacity: .65; } }
+@media (prefers-reduced-motion: reduce) { .cta::before { animation: none; } }
+.cta:hover { transform: translateY(-1px); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 55%), color-mix(in srgb, var(--bg) 50%, transparent); }
+.cta:hover::before { opacity: .7; }
+.mail { margin-top: 22px; }
+.private { margin: 28px clamp(18px, 3vw, 36px) 0; max-width: 72ch; }
+.private h3 { margin: 0 0 8px; }
+.private p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
