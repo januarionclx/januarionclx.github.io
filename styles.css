@@ -422,3 +422,9 @@ h1, h2, .t { --ga: var(--teal); --gb: var(--acc2, var(--teal)); }
   .case { grid-template-columns: 1fr; }
   .case .schema { grid-column: 1; grid-row: auto; max-height: 120px; margin-top: 6px; }
 }
+
+/* Right now: statements, highlight words only; portfolio without icons */
+.cases { display: flex; flex-direction: column; gap: clamp(18px, 3.4vh, 34px); margin-top: clamp(18px, 3vh, 30px); }
+.stmt { margin: 0; max-width: 30ch; font-size: clamp(1.6rem, 3vw, 2.7rem); font-weight: 800; letter-spacing: -0.045em; line-height: 1.08; color: var(--ink); text-wrap: balance; }
+.stmt em { font-style: normal; color: var(--teal); }
+.prod { display: flex; flex-direction: column; gap: 8px; }
