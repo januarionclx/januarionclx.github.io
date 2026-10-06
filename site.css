@@ -18,14 +18,14 @@
 @media (min-width: 640px) { :root { --pad: 40px; } }
 @media (min-width: 900px) { :root { --top: calc(env(safe-area-inset-top, 0px) + clamp(72px, 13vh, 150px)); } }
 
-/* looks: GIPX's ink, teal, violet and ember (its red), and a gold one built the same way.
-   One accent per look (white on black, as on GIPX, where the name is GIPX's silver); descriptions are always grey. */
-:root { --a-ink: #ececea; --a-teal: #7fd1c4; --a-gold: #e6c27a; --a-violet: #c3a8ff; --a-ember: #ff6a57; }
-:root, :root[data-look="ink"] { --bg: #090909; --fg: #f5f5f3; --muted: #a9a8a4; --accent: var(--a-ink); --name: #c4c3bf; --s1: #404040; --s2: #c9c9c9; --s3: #090909; }
-:root[data-look="teal"] { --bg: #071615; --fg: #eaf6f3; --muted: #b1b5b3; --accent: var(--a-teal); --s1: #1f5f5b; --s2: #7fd1c4; --s3: #071615; }
+/* looks: GIPX's teal, ink, violet and ember (its red), and a gold one built the same way. One accent per look;
+   descriptions are always grey. Teal opens the site, as on the share image; the intro lines are grey with white
+   key words, so the name stays the only coloured word there. On black (as on GIPX) the name is silver. */
+:root { --a-ink: #ececea; --a-teal: #7fd1c4; --a-gold: #e6c27a; --a-violet: #c3a8ff; --a-ember: #ff6a57; --name: var(--accent); }
+:root, :root[data-look="teal"] { --bg: #071615; --fg: #eaf6f3; --muted: #b1b5b3; --accent: var(--a-teal); --s1: #1f5f5b; --s2: #7fd1c4; --s3: #071615; }
+:root[data-look="ink"] { --bg: #090909; --fg: #f5f5f3; --muted: #a9a8a4; --accent: var(--a-ink); --name: #c4c3bf; --s1: #404040; --s2: #c9c9c9; --s3: #090909; }
 :root[data-look="gold"] { --bg: #120d05; --fg: #f7f0e1; --muted: #b8b4ab; --accent: var(--a-gold); --s1: #5c471a; --s2: #e6c27a; --s3: #120d05; }
 :root[data-look="violet"] { --bg: #0b0716; --fg: #f3eeff; --muted: #b4b2bb; --accent: var(--a-violet); --s1: #3b2a7a; --s2: #c3a8ff; --s3: #0b0716; }
-:root[data-look]:not([data-look="ink"]) { --name: var(--accent); }
 :root[data-look="ember"] { --bg: #140705; --fg: #fff1e6; --muted: #bcb4af; --accent: var(--a-ember); --s1: #7a2a12; --s2: #ffb070; --s3: #140705; }
 :root { --line: color-mix(in srgb, var(--fg) 22%, transparent); }
 
@@ -78,10 +78,11 @@ button { font: inherit; color: inherit; }
 .swap em.on { opacity: 1; transform: none; filter: none; }
 .swap em.off { transform: translateY(-.35em); }
 
-.svc { display: grid; gap: clamp(20px, 3.2vh, 36px); margin-top: clamp(20px, 3vh, 36px); }
-/* service names share the 'doing now' style */
-.svc h3 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
+.svc { display: grid; gap: clamp(22px, 3.4vh, 38px); margin-top: clamp(20px, 3vh, 36px); }
+/* service names read like the portfolio names: big, light and white, with the grey description under them */
+.svc h3 { margin: 0; font-size: clamp(1.9rem, 8.4vw, 3.2rem); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
 .svc p, .lead { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
+.svc p { margin-top: .6em; }
 .svc p .l, .lead .l, .thesis .l { display: block; }
 .svc p .l, .lead .l, .thesis .l, .nm-d { text-wrap: balance; }
 
@@ -181,9 +182,11 @@ button { font: inherit; color: inherit; }
 
 /* ---------- wider screens ---------- */
 @media (min-width: 900px) {
-  .svc { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(28px, 3vw, 56px); max-width: 1180px; }
-  .svc p { max-width: 30ch; }
-  .svc h3 { font-size: clamp(1.55rem, 2.2vw, 2.1rem); }
+  /* each service is a row, the name beside its description, like the portfolio */
+  .svc { max-width: 1180px; gap: clamp(22px, 3.2vh, 34px); }
+  .svc article { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: clamp(28px, 4vw, 64px); align-items: baseline; }
+  .svc p { margin-top: 0; max-width: 36ch; }
+  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); }
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d, .go { margin-top: 0; }
 }

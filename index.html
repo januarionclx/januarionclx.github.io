@@ -6,7 +6,7 @@
   <title>Januario Pinto | Software &amp; consulting</title>
   <meta name="description" content="Januario Pinto designs and consults companies as living systems and creates software. Based in Porto.">
   <meta name="author" content="Januario Pinto">
-  <meta name="theme-color" content="#090909">
+  <meta name="theme-color" content="#071615">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Januario Pinto">
   <meta property="og:description" content="I design and consult companies. I create software. Based in Porto.">
@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <script>document.documentElement.classList.add('js'); document.documentElement.dataset.look = 'ink';</script>
+  <script>document.documentElement.classList.add('js'); document.documentElement.dataset.look = 'teal';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap">
@@ -30,7 +30,7 @@
 <div class="sky" aria-hidden="true"><canvas id="sky"></canvas></div>
 <div class="veil" aria-hidden="true"></div>
 
-<button type="button" class="look" id="lookBtn" data-look="ink" aria-label="Change colour">
+<button type="button" class="look" id="lookBtn" data-look="teal" aria-label="Change colour">
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <g class="em em-teal"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-4 3-6 6-10z"/></g>
     <g class="em em-ink"><circle cx="12" cy="12" r="7.5"/><circle class="fill" cx="12" cy="12" r="3"/></g>
@@ -40,7 +40,7 @@
   </svg>
 </button>
 
-<header class="stage hero" id="top" data-look="ink" data-rest="0.7" aria-label="Intro">
+<header class="stage hero" id="top" data-look="teal" data-rest="0.7" aria-label="Intro">
   <div class="hero-in">
     <h1 class="title"><span class="l">Hey, I&rsquo;m</span> <span class="l name">Januario.</span></h1>
     <div class="thesis">
@@ -52,7 +52,7 @@
 </header>
 
 <main>
-  <section class="stage" id="services" data-look="teal" aria-labelledby="services-title">
+  <section class="stage" id="services" data-look="ink" aria-labelledby="services-title">
     <h2 class="title" id="services-title"><span class="l">Services</span></h2>
     <div class="svc">
       <article class="grp">
@@ -114,7 +114,7 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var stages = [].slice.call(document.querySelectorAll('.stage'));
   var NAMES = ['Intro', 'Services', 'Now', 'Portfolio', 'Contact'];
-  var LOOKS = ['ink', 'teal', 'gold', 'violet', 'ember'];
+  var LOOKS = ['teal', 'ink', 'gold', 'violet', 'ember'];
   var lookBtn = document.getElementById('lookBtn');
   document.getElementById('year').textContent = new Date().getFullYear();
 
