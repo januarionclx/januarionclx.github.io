@@ -187,20 +187,27 @@
     var cur = root.dataset.theme;
     pick.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === cur)); });
   }
-  // each switch uncovers the new theme with a different reveal (view transitions)
-  var revealN = 0;
-  function reveal(e) {
-    var w = innerWidth, h = innerHeight, cx = w / 2, cy = h / 2, R = Math.hypot(w, h);
-    var bx = e && e.clientX ? e.clientX : w - 60, by = e && e.clientY ? e.clientY : 30;
-    var bands = function (k) { var p = [], n = 7, bh = 100 / n; for (var i = 0; i < n; i++) { var t = i * bh, b2 = t + bh * k; p.push('0% ' + t + '%', '100% ' + t + '%', '100% ' + b2 + '%', '0% ' + b2 + '%', '0% ' + t + '%'); } return 'polygon(evenodd, ' + p.join(', ') + ')'; };
-    var kinds = [
-      { clipPath: ['inset(0 0 100% 0)', 'inset(0)'], ms: 800 },
-      { clipPath: ['circle(0px at ' + cx + 'px ' + cy + 'px)', 'circle(' + R + 'px at ' + cx + 'px ' + cy + 'px)'], ms: 900 },
-      { clipPath: ['circle(0px at ' + bx + 'px ' + by + 'px)', 'circle(' + R * 1.1 + 'px at ' + bx + 'px ' + by + 'px)'], ms: 1000 },
-      { clipPath: ['polygon(0 0, 0 0, 0 0)', 'polygon(0 0, 200% 0, 0 200%)'], ms: 900 },
-      { clipPath: [bands(0), bands(1)], ms: 900 }
-    ];
-    return kinds[revealN++ % kinds.length];
+  // a theme switch starts as a dot in the centre and grows, wobbling like liquid, until it fills the screen
+  function reveal() {
+    var w = innerWidth, h = innerHeight, cx = w / 2, cy = h / 2, R = Math.hypot(w, h) * 0.62, N = 72;
+    function blob(r, ph) {
+      var pts = [];
+      for (var i = 0; i < N; i++) {
+        var a = i / N * Math.PI * 2;
+        var k = 1 + 0.07 * Math.sin(3 * a + ph) + 0.045 * Math.sin(5 * a - ph * 1.6) + 0.025 * Math.sin(8 * a + ph * 2.3);
+        pts.push((cx + Math.cos(a) * r * k).toFixed(1) + 'px ' + (cy + Math.sin(a) * r * k).toFixed(1) + 'px');
+      }
+      return 'polygon(' + pts.join(', ') + ')';
+    }
+    var frames = [], steps = 16;
+    frames.push({ clipPath: blob(0, 0), offset: 0 });
+    frames.push({ clipPath: blob(7, 0.4), offset: 0.08 });
+    frames.push({ clipPath: blob(11, 0.9), offset: 0.18 });
+    for (var i = 1; i <= steps; i++) {
+      var k = i / steps, e = k * k * (3 - 2 * k);
+      frames.push({ clipPath: blob(11 + (R * 1.25 - 11) * e, 0.9 + k * 4.2), offset: 0.18 + 0.82 * k });
+    }
+    return { frames: frames, ms: 2600 };
   }
   function applyTheme(name) {
     root.dataset.theme = name;
@@ -212,10 +219,10 @@
       var name = b.dataset.setTheme;
       if (name === root.dataset.theme) return;
       if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) { applyTheme(name); return; }
-      var r = reveal(e);
+      var r = reveal();
       var vt = document.startViewTransition(function () { applyTheme(name); });
       vt.ready.then(function () {
-        document.documentElement.animate({ clipPath: r.clipPath }, { pseudoElement: '::view-transition-new(root)', duration: r.ms, easing: 'cubic-bezier(.65, 0, .35, 1)' });
+        document.documentElement.animate(r.frames, { pseudoElement: '::view-transition-new(root)', duration: r.ms, easing: 'linear' });
       });
     });
   });
