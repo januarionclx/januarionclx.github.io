@@ -389,8 +389,9 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display:
   filter: blur(10px); opacity: .35; animation: breathe 4.5s ease-in-out infinite;
 }
 @keyframes breathe { 50% { opacity: .6; transform: scale(1.06); } }
-.cta-glass:hover { background: transparent; transform: scale(1.04); }
-.cta-glass:hover::before { opacity: .75; animation-duration: 2.2s; }
 .cta-glass:active { transform: scale(.97); }
 .cta-glass.no-lens { background: color-mix(in srgb, var(--bg) 28%, transparent); backdrop-filter: blur(14px) brightness(1.12); -webkit-backdrop-filter: blur(14px) brightness(1.12); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25); }
 @media (prefers-reduced-motion: reduce) { .cta-glass::before { animation: none; } }
+
+/* the work button never shows a selection ring or box */
+.cta, .cta:focus, .cta:focus-visible, .cta:active { outline: none; -webkit-tap-highlight-color: transparent; }

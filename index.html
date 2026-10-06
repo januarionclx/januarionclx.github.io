@@ -770,18 +770,11 @@
     if (!btn) return;
     var sh = shaders[0], still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     function centre() { var r = btn.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
-    var drip = 0;
-    btn.addEventListener('pointerenter', function () {
-      if (!sh || still) return;
-      var c = centre(); sh.ripple(c[0], c[1]);
-      clearInterval(drip); drip = setInterval(function () { var c2 = centre(); sh.ripple(c2[0], c2[1]); }, 1500);
-    });
-    btn.addEventListener('pointerleave', function () { clearInterval(drip); });
     btn.addEventListener('pointerdown', function () { if (sh && !still) { var c = centre(); sh.ripple(c[0], c[1], true); } });
 
     if (!cv || !window.chrome || !sh) { btn.classList.add('no-lens'); return; }
     var g;
-    try { g = createGlass(cv, { radius: 999, depth: 12, scale: 0.16, chroma: 0.35, glow: 0.55, edge: 0.7, edgeWidth: 2.5, specularRotation: 35 }); }
+    try { g = createGlass(cv, { radius: 999, depth: 14, scale: 0.16, chroma: 0.3, glow: 0.35, edge: 0.12, edgeWidth: 1.5, specularRotation: 35 }); }
     catch (e) { btn.classList.add('no-lens'); return; }
     function place() {
       var r = btn.getBoundingClientRect(), c = cv.getBoundingClientRect();
@@ -790,12 +783,6 @@
       g.setPosition((r.left - c.left) * sx, (r.top - c.top) * sy);
     }
     place(); addEventListener('resize', place); setTimeout(place, 900);
-    // the surface bulges: refraction eases up on hover, back down after
-    var sc = 0.16, target = 0.16, raf = 0;
-    function ease() { sc += (target - sc) * 0.12; g.setOptions({ scale: sc, glow: 0.4 + (sc - 0.16) * 3 }); raf = Math.abs(target - sc) > 0.001 ? requestAnimationFrame(ease) : 0; }
-    function to(v) { target = v; if (!raf) raf = requestAnimationFrame(ease); }
-    btn.addEventListener('pointerenter', function () { to(0.3); });
-    btn.addEventListener('pointerleave', function () { to(0.16); });
   })();
 
 })();
