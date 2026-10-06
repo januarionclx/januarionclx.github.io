@@ -273,8 +273,8 @@ html.gated .themes { opacity: 0; pointer-events: none; }
 
 /* ---------- two themes; the palette drifts slowly between two related tones ---------- */
 .svc { --hi: var(--teal); color: var(--ink); }
-:root[data-theme="dark"] { --acc2: #7cc6e6; --sh3-body: #142b3a; --sh3-vein: #74c2e4; --sh3-field: #0a0f14; --sh3-warm: #2b5f6e; }
-:root[data-theme="gold"] { --acc2: #f0c674; --sh3-body: #2b2210; --sh3-vein: #d9a24c; --sh3-field: #0e0c08; --sh3-warm: #f3e9d2; }
+:root[data-theme="dark"] { --tint1: #8fc9bd; --tint2: #24577a; --acc2: #7cc6e6; --sh3-body: #142b3a; --sh3-vein: #74c2e4; --sh3-field: #0a0f14; --sh3-warm: #2b5f6e; }
+:root[data-theme="gold"] { --tint1: #eadfc4; --tint2: #6e3524; --acc2: #f0c674; --sh3-body: #2b2210; --sh3-vein: #d9a24c; --sh3-field: #0e0c08; --sh3-warm: #f3e9d2; }
 /* sheen: a couple of big words carry both tones */
 .sheen .w > span, .sheen.w > span { background: linear-gradient(100deg, var(--teal) 0%, var(--acc2, var(--teal)) 45%, var(--teal) 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 9s ease-in-out infinite alternate; }
 @keyframes sheen { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
