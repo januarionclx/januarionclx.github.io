@@ -21,7 +21,13 @@
 </head>
 <body>
 <div class="themes">
-  <button type="button" id="themeBtn" aria-label="Switch to light"><span></span></button>
+  <button type="button" id="themeBtn" aria-label="Switch to light">
+    <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
+      <mask id="moon-cut"><rect x="0" y="0" width="24" height="24" fill="white"/><circle class="cut" cx="24" cy="10" r="6" fill="black"/></mask>
+      <circle class="core" cx="12" cy="12" r="5" mask="url(#moon-cut)" fill="currentColor"/>
+      <g class="rays" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M4.6 19.4L6 18M18 6l1.4-1.4"/></g>
+    </svg>
+  </button>
 </div>
 <div class="gate" id="gate">
   <button class="play magnet" id="play" type="button" aria-label="Play the introduction">
