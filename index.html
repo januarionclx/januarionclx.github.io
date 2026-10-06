@@ -23,9 +23,10 @@
 <div class="themes">
   <button type="button" id="themeBtn" aria-label="Switch to light">
     <svg class="sunmoon" viewBox="0 0 24 24" aria-hidden="true">
-      <mask id="moon-cut"><rect x="0" y="0" width="24" height="24" fill="white"/><circle class="cut" cx="24" cy="10" r="6" fill="black"/></mask>
-      <circle class="core" cx="12" cy="12" r="5" mask="url(#moon-cut)" fill="currentColor"/>
-      <g class="rays" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M4.6 19.4L6 18M18 6l1.4-1.4"/></g>
+      <mask id="moon-cut"><rect x="-4" y="-4" width="32" height="32" fill="white"/><circle class="cut" cx="26" cy="4" r="7.2" fill="black"/></mask>
+      <g class="rays" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(0 12 12)" style="--r:0"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(45 12 12)" style="--r:1"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(90 12 12)" style="--r:2"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(135 12 12)" style="--r:3"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(180 12 12)" style="--r:4"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(225 12 12)" style="--r:5"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(270 12 12)" style="--r:6"/><line x1="12" y1="2.2" x2="12" y2="4.6" transform="rotate(315 12 12)" style="--r:7"/></g>
+      <circle class="core" cx="12" cy="12" r="4.6" mask="url(#moon-cut)" fill="currentColor"/>
+      <g class="stars" fill="currentColor"><path class="s1" d="M19.2 3.2l.55 1.25 1.25.55-1.25.55-.55 1.25-.55-1.25-1.25-.55 1.25-.55z"/><circle class="s2" cx="21.4" cy="9.6" r=".75"/></g>
     </svg>
   </button>
 </div>
@@ -73,12 +74,12 @@
         <article class="panel" id="svc-tech" style="--c: var(--ochre)">
           <h3>Technical consulting</h3>
           <p class="lead" data-depth="0.5" data-split>A fractional CTO for the decisions <em>you can&rsquo;t get wrong.</em></p>
-          <p data-depth="0.8">Senior judgment on architecture, infrastructure and AI, without the cost of a full-time hire.</p>
+          <p data-depth="0.8" data-split data-letters class="soft" style="--base: .5s">Senior judgment on architecture, infrastructure and AI, without the cost of a full-time hire.</p>
         </article>
         <article class="panel" id="svc-org" style="--c: var(--clay)">
           <h3>Organizational consulting</h3>
           <p class="lead" data-depth="0.5" data-split>A company that runs <em>without a boss</em> in every loop.</p>
-          <p data-depth="0.8">Clear roles. Distributed authority. Systems people can run without you.</p>
+          <p data-depth="0.8" data-split data-letters class="soft" style="--base: .5s">Clear roles. Distributed authority. Systems people can run without you.</p>
         </article>
       </div>
     </div>
@@ -98,14 +99,14 @@
         <div class="cells now">
           <div data-depth="0.6">
             <p class="big" data-split data-letters style="--base: .6s">Large-scale software and organizational work, in a country rebuilding itself.</p>
-            <p>From Lisbon, with a small group of partners, where technology and institutions have to change together.</p>
+            <p data-split data-letters class="soft" style="--base: 2.4s">From Lisbon, with a small group of partners, where technology and institutions have to change together.</p>
           </div>
           <div data-depth="1.1">
             <ul class="products" id="products">
-              <li style="--c: var(--teal)"><h3>People</h3></li>
-              <li style="--c: var(--ochre)"><h3>Flows</h3></li>
-              <li style="--c: var(--clay)"><h3>Verbal</h3></li>
-              <li style="--c: var(--ink)"><h3>Artist OS</h3></li>
+              <li style="--c: var(--teal)"><h3 data-split>People</h3></li>
+              <li style="--c: var(--ochre)"><h3 data-split>Flows</h3></li>
+              <li style="--c: var(--clay)"><h3 data-split>Verbal</h3></li>
+              <li style="--c: var(--ink)"><h3 data-split>Artist OS</h3></li>
             </ul>
           </div>
         </div>
@@ -126,11 +127,11 @@
       <div class="inner">
         <div class="cells" style="display:block">
           <div class="work">
-            <a data-depth="0.40" href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="yr">2019</span><span class="t"><span class="ini">T</span>he Unit Organization</span><span class="d">Incubator and studio. Products, companies, consulting.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <a href="https://restaurantesabasnieves.com" target="_blank" rel="noopener"><span class="yr">2026</span><span class="t"><span class="ini">S</span>abas Nieves</span><span class="d">Point of sale and owner&rsquo;s portal for a restaurant in Venezuela.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <a data-depth="0.58" href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t"><span class="ini">H</span>olacracy Assistant</span><span class="d">An AI guide to self-management, used by teams in practice.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <a data-depth="0.76" href="https://strangeartefacts.com" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t"><span class="ini">S</span>trange Artefacts</span><span class="d">AI-powered creative tools and film concepts.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
-            <div class="row"><span class="yr">2023</span><span class="t"><span class="ini">S</span>elf-run communities</span><span class="d">Governance for coliving and coworking spaces, run by the people who live and work in them.</span><span class="k"></span></div>
+            <a data-depth="0.40" href="https://theunitorganization.com" target="_blank" rel="noopener"><span class="yr">2019</span><span class="t" data-split><span class="ini">T</span>he Unit Organization</span><span class="d" data-split data-letters style="--base: 0.35s">Incubator and studio. Products, companies, consulting.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <a href="https://restaurantesabasnieves.com" target="_blank" rel="noopener"><span class="yr">2026</span><span class="t" data-split><span class="ini">S</span>abas Nieves</span><span class="d" data-split data-letters style="--base: 0.63s">Point of sale and owner&rsquo;s portal for a restaurant in Venezuela.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <a data-depth="0.58" href="https://chatgpt.com/g/g-HolacracyGPT" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t" data-split><span class="ini">H</span>olacracy Assistant</span><span class="d" data-split data-letters style="--base: 0.91s">An AI guide to self-management, used by teams in practice.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <a data-depth="0.76" href="https://strangeartefacts.com" target="_blank" rel="noopener"><span class="yr">2024</span><span class="t" data-split><span class="ini">S</span>trange Artefacts</span><span class="d" data-split data-letters style="--base: 1.19s">AI-powered creative tools and film concepts.</span><span class="k"><span class="arrow">&#8599;</span></span></a>
+            <div class="row"><span class="yr">2023</span><span class="t" data-split><span class="ini">S</span>elf-run communities</span><span class="d" data-split data-letters style="--base: 1.47s">Governance for coliving and coworking spaces, run by the people who live and work in them.</span><span class="k"></span></div>
           </div>
         </div>
       </div>
@@ -144,7 +145,7 @@
       <div class="cells">
         <div class="cell grow">
           <h2 data-depth="0.4" data-split>Let&rsquo;s <span class="accent sheen">talk.</span></h2>
-          <p class="lead" data-depth="0.7">Building something that has to grow? Write to me.<br>I read everything myself.</p>
+          <p class="lead soft" data-depth="0.7" data-split data-letters style="--base: .5s">Building something that has to grow? Write to me.<br>I read everything myself.</p>
           <div class="mail" data-depth="1">
             <a class="addr" id="addr" href="mailto:contact@januariopinto.com">contact@januariopinto.com</a>
             <button class="copy magnet" id="copyBtn" type="button">Copy</button>
@@ -320,7 +321,7 @@
             if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
             var w = document.createElement('span'); w.className = 'w';
             var inner = document.createElement('span');
-            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
+            if (!n.parentNode.closest('[data-letters]') || n.parentNode.closest('.sheen, .ini')) { inner.textContent = part; inner.className = 'ch'; inner.style.setProperty('--i', i++); }
             else part.split('').forEach(function (ch) { var l = document.createElement('span'); l.className = 'ch'; l.textContent = ch; l.style.setProperty('--i', i++); inner.appendChild(l); });
             w.appendChild(inner); frag.appendChild(w);
           });
