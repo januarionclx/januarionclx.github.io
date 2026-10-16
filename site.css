@@ -245,79 +245,42 @@ button { font: inherit; color: inherit; }
 }
 @media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: min(1.75rem, 8.4vw); } .nm { font-size: min(2.5rem, 11vw); } }
 
-/* ---------- wide screens with a mouse: one long page, a rail of sections on the left ---------- */
-.rail { display: none; }
+/* ---------- wide screens with a mouse: one page you scroll, each section a screen tall, the bar along the
+   bottom as on a phone. As there, the title is the roof and the bar the floor, and the content sits centred
+   between them; sizes follow the screen's height too, so nothing ever reaches the bar. ---------- */
 .desk, .desk body { height: auto; overflow: visible; }
-.desk .bar { display: none; }
-.desk .stage {
-  position: relative; inset: auto; min-height: 100svh; overflow: visible; visibility: visible; justify-content: center;
-  padding: 14svh var(--pad) 14svh calc(var(--pad) + 200px); user-select: text; -webkit-user-select: text;
-}
-.desk .foot { display: block; }
-.desk .rail { position: fixed; z-index: 5; left: var(--pad); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-start; gap: 36px; }
-.rail ol { position: relative; list-style: none; margin: 0; padding: 0 0 0 18px; display: grid; gap: 16px; border-left: 1px solid var(--line); }
-.rail a { display: flex; gap: 12px; font: 500 10.5px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--muted); opacity: .55; transition: opacity .4s ease, color .4s ease; }
-.rail a:hover { opacity: 1; }
-.rail a[aria-current] { opacity: 1; color: var(--fg); }
-.rail .n { transition: color var(--fade); }
-.rail a[aria-current] .n { color: var(--accent); }
-.rail .dot { position: absolute; left: -3.5px; top: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transition: translate .5s var(--move), background-color var(--fade); }
-.desk .look { margin-left: 4px; }
-.desk #contact .asks { margin-top: clamp(28px, 5svh, 56px); }
-.desk #contact .mail { margin-bottom: 0; }
+.desk { scroll-snap-type: y proximity; }
+.desk .stage { position: relative; inset: auto; min-height: 100svh; overflow: visible; visibility: visible; scroll-snap-align: start; user-select: text; -webkit-user-select: text; }
+.desk .title { font-size: min(6.4rem, 11.6vw, 11svh); }
+.desk .hero .title { font-size: min(12.5rem, 20.5vw, 17svh); }
+.desk .hero-in { flex: 1; display: flex; flex-direction: column; }
+.desk .say { font-size: min(4.6rem, 8.6vw, 8svh); }
+.desk .say.what { margin-top: auto; }
+.desk .say.where { margin-bottom: auto; }
+.desk .doing li { font-size: min(2.6rem, 5.4svh); }
+.desk .names { margin-block: auto; }
+.desk .nm { font-size: min(4.2rem, 7svh); }
+.desk .asks p { font-size: min(2.6rem, 4.4svh); }
+.desk .addr { font-size: min(4.2rem, 6svh); }
 
-/* services, three ways to compare (data-svc on the root); all of them read from the left */
-.desk #services { padding-block: 0; justify-content: flex-start; }
-.desk .pin { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-block: 14svh; }
-.desk[data-svc="unfold"] #services, .desk[data-svc="one"] #services { height: 330svh; }
-.desk[data-svc="unfold"] .pin, .desk[data-svc="one"] .pin { position: sticky; top: 0; height: 100svh; }
-.desk .svc { display: block; margin-top: clamp(28px, 5svh, 56px); }
-.desk .svc article { display: block; }
-.desk .svc p { margin-top: 0; }
-.ticks { display: none; }
-.pick { display: none; }
-.desk .pick { position: fixed; z-index: 6; top: 20px; right: var(--pad); display: flex; align-items: center; gap: 18px; font: 500 10px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.pick button { position: relative; padding: 6px 0; border: 0; background: none; font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted); opacity: .6; cursor: pointer; }
-.pick button:hover { opacity: 1; }
-.pick button.on { opacity: 1; color: var(--fg); }
-.pick button.on::before { content: ''; position: absolute; left: -10px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--accent); }
-
-/* A, unfold: the names stacked; the one you're on turns the accent and opens its text under it */
-.desk[data-svc="unfold"] .svc article { display: grid; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
-.desk[data-svc="unfold"] .svc article.on { grid-template-rows: auto 1fr; }
-.desk[data-svc="unfold"] .svc article + article { margin-top: clamp(10px, 1.6svh, 18px); }
-.desk[data-svc="unfold"] .svc h3 { width: max-content; font-size: clamp(2.4rem, 4vw, 4rem); opacity: .3; cursor: pointer; transition: opacity .5s var(--move), color .5s var(--move); }
-.desk[data-svc="unfold"] .svc h3:hover { opacity: .6; }
-.desk[data-svc="unfold"] .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
-.desk[data-svc="unfold"] .svc p { min-height: 0; overflow: hidden; max-width: 46ch; font-size: clamp(1.1rem, 1.45vw, 1.4rem); }
-.desk[data-svc="unfold"] .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
-.desk[data-svc="unfold"] .svc p .l:last-child { padding-bottom: 12px; }
-.desk[data-svc="unfold"] .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
-
-/* B, rows: a still index on hairlines that fade at the ends; number, name, description */
-.desk[data-svc="rows"] .svc { counter-reset: svc; max-width: 1080px; }
-.desk[data-svc="rows"] .svc article {
-  display: grid; grid-template-columns: 52px minmax(0, 1fr) minmax(0, 1.25fr); column-gap: 24px; align-items: baseline;
-  padding-block: clamp(22px, 3.6svh, 40px); counter-increment: svc;
-  border-top: 1px solid; border-image: linear-gradient(90deg, var(--line), var(--line) 70%, transparent) 1;
-}
-.desk[data-svc="rows"] .svc article::before { content: '0' counter(svc); font: 500 10.5px/1 var(--f-mono); letter-spacing: .12em; color: var(--muted); }
-.desk[data-svc="rows"] .svc h3 { font-size: clamp(1.9rem, 2.8vw, 2.8rem); transition: color .3s ease; }
-.desk[data-svc="rows"] .svc article:hover h3 { color: var(--title-acc, var(--accent)); }
-.desk[data-svc="rows"] .svc p { max-width: 44ch; }
-.desk[data-svc="rows"] .svc p .l:first-child { color: var(--fg); }
-
-/* C, one at a time: the section holds still and each service takes the screen in turn */
-.desk[data-svc="one"] .ticks { display: flex; gap: 6px; margin-top: clamp(28px, 5svh, 56px); }
-.ticks i { width: 28px; height: 2px; border-radius: 2px; background: var(--line); cursor: pointer; transition: background-color .4s ease, width .5s var(--move); }
-.ticks i.on { width: 56px; background: var(--title-acc, var(--accent)); }
-.desk[data-svc="one"] .svc { display: grid; margin-top: clamp(20px, 3svh, 32px); }
-.desk[data-svc="one"] .svc article { grid-area: 1 / 1; }
-.desk[data-svc="one"] .svc article:not(.on) { pointer-events: none; }
-.desk[data-svc="one"] .svc h3 { font-size: clamp(3rem, 6vw, 6rem); line-height: .95; letter-spacing: -.055em; }
-.desk[data-svc="one"] .svc p { margin-top: clamp(18px, 3svh, 30px); max-width: 40ch; font-size: clamp(1.2rem, 1.6vw, 1.6rem); }
-.desk[data-svc="one"] .svc p .l:first-child { color: var(--fg); }
-.desk[data-svc="one"] .svc article:not(.on) .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); transition: opacity var(--out) var(--reel), transform 0s var(--out), filter 0s var(--out); }
+/* services hold still while you scroll through them: the names stacked, the one you're on in the accent
+   with its text open under it */
+.desk #services { height: 330svh; padding-block: 0; }
+.desk .pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; padding: var(--top) 0 calc(var(--bar-b) + var(--bar-h) + 24px); }
+.desk .svc { display: block; margin-block: auto; }
+.desk .svc article { display: grid; grid-template-columns: none; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
+.desk .svc article.on { grid-template-rows: auto 1fr; }
+.desk .svc article + article { margin-top: clamp(6px, 1.4svh, 18px); }
+.desk .svc h3 { width: max-content; font-size: min(4rem, 4vw, 6.4svh); cursor: pointer; }
+/* once the section is in, the names dim and light at once, without the entrance's stagger */
+.desk .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
+.desk .in .svc article:not(.on) h3 { opacity: .3; }
+.desk .in .svc article:not(.on) h3:hover { opacity: .6; }
+.desk .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
+.desk .svc p { margin-top: 0; min-height: 0; overflow: hidden; max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
+.desk .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
+.desk .svc p .l:last-child { padding-bottom: 12px; }
+.desk .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
 
 @media (prefers-reduced-motion: reduce) {
   .hero.in .name { animation: none; }
