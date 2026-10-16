@@ -251,6 +251,23 @@
     for (var i = 0; i < stages.length; i++) if (a.getAttribute('href') === '#' + stages[i].id) { e.preventDefault(); go(i); return; }
   });
 
+  // On a phone a sideways swipe turns to the next or previous screen, just as its button would.
+  // Up and down still scrolls a long screen, and the bar keeps its own drag.
+  var swipe = null;
+  document.addEventListener('touchstart', function (e) {
+    var p = e.touches[0];
+    swipe = e.touches.length === 1 && !e.target.closest('.bar') ? { x: p.clientX, y: p.clientY, t: performance.now() } : null;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (!swipe) return;
+    var p = e.changedTouches[0], dx = p.clientX - swipe.x, dy = p.clientY - swipe.y, quick = performance.now() - swipe.t < 600;
+    swipe = null;
+    if (Math.abs(dx) < (quick ? 40 : 80) || Math.abs(dx) < 1.5 * Math.abs(dy)) return; // a flick goes sooner than a slow drag
+    var i = cur + (dx < 0 ? 1 : -1);
+    if (i >= 0 && i < stages.length) go(i);
+  }, { passive: true });
+  document.addEventListener('touchcancel', function () { swipe = null; }, { passive: true });
+
   // The intro's first line turns from one thing I do into the next while the intro is on screen (Porto stays).
   // Words both phrases share stay, sliding into place if they must; the others lift away and the new ones rise in.
   var PHRASES = ['I design companies.', 'I consult companies.', 'I create products.', 'I create software.', 'I automate processes.'];

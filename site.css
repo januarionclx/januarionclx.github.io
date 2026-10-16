@@ -140,7 +140,7 @@ button { font: inherit; color: inherit; }
 .js .stage {
   position: fixed; inset: 0; margin: 0; display: flex; flex-direction: column;
   padding: var(--top) var(--pad) calc(var(--bar-b) + var(--bar-h) + 24px);
-  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; touch-action: pan-y; /* sideways swipes are ours */
   visibility: hidden; user-select: none; -webkit-user-select: none;
 }
 .js .stage::-webkit-scrollbar { display: none; }
