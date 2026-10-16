@@ -196,12 +196,12 @@ button { font: inherit; color: inherit; }
 
 /* ---------- wider screens ---------- */
 @media (min-width: 900px) {
-  /* each service is a row: the names right-aligned on one axis, each beside its description */
+  /* each service is a row: the name, then its description beside it, both from the left */
   .svc { grid-template-columns: max-content minmax(0, 50ch); column-gap: clamp(28px, 3.4vw, 56px); row-gap: clamp(22px, 3.2svh, 34px); }
   .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: start; }
   .svc p { margin-top: 0; max-width: none; }
   .asks p { font-size: min(2.6rem, 5svh); }
-  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); text-align: right; }
+  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); }
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d { margin-top: 0; }
 }
@@ -266,19 +266,58 @@ button { font: inherit; color: inherit; }
 .desk #contact .asks { margin-top: clamp(28px, 5svh, 56px); }
 .desk #contact .mail { margin-bottom: 0; }
 
-/* services: the names pinned on the left, each one's text passing on the right */
-.desk #services { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); column-gap: clamp(40px, 6vw, 120px); align-items: start; padding-block: 0; }
-.desk .pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; justify-content: center; }
-.desk .svc-list { list-style: none; margin: clamp(28px, 5svh, 56px) 0 0; padding: 0; display: grid; gap: 16px; }
-.desk .svc-list li { width: max-content; font-size: clamp(2rem, 2.9vw, 3rem); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); opacity: .26; cursor: pointer; transition: opacity .5s var(--move), color .5s var(--move), translate .5s var(--move); }
-.desk .svc-list li:hover { opacity: .6; }
-.desk .svc-list li.on { opacity: 1; color: var(--title-acc, var(--accent)); translate: 14px 0; }
-.desk .svc { display: block; margin: 0; padding-block: 15svh; }
-.desk .svc article { display: flex; flex-direction: column; justify-content: center; min-height: 70svh; }
-.desk .svc h3 { margin-bottom: 20px; font: 500 10.5px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; text-align: left; color: var(--muted); }
-.desk .svc p { max-width: 24ch; font-size: clamp(1.6rem, 2.3vw, 2.4rem); font-weight: 600; line-height: 1.16; letter-spacing: -.035em; color: var(--fg); }
-.desk .svc p .l + .l { margin-top: .5em; color: var(--muted); }
-.desk .svc article:not(.in) .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
+/* services, three ways to compare (data-svc on the root); all of them read from the left */
+.desk #services { padding-block: 0; justify-content: flex-start; }
+.desk .pin { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-block: 14svh; }
+.desk[data-svc="unfold"] #services, .desk[data-svc="one"] #services { height: 330svh; }
+.desk[data-svc="unfold"] .pin, .desk[data-svc="one"] .pin { position: sticky; top: 0; height: 100svh; }
+.desk .svc { display: block; margin-top: clamp(28px, 5svh, 56px); }
+.desk .svc article { display: block; }
+.desk .svc p { margin-top: 0; }
+.ticks { display: none; }
+.pick { display: none; }
+.desk .pick { position: fixed; z-index: 6; top: 20px; right: var(--pad); display: flex; align-items: center; gap: 18px; font: 500 10px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.pick button { position: relative; padding: 6px 0; border: 0; background: none; font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted); opacity: .6; cursor: pointer; }
+.pick button:hover { opacity: 1; }
+.pick button.on { opacity: 1; color: var(--fg); }
+.pick button.on::before { content: ''; position: absolute; left: -10px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--accent); }
+
+/* A, unfold: the names stacked; the one you're on turns the accent and opens its text under it */
+.desk[data-svc="unfold"] .svc article { display: grid; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
+.desk[data-svc="unfold"] .svc article.on { grid-template-rows: auto 1fr; }
+.desk[data-svc="unfold"] .svc article + article { margin-top: clamp(10px, 1.6svh, 18px); }
+.desk[data-svc="unfold"] .svc h3 { width: max-content; font-size: clamp(2.4rem, 4vw, 4rem); opacity: .3; cursor: pointer; transition: opacity .5s var(--move), color .5s var(--move); }
+.desk[data-svc="unfold"] .svc h3:hover { opacity: .6; }
+.desk[data-svc="unfold"] .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
+.desk[data-svc="unfold"] .svc p { min-height: 0; overflow: hidden; max-width: 46ch; font-size: clamp(1.1rem, 1.45vw, 1.4rem); }
+.desk[data-svc="unfold"] .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
+.desk[data-svc="unfold"] .svc p .l:last-child { padding-bottom: 12px; }
+.desk[data-svc="unfold"] .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
+
+/* B, rows: a still index on hairlines that fade at the ends; number, name, description */
+.desk[data-svc="rows"] .svc { counter-reset: svc; max-width: 1080px; }
+.desk[data-svc="rows"] .svc article {
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) minmax(0, 1.25fr); column-gap: 24px; align-items: baseline;
+  padding-block: clamp(22px, 3.6svh, 40px); counter-increment: svc;
+  border-top: 1px solid; border-image: linear-gradient(90deg, var(--line), var(--line) 70%, transparent) 1;
+}
+.desk[data-svc="rows"] .svc article::before { content: '0' counter(svc); font: 500 10.5px/1 var(--f-mono); letter-spacing: .12em; color: var(--muted); }
+.desk[data-svc="rows"] .svc h3 { font-size: clamp(1.9rem, 2.8vw, 2.8rem); transition: color .3s ease; }
+.desk[data-svc="rows"] .svc article:hover h3 { color: var(--title-acc, var(--accent)); }
+.desk[data-svc="rows"] .svc p { max-width: 44ch; }
+.desk[data-svc="rows"] .svc p .l:first-child { color: var(--fg); }
+
+/* C, one at a time: the section holds still and each service takes the screen in turn */
+.desk[data-svc="one"] .ticks { display: flex; gap: 6px; margin-top: clamp(28px, 5svh, 56px); }
+.ticks i { width: 28px; height: 2px; border-radius: 2px; background: var(--line); cursor: pointer; transition: background-color .4s ease, width .5s var(--move); }
+.ticks i.on { width: 56px; background: var(--title-acc, var(--accent)); }
+.desk[data-svc="one"] .svc { display: grid; margin-top: clamp(20px, 3svh, 32px); }
+.desk[data-svc="one"] .svc article { grid-area: 1 / 1; }
+.desk[data-svc="one"] .svc article:not(.on) { pointer-events: none; }
+.desk[data-svc="one"] .svc h3 { font-size: clamp(3rem, 6vw, 6rem); line-height: .95; letter-spacing: -.055em; }
+.desk[data-svc="one"] .svc p { margin-top: clamp(18px, 3svh, 30px); max-width: 40ch; font-size: clamp(1.2rem, 1.6vw, 1.6rem); }
+.desk[data-svc="one"] .svc p .l:first-child { color: var(--fg); }
+.desk[data-svc="one"] .svc article:not(.on) .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); transition: opacity var(--out) var(--reel), transform 0s var(--out), filter 0s var(--out); }
 
 @media (prefers-reduced-motion: reduce) {
   .hero.in .name { animation: none; }
