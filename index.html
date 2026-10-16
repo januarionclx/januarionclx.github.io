@@ -272,6 +272,18 @@
   }, { passive: true });
   document.addEventListener('touchcancel', function () { swipe = null; }, { passive: true });
 
+  // the keyboard does the same: h and l (as in vim) or the left and right arrows. On the long page a
+  // quick second press counts from where the first was going, not from where the scroll has got to.
+  var keyTo = 0, keyAt = 0;
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    var by = { h: -1, ArrowLeft: -1, l: 1, ArrowRight: 1 }[e.key];
+    if (!by) return;
+    var i = (desk && performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
+    if (i < 0 || i >= stages.length) return;
+    e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i);
+  });
+
   // The intro's first line turns from one thing I do into the next while the intro is on screen (Porto stays).
   // Words both phrases share stay, sliding into place if they must; the others lift away and the new ones rise in.
   var PHRASES = ['I design companies.', 'I consult companies.', 'I create products.', 'I create software.', 'I automate processes.'];
