@@ -115,6 +115,10 @@
 (function () {
   var root = document.documentElement;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // a wide screen with a mouse gets one long page instead of screens (see deskStart)
+  var deskQ = matchMedia('(min-width: 1100px) and (hover: hover) and (pointer: fine)'), desk = deskQ.matches;
+  if (desk) root.classList.add('desk');
+  if (deskQ.addEventListener) deskQ.addEventListener('change', function () { location.reload(); });
   var stages = [].slice.call(document.querySelectorAll('.stage'));
   var NAMES = ['Intro', 'Services', 'Now', 'Portfolio', 'Contact'];
   var LOOKS = ['teal', 'ink', 'gold', 'violet', 'ember'];
@@ -330,6 +334,7 @@
   }
   // Leaving fades everything at once; the next screen starts as soon as the old one is gone.
   function go(i, now) {
+    if (desk) { stages[i].scrollIntoView({ behavior: now || reduce ? 'auto' : 'smooth' }); return; }
     if (i === cur && !now) return;
     var from = stages[cur];
     cur = shown = i; movedAt = performance.now();
@@ -352,9 +357,70 @@
     if (started) return;
     started = true; root.classList.add('ready');
     if (nameFx) nameFx.build();
-    show();
+    if (desk) deskStart(); else show();
     setTimeout(function () { shine(0); }, 1700); // a first glint once the bar has arrived
   }
+  // On a wide screen with a mouse the screens become one page you scroll. A rail on the left lists the
+  // sections and lights the one you're in, and the colour follows you down. Services pin their names on the
+  // left while each one's text passes on the right; the name being read lights up.
+  function deskStart() {
+    var rail = document.createElement('nav'); rail.className = 'rail'; rail.setAttribute('aria-label', 'Sections');
+    var ol = document.createElement('ol'), dot = document.createElement('i'); dot.className = 'dot'; dot.setAttribute('aria-hidden', 'true');
+    var links = NAMES.map(function (name, i) {
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.href = '#' + stages[i].id; a.innerHTML = '<span class="n">0' + (i + 1) + '</span><span class="t">' + name + '</span>';
+      li.appendChild(a); ol.appendChild(li); return a;
+    });
+    ol.appendChild(dot); rail.appendChild(ol); rail.appendChild(lookBtn); document.body.appendChild(rail);
+
+    // services: the title and the names stay on the left; each text below reveals itself as it arrives
+    var svc = document.getElementById('services'), pin = document.createElement('div'), list = document.createElement('ul');
+    var arts = [].slice.call(svc.querySelectorAll('.svc article'));
+    pin.className = 'pin'; list.className = 'svc-list'; list.setAttribute('aria-hidden', 'true');
+    var items = arts.map(function (art, k) {
+      var li = document.createElement('li'); li.textContent = art.querySelector('h3').textContent;
+      li.addEventListener('click', function () { art.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); });
+      list.appendChild(li);
+      [].forEach.call(art.querySelectorAll('.l'), function (l, j) { l.style.setProperty('--d', (0.08 + 0.16 * j).toFixed(2) + 's'); });
+      return li;
+    });
+    pin.appendChild(svc.querySelector('.title')); pin.appendChild(list); svc.insertBefore(pin, svc.firstChild);
+    items[0].classList.add('on');
+
+    stages.forEach(function (s) { s.classList.add('cur'); s.inert = false; });
+    cur = -1;
+    function setCur(i) {
+      if (i === cur) return;
+      cur = i;
+      setLook(stages[i].dataset.look);
+      links.forEach(function (a, k) { if (k === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+      dot.style.translate = '0 ' + (links[i].parentNode.offsetTop + links[i].offsetHeight / 2 - 3).toFixed(1) + 'px';
+      if (i === 0) morphStart(); else morphStop();
+      try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
+    }
+    // a thin line across the middle of the window decides what you're in
+    var mid = { rootMargin: '-50% 0px -50% 0px' };
+    var atSection = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) setCur(stages.indexOf(e.target)); }); }, mid);
+    var atService = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { var k = arts.indexOf(e.target); items.forEach(function (li, j) { li.classList.toggle('on', j === k); }); } });
+    }, mid);
+    var arrive = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); arrive.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -18% 0px' });
+    stages.forEach(function (s) { atSection.observe(s); arrive.observe(s); });
+    arts.forEach(function (a) { atService.observe(a); arrive.observe(a); });
+
+    // the name's smoke has to know where the name is now that it scrolls
+    if (nameFx) {
+      nameFx.show(true); setTimeout(nameFx.locate, 950);
+      var ticking = false;
+      addEventListener('scroll', function () {
+        if (ticking) return; ticking = true;
+        requestAnimationFrame(function () { ticking = false; nameFx.locate(); });
+      }, { passive: true });
+    }
+  }
+
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
   setTimeout(begin, 1000);
 
