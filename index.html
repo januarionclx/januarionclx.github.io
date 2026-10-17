@@ -566,7 +566,7 @@
   var KEYS = /[?&]keys=jump\b/.test(location.search) ? 'jump' : 'step', stepAt = 0;
   function busy() {
     if (desk) return !!glideRaf && Math.abs(legTo - glideY) > 0.15 * Math.abs(legTo - legFrom);
-    return performance.now() - stepAt < 600; // a screen takes about that long to come in
+    return performance.now() - stepAt < 400; // a screen takes about that long to come in (a fast double press is quicker)
   }
   function travel(by) {
     if (KEYS === 'jump') {
