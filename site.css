@@ -146,9 +146,9 @@ button { font: inherit; color: inherit; }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
 .js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
-/* on screens (phones), a short title takes one line; 'now' keeps its own */
-:root:not(.desk) .title.one { min-height: 0; margin-bottom: clamp(14px, 3.4svh, 36px); }
-:root:not(.desk) .title.one .l { display: inline-block; }
+/* on screens (phones), a short title takes one line; 'now' keeps its own. On the long page, 'My services' does too */
+:root:not(.desk) .title.one, .desk #services .title { min-height: 0; margin-bottom: clamp(14px, 3.4svh, 36px); }
+:root:not(.desk) .title.one .l, .desk #services .title .l { display: inline-block; }
 .js .foot { display: none; }
 
 /* lines rise out of a soft blur, one after another; on leaving they all fade at once */
