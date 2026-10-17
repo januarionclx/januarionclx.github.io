@@ -357,9 +357,9 @@
 
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
   // k or the up and down arrows go down and up through the items of the section you're in (never to another
-  // section: that's left and right), and c changes the colour. A quick second press counts from where the
-  // first was going, and the trip is made once (see travel). Single-letter keys can get in the way of speech and switch
-  // control, so the guide can turn them off (the arrows always work).
+  // section: that's left and right), and c changes the colour. They go one step at a time (see travel).
+  // Single-letter keys can get in the way of speech and switch control, so the guide can turn them off (the
+  // arrows always work).
   var keyTo = 0, keyAt = 0, letters = true;
   try { letters = localStorage.getItem('letters') !== 'off'; } catch (e) {}
   document.addEventListener('keydown', function (e) {
@@ -372,14 +372,14 @@
     if (down) {
       var L = lights[Math.max(0, cur)];
       if (!L) return; // nothing to step through here: the arrows scroll as usual
-      e.preventDefault(); L.step(down); // at either end they stop, rather than scroll on to the next section
+      e.preventDefault(); // at either end they stop, rather than scroll on to the next section
+      if (KEYS === 'step' && desk && cur === si && busy()) return; // a service still on its way: one at a time
+      L.step(down);
       return;
     }
     var by = { h: -1, ArrowLeft: -1, l: 1, ArrowRight: 1 }[e.key];
     if (!by) return;
-    var i = (performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
-    if (i < 0 || i >= stages.length) return;
-    e.preventDefault(); keyTo = i; keyAt = performance.now(); travel(i);
+    e.preventDefault(); travel(by);
   });
 
   // The guide to the keys: ? opens it, and so does the ? at the end of the bar (on screens with a mouse).
@@ -523,9 +523,10 @@
   // The long page glides where a key or a button sends it: one movement that a quick second press redirects
   // instead of starting over (a critically damped spring: no overshoot, under a second however far), stopped by
   // the wheel or a finger. While it glides the services hold still rather than flick through each on the way.
-  var glideY = 0, glideV = 0, glideTo = 0, glideRaf = 0, glideLast = 0;
+  var glideY = 0, glideV = 0, glideTo = 0, glideRaf = 0, glideLast = 0, legFrom = 0, legTo = 0;
   function glide(y) {
     glideTo = Math.max(0, Math.min(y, root.scrollHeight - innerHeight));
+    legFrom = glideRaf ? glideY : scrollY; legTo = glideTo; // this leg of the trip, for travel's 'nearly there'
     if (reduce) { stopGlide(); scrollTo(0, glideTo); return; }
     if (!glideRaf) { glideY = scrollY; glideV = 0; glideLast = performance.now(); root.classList.add('gliding'); glideRaf = requestAnimationFrame(glideStep); }
   }
@@ -558,19 +559,38 @@
     clearTimeout(timer);
     if (now || reduce) show(); else timer = setTimeout(show, 170);
   }
-  // The keys make the trip once, however fast they're pressed: the movement starts at once (the glide, or the
-  // old screen fading), but the section (its colours, the bubble, the new screen) only changes when the presses
-  // stop coming, so a quick second press never flashes the section in between.
-  function travel(i) {
-    clearTimeout(keyT);
-    if (desk) {
-      travelTo = i; travelEnd = performance.now() + 1500;
-      glide(stages[i].getBoundingClientRect().top + scrollY);
-      keyT = setTimeout(function () { mark(i); if (i === si) svcStep(0); }, 260);
+  // How the keys travel. 'step' (the default) goes one section per press: a press while it's still on its way is
+  // ignored, unless it's nearly there (85% of the way), when it carries straight on to the next without stopping.
+  // 'jump' (try ?keys=jump) lets quick presses add up into one trip: the movement starts at once, and the section
+  // (its colours, the bubble, the new screen) changes once the presses stop coming.
+  var KEYS = /[?&]keys=jump\b/.test(location.search) ? 'jump' : 'step', stepAt = 0;
+  function busy() {
+    if (desk) return !!glideRaf && Math.abs(legTo - glideY) > 0.15 * Math.abs(legTo - legFrom);
+    return performance.now() - stepAt < 600; // a screen takes about that long to come in
+  }
+  function travel(by) {
+    if (KEYS === 'jump') {
+      var j = (performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
+      if (j < 0 || j >= stages.length) return;
+      keyTo = j; keyAt = performance.now(); clearTimeout(keyT);
+      if (desk) {
+        travelTo = j; travelEnd = performance.now() + 1500;
+        glide(stages[j].getBoundingClientRect().top + scrollY);
+        keyT = setTimeout(function () { mark(j); if (j === si) svcStep(0); }, 260);
+      } else {
+        stages[cur].classList.remove('in'); morphStop(); clearTimeout(timer);
+        keyT = setTimeout(function () { mark(j); show(); }, 260);
+      }
       return;
     }
-    stages[cur].classList.remove('in'); morphStop(); clearTimeout(timer);
-    keyT = setTimeout(function () { mark(i); show(); }, 260);
+    if (busy()) return;
+    var i = (desk && glideRaf && travelTo >= 0 ? travelTo : Math.max(0, cur)) + by; // nearly there: on from where it's going
+    if (i < 0 || i >= stages.length) return;
+    stepAt = performance.now();
+    if (!desk) { go(i); return; }
+    mark(i); travelTo = i; travelEnd = performance.now() + 1500;
+    if (i === si) svcStep(0);
+    glide(stages[i].getBoundingClientRect().top + scrollY);
   }
   function fromHash() { for (var i = 0; i < stages.length; i++) if (location.hash === '#' + stages[i].id) return i; return -1; }
   fit();
