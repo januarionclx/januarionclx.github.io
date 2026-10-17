@@ -13,6 +13,7 @@
   --top: calc(env(safe-area-inset-top, 0px) + clamp(64px, 11svh, 140px)); /* titles sit high; the content gets the room */
   --bar-b: calc(env(safe-area-inset-bottom, 0px) + clamp(24px, 7svh, 72px));
   --bar-h: 44px;
+  --bar-w: min(590px, calc(100vw - 2 * var(--pad))); /* the bar's width; titles end where it ends */
   color-scheme: dark;
 }
 @media (min-width: 640px) { :root { --pad: 40px; } }
@@ -56,7 +57,11 @@ button { font: inherit; color: inherit; }
 .veil { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .25), transparent 35%, rgba(0, 0, 0, .6)); }
 
 /* ---------- type ---------- */
-.title { margin: 0; font-size: clamp(2.6rem, 11.6vw, 6.4rem); font-weight: 900; line-height: .98; letter-spacing: -.055em; }
+.title { margin: 0; font-size: min(clamp(2.6rem, 11.6vw, 6.4rem), calc(var(--bar-w) / 7)); font-weight: 900; line-height: .98; letter-spacing: -.055em; }
+/* a section's title runs on until the bar ends, and only then breaks between its parts. The size above keeps the
+   widest line ('What I’m doing', 6.8em) inside the bar with a little room, so no part ever breaks inside */
+.stage:not(.hero) .title { max-width: var(--bar-w); }
+.stage:not(.hero) .title .l { white-space: nowrap; }
 .title .l { display: block; }
 .title .acc { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.025em; padding-left: .06em; color: var(--title-acc, var(--accent)); }
 
@@ -146,9 +151,9 @@ button { font: inherit; color: inherit; }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
 .js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
-/* on screens (phones), a short title takes one line; 'now' keeps its own. On the long page, 'My services' does too */
-:root:not(.desk) .title.one, .desk #services .title { min-height: 0; margin-bottom: clamp(14px, 3.4svh, 36px); }
-:root:not(.desk) .title.one .l, .desk #services .title .l { display: inline-block; }
+/* a short title takes one line; 'now' keeps its own */
+.js .stage .title.one { min-height: 0; margin-bottom: clamp(14px, 3.4svh, 36px); }
+.title.one .l { display: inline-block; }
 .js .foot { display: none; }
 
 /* lines rise out of a soft blur, one after another; on leaving they all fade at once */
@@ -158,7 +163,7 @@ button { font: inherit; color: inherit; }
 /* ---------- section buttons: one row, and everything in it moves with transforms and opacity only.
    The bubble slides to the current button and fades into the section's colour while its label crossfades;
    on a phone (compact) the other sections are letter circles that slide aside to make room. ---------- */
-.bar { position: fixed; z-index: 5; left: var(--pad); bottom: var(--bar-b); width: min(590px, calc(100vw - 2 * var(--pad))); display: flex; gap: 6px; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .6s var(--reel) 1s, transform .6s var(--reel) 1s; }
+.bar { position: fixed; z-index: 5; left: var(--pad); bottom: var(--bar-b); width: var(--bar-w); display: flex; gap: 6px; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .6s var(--reel) 1s, transform .6s var(--reel) 1s; }
 .ready .bar { opacity: 1; transform: none; pointer-events: auto; }
 .bar-row { position: relative; flex: 1; min-width: 0; height: var(--bar-h); touch-action: none; }
 .bar-row button {
@@ -303,7 +308,7 @@ button { font: inherit; color: inherit; }
 .desk, .desk body { height: auto; overflow: visible; }
 .desk { scroll-snap-type: y proximity; }
 .desk .stage { position: relative; inset: auto; min-height: 100svh; overflow: visible; visibility: visible; scroll-snap-align: start; user-select: text; -webkit-user-select: text; }
-.desk .title { font-size: min(6.4rem, 11.6vw, 11svh); }
+.desk .title { font-size: min(6.4rem, 11.6vw, 11svh, calc(var(--bar-w) / 7)); }
 .desk .hero .title { font-size: min(12.5rem, 20.5vw, 17svh); }
 .desk .hero-in { flex: 1; display: flex; flex-direction: column; }
 .desk .say { font-size: min(4.6rem, 8.6vw, 8svh); }
