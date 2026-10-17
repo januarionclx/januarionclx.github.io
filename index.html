@@ -50,7 +50,7 @@
 
 <main>
   <section class="stage" id="services" data-look="ink" aria-labelledby="services-title">
-    <h2 class="title" id="services-title"><span class="l">My</span> <span class="l acc">services</span></h2>
+    <h2 class="title one" id="services-title"><span class="l">My</span> <span class="l acc">services</span></h2>
     <div class="svc">
       <article class="grp">
         <h3 class="l">Software development</h3>
@@ -78,7 +78,7 @@
   </section>
 
   <section class="stage" id="portfolio" data-look="violet" data-pace="0.7" aria-labelledby="portfolio-title">
-    <h2 class="title" id="portfolio-title"><span class="l">Public</span> <span class="l acc">portfolio</span></h2>
+    <h2 class="title one" id="portfolio-title"><span class="l">Public</span> <span class="l acc">portfolio</span></h2>
     <ul class="names">
       <li class="grp"><span class="nm l">People</span> <span class="nm-d l">A human-centric CRM.</span></li>
       <li class="grp"><span class="nm l">Flows</span> <span class="nm-d l">Chat automations, built step by step.</span></li>
@@ -89,7 +89,7 @@
 </main>
 
 <footer class="stage" id="contact" data-look="ember" aria-labelledby="contact-title">
-  <h2 class="title" id="contact-title"><span class="l">Let&rsquo;s</span> <span class="l acc">talk.</span></h2>
+  <h2 class="title one" id="contact-title"><span class="l">Let&rsquo;s</span> <span class="l acc">talk.</span></h2>
   <div class="asks grp">
     <p class="l">Have an idea?</p>
     <p class="l">Need help?</p>
@@ -272,14 +272,25 @@
   }, { passive: true });
   document.addEventListener('touchcancel', function () { swipe = null; }, { passive: true });
 
-  // the keyboard does the same: h and l (as in vim) or the left and right arrows. On the long page a
-  // quick second press counts from where the first was going, not from where the scroll has got to.
-  var keyTo = 0, keyAt = 0;
+  // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
+  // k go down and up (on the long page they also stop at each service), and c changes the colour. A quick
+  // second press counts from where the first was going, not from where the scroll has got to.
+  var keyTo = 0, keyY = 0, keyAt = 0, stops = null;
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-    var by = { h: -1, ArrowLeft: -1, l: 1, ArrowRight: 1 }[e.key];
+    if (e.key === 'c') { e.preventDefault(); lookBtn.click(); return; }
+    var by = { h: -1, ArrowLeft: -1, k: -1, l: 1, ArrowRight: 1, j: 1 }[e.key];
     if (!by) return;
-    var i = (desk && performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
+    var quick = performance.now() - keyAt < 900;
+    if (stops && (e.key === 'j' || e.key === 'k')) {
+      var from = quick ? keyY : scrollY, ys = stops();
+      var y = by > 0 ? ys.filter(function (v) { return v > from + 4; })[0] : ys.filter(function (v) { return v < from - 4; }).pop();
+      if (y === undefined) return;
+      e.preventDefault(); keyY = y; keyAt = performance.now();
+      scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+      return;
+    }
+    var i = (desk && quick ? keyTo : Math.max(0, cur)) + by;
     if (i < 0 || i >= stages.length) return;
     e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i);
   });
@@ -398,6 +409,15 @@
       });
     });
     stages.forEach(function (s) { s.classList.add('cur'); s.inert = false; });
+    // where j and k stop: the top of each section, and each service on the way through services
+    stops = function () {
+      var ys = [], span = svc.offsetHeight - innerHeight;
+      stages.forEach(function (s) {
+        if (s !== svc) ys.push(s.offsetTop);
+        else arts.forEach(function (a, k) { ys.push(svc.offsetTop + span * k / arts.length + (k ? 2 : 0)); });
+      });
+      return ys;
+    };
 
     // the section across the middle of the window is the one you're on
     function here() {
