@@ -331,6 +331,8 @@ button { font: inherit; color: inherit; }
 /* services hold still while you scroll through them: the names stacked, the one you're on in the accent
    with its text open under it. Phones fold them the same way, a tap opening one (.fold) */
 .desk #services { height: calc(110svh * var(--n, 3)); padding-block: 0; } /* --n: how many services (set by the script) */
+/* the pin only holds the services still on the long page; elsewhere its title and list are the screen's own */
+.pin { display: contents; }
 .desk .pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; padding: var(--top) 0 calc(var(--bar-b) + var(--bar-h) + 24px); }
 .desk .svc, .fold .svc { display: block; }
 .desk .svc { margin-block: auto; }
