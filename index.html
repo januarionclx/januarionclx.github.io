@@ -693,8 +693,10 @@
     var d = 1;
     function size() {
       d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
-      canvas.width = Math.max(1, Math.round(canvas.clientWidth * d)); canvas.height = Math.max(1, Math.round(canvas.clientHeight * d));
-      gl.viewport(0, 0, canvas.width, canvas.height);
+      var w = Math.max(1, Math.round(canvas.clientWidth * d)), h = Math.max(1, Math.round(canvas.clientHeight * d));
+      if (w === canvas.width && h === canvas.height) return false; // a new size wipes the canvas, so only when it changes
+      canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h);
+      return true;
     }
     var seed = Math.random() * 40, t0 = performance.now(), last = 0, raf = 0;
     function draw(now) {
@@ -720,12 +722,14 @@
       raf = requestAnimationFrame(frame);
     }
     function kick() { if (reduce) { draw(performance.now()); return; } if (!raf) raf = requestAnimationFrame(frame); }
-    addEventListener('resize', function () { size(); kick(); });
+    // a wiped canvas is drawn again at once, so resizing the window never shows a black frame
+    addEventListener('resize', function () { if (size()) api.now(); kick(); });
     document.addEventListener('visibilitychange', kick);
     canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); canvas.classList.remove('on'); });
     size(); kick();
     api.tint = function (instant) { pal.set(instant); kick(); };
     api.kick = kick;
+    api.now = function () { if (!document.hidden) draw(performance.now()); }; // draw this instant, letters and all
     return api;
   }
 
@@ -779,7 +783,7 @@
       }
       gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
-      ok = true; sky.kick();
+      ok = true; sky.now(); sky.kick(); // drawn at once: a new size wiped the canvas
     }
     sky.hooks.push(function (now, t, mouse, act, rw, rh, bgd) {
       if (!ok || !on) return;
