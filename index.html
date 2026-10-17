@@ -70,10 +70,10 @@
   <section class="stage" id="now" data-look="gold" aria-labelledby="now-title">
     <h2 class="title" id="now-title"><span class="l">What I&rsquo;m doing</span> <span class="l acc">now</span></h2>
     <ul class="doing grp">
-      <li class="l">Automating systems</li>
-      <li class="l">Creating harnesses</li>
-      <li class="l">Building software factories</li>
-      <li class="l">Working with private clients</li>
+      <li><span class="l">Automating systems</span></li>
+      <li><span class="l">Creating harnesses</span></li>
+      <li><span class="l">Building software factories</span></li>
+      <li><span class="l">Working with private clients</span></li>
     </ul>
   </section>
 
@@ -274,8 +274,9 @@
   document.addEventListener('touchcancel', function () { swipe = null; }, { passive: true });
 
   // Items you can light: point at one, tap it, or step to it with j and k, and it takes its section's colour
-  // with the smoke running through its letters, like the name. A second tap puts it out. pick, when given,
-  // decides instead (the services on the long page are lit by the scroll, so a click scrolls there).
+  // with the smoke running through its letters, like the name, while the others step back. A second tap puts
+  // it out. pick, when given, decides instead (the services on the long page are lit by the scroll, so a click
+  // scrolls there).
   var glows = null, glowing = null;
   function Lights(list, items, targets, pick) {
     var at = -1, aim = -1, aimAt = 0, type = '';
@@ -309,7 +310,7 @@
     var list = s.querySelector('.doing, .names, .svc');
     if (!list || (desk && s.id === 'services')) return null; // the long page lights services itself (deskStart)
     var items = [].slice.call(list.children);
-    return Lights(list, items, s.id === 'now' ? items : items.map(function (it) { return it.querySelector('.nm, h3'); }));
+    return Lights(list, items, items.map(function (it) { return it.querySelector('.l'); })); // an item's first line is what lights
   });
 
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and

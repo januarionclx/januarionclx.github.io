@@ -189,12 +189,19 @@ button { font: inherit; color: inherit; }
 .bar.still .bar-row button, .bar.still .bubble { transition: none; }
 
 /* ---------- lit items: the one you point at, tap or reach with j and k takes the section's colour, and with
-   WebGL the smoke runs through its letters (a canvas that fades in over them) ---------- */
-.doing li, .nm, .svc h3 { position: relative; }
+   WebGL the smoke runs through its letters (a canvas that fades in over them). The others step back, as the
+   services do on the long page, and the lit one steps forward a little ---------- */
+.doing .l { display: block; }
+.doing .l, .nm, .svc h3 { position: relative; }
 .doing li, .names li { width: fit-content; }
 .js .doing li, .js .names li, .js:not(.desk) .svc article { cursor: pointer; }
 .doing .lit, .names .lit, .svc .lit { color: var(--hi); }
 .js .in .doing .l, .js .in .names .nm, .js .in .svc h3 { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .4s ease; }
+.doing > li, .names > li, .js:not(.desk) .svc > article { transition: opacity .4s ease, translate .5s var(--move); }
+.doing:has(.lit) > li:not(:has(.lit)), .names:has(.lit) > li:not(:has(.lit)), .js:not(.desk) .svc:has(.lit) > article:not(:has(.lit)) { opacity: .3; }
+@media (prefers-reduced-motion: no-preference) {
+  .doing > li:has(.lit), .names > li:has(.lit), .js:not(.desk) .svc > article:has(.lit) { translate: 10px 0; }
+}
 .glow { opacity: 0; transition: opacity .45s ease; }
 .glow.on { opacity: 1; }
 
