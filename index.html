@@ -357,8 +357,8 @@
 
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
   // k or the up and down arrows go down and up through the items of the section you're in (never to another
-  // section: that's left and right), and c changes the colour. On the long page a quick second press counts from where the first was
-  // going, not from where the scroll has got to. Single-letter keys can get in the way of speech and switch
+  // section: that's left and right), and c changes the colour. A quick second press counts from where the
+  // first was going, and the trip is made once (see travel). Single-letter keys can get in the way of speech and switch
   // control, so the guide can turn them off (the arrows always work).
   var keyTo = 0, keyAt = 0, letters = true;
   try { letters = localStorage.getItem('letters') !== 'off'; } catch (e) {}
@@ -377,9 +377,9 @@
     }
     var by = { h: -1, ArrowLeft: -1, l: 1, ArrowRight: 1 }[e.key];
     if (!by) return;
-    var i = (desk && performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
+    var i = (performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
     if (i < 0 || i >= stages.length) return;
-    e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i, false, 260); // a quick second press lands straight on its screen
+    e.preventDefault(); keyTo = i; keyAt = performance.now(); travel(i);
   });
 
   // The guide to the keys: ? opens it, and so does the ? at the end of the bar (on screens with a mouse).
@@ -538,11 +538,12 @@
   function stopGlide() { cancelAnimationFrame(glideRaf); glideRaf = 0; root.classList.remove('gliding'); }
   ['wheel', 'touchstart'].forEach(function (t) { addEventListener(t, function () { if (glideRaf) { stopGlide(); onScroll(); } }, { passive: true }); });
 
-  // Leaving fades everything at once; the next screen starts as soon as the old one is gone (wait, from the
-  // keys, gives a quick second press time to count). On the long page it glides there instead, and the bubble
-  // goes straight to it rather than through every section on the way; arriving at the services opens the first.
-  var travelTo = -1, travelEnd = 0;
-  function go(i, now, wait) {
+  // Leaving fades everything at once; the next screen starts as soon as the old one is gone. On the long page
+  // it glides there instead, and the bubble goes straight to it rather than through every section on the way;
+  // arriving at the services opens the first.
+  var travelTo = -1, travelEnd = 0, keyT = 0;
+  function go(i, now) {
+    clearTimeout(keyT);
     if (desk) {
       mark(i, now); travelTo = i; travelEnd = performance.now() + 1500;
       if (i === si) svcStep(0);
@@ -555,7 +556,21 @@
     mark(i, now);
     from.classList.remove('in'); morphStop();
     clearTimeout(timer);
-    if (now || reduce) show(); else timer = setTimeout(show, wait || 170);
+    if (now || reduce) show(); else timer = setTimeout(show, 170);
+  }
+  // The keys make the trip once, however fast they're pressed: the movement starts at once (the glide, or the
+  // old screen fading), but the section (its colours, the bubble, the new screen) only changes when the presses
+  // stop coming, so a quick second press never flashes the section in between.
+  function travel(i) {
+    clearTimeout(keyT);
+    if (desk) {
+      travelTo = i; travelEnd = performance.now() + 1500;
+      glide(stages[i].getBoundingClientRect().top + scrollY);
+      keyT = setTimeout(function () { mark(i); if (i === si) svcStep(0); }, 260);
+      return;
+    }
+    stages[cur].classList.remove('in'); morphStop(); clearTimeout(timer);
+    keyT = setTimeout(function () { mark(i); show(); }, 260);
   }
   function fromHash() { for (var i = 0; i < stages.length; i++) if (location.hash === '#' + stages[i].id) return i; return -1; }
   fit();
