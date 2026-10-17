@@ -28,7 +28,7 @@
 :root[data-look="gold"] { --bg: #120d05; --fg: #f7f0e1; --muted: #b8b4ab; --accent: var(--a-gold); --s1: #5c471a; --s2: #e6c27a; --s3: #120d05; }
 :root[data-look="violet"] { --bg: #0b0716; --fg: #f3eeff; --muted: #b4b2bb; --accent: var(--a-violet); --s1: #3b2a7a; --s2: #c3a8ff; --s3: #0b0716; }
 :root[data-look="ember"] { --bg: #140705; --fg: #fff1e6; --muted: #bcb4af; --accent: var(--a-ember); --s1: #7a2a12; --s2: #ffb070; --s3: #140705; }
-:root { --line: color-mix(in srgb, var(--fg) 22%, transparent); }
+:root { --line: color-mix(in srgb, var(--fg) 22%, transparent); --hi: var(--title-acc, var(--accent)); /* the colour of a lit item */ }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -70,7 +70,7 @@ button { font: inherit; color: inherit; }
 @keyframes sheen { 0% { background-position: 100% 0; } 34%, 100% { background-position: 0% 0; } }
 /* with WebGL the letters are windows onto a lighter copy of the smoke (the shine above is the fallback) */
 .hero .name { position: relative; }
-.name-fx { position: absolute; display: block; pointer-events: none; }
+.letters { position: absolute; display: block; pointer-events: none; }
 .namefx .hero .name, .namefx .hero.in .name { background: none; color: transparent; -webkit-text-fill-color: transparent; animation: none; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
@@ -140,12 +140,15 @@ button { font: inherit; color: inherit; }
 .js .stage {
   position: fixed; inset: 0; margin: 0; display: flex; flex-direction: column;
   padding: var(--top) var(--pad) calc(var(--bar-b) + var(--bar-h) + 24px);
-  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; touch-action: pan-y; /* sideways swipes are ours */
   visibility: hidden; user-select: none; -webkit-user-select: none;
 }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
 .js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
+/* on screens (phones), a short title takes one line; 'now' keeps its own. On the long page, 'My services' does too */
+:root:not(.desk) .title.one, .desk #services .title { min-height: 0; margin-bottom: clamp(14px, 3.4svh, 36px); }
+:root:not(.desk) .title.one .l, .desk #services .title .l { display: inline-block; }
 .js .foot { display: none; }
 
 /* lines rise out of a soft blur, one after another; on leaving they all fade at once */
@@ -185,6 +188,23 @@ button { font: inherit; color: inherit; }
 .bar.dragging .bar-row button:active { scale: none; }
 .bar.still .bar-row button, .bar.still .bubble { transition: none; }
 
+/* ---------- lit items: the one you point at, tap or reach with j and k takes the section's colour, and with
+   WebGL the smoke runs through its letters (a canvas that fades in over them). The others step back, as the
+   services do on the long page, and the lit one steps forward a little ---------- */
+.doing .l { display: block; }
+.doing .l, .nm, .svc h3 { position: relative; }
+.doing li, .names li { width: fit-content; }
+.js .doing li, .js .names li, .js:not(.desk) .svc article { cursor: pointer; }
+.doing .lit, .names .lit, .svc .lit { color: var(--hi); }
+.js .in .doing .l, .js .in .names .nm, .js .in .svc h3 { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .4s ease; }
+.doing > li, .names > li, .js:not(.desk) .svc > article { transition: opacity .4s ease, translate .5s var(--move); }
+.doing:has(.lit) > li:not(:has(.lit)), .names:has(.lit) > li:not(:has(.lit)), .js:not(.desk) .svc:has(.lit) > article:not(:has(.lit)) { opacity: .3; }
+@media (prefers-reduced-motion: no-preference) {
+  .doing > li:has(.lit), .names > li:has(.lit), .js:not(.desk) .svc > article:has(.lit) { translate: 10px 0; }
+}
+.glow { opacity: 0; transition: opacity .45s ease; }
+.glow.on { opacity: 1; }
+
 /* ---------- colour button: one emblem per look ---------- */
 /* ---------- the emblem ends the row: it changes shape and colour with the section, and tapping it plays through the looks ---------- */
 .js .look { flex: none; width: var(--bar-h); height: var(--bar-h); display: grid; place-items: center; padding: 0; border: 1px solid rgba(255, 255, 255, .17); border-radius: 999px; background: rgba(0, 0, 0, .24); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); color: var(--accent); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), box-shadow .15s var(--press), color .42s var(--move); }
@@ -194,14 +214,46 @@ button { font: inherit; color: inherit; }
 .look .em .fill { fill: currentColor; stroke: none; }
 .look[data-look="teal"] .em-teal, .look[data-look="ink"] .em-ink, .look[data-look="gold"] .em-gold, .look[data-look="violet"] .em-violet, .look[data-look="ember"] .em-ember { opacity: 1; transform: none; }
 
+/* ---------- the keys: a ? at the end of the bar (mouse screens only) and the guide it opens ---------- */
+.help { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .js .help { flex: none; width: var(--bar-h); height: var(--bar-h); display: grid; place-items: center; padding: 0; border: 1px solid rgba(255, 255, 255, .17); border-radius: 999px; background: rgba(0, 0, 0, .24); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); color: var(--muted); font: 500 13px/1 var(--f-mono); cursor: pointer; transition: color .2s ease, transform .15s var(--press); }
+  .js .help:hover { color: var(--fg); }
+  .js .help:active { transform: translateY(1px) scale(.94); }
+}
+.guide {
+  width: min(400px, calc(100vw - 32px)); margin: auto; padding: 26px 26px 22px; border: 1px solid var(--line); border-radius: 14px;
+  background: color-mix(in srgb, var(--bg) 86%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  color: var(--fg); box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
+}
+.guide[open] { animation: guide-in .22s var(--reel); }
+@keyframes guide-in { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+.guide::backdrop { background: rgba(0, 0, 0, .45); }
+.guide h2 { margin: 0 0 16px; font: 500 10.5px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.guide dl { margin: 0; }
+.guide dl div { display: grid; grid-template-columns: 9.5em 1fr; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.guide dt { display: flex; align-items: center; gap: 4px; }
+.guide dt span { margin: 0 4px; font-size: 12px; color: var(--muted); }
+.guide dd { margin: 0; font-size: 14px; color: var(--muted); }
+.guide kbd { min-width: 26px; height: 26px; padding: 0 6px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px; font: 500 12px/1 var(--f-mono); color: var(--fg); }
+.guide .sw { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); cursor: pointer; }
+.guide .sw input { appearance: none; position: relative; flex: none; width: 34px; height: 20px; margin: 0; border-radius: 999px; background: var(--line); cursor: pointer; transition: background-color .2s ease; }
+.guide .sw input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--fg); transition: translate .2s var(--move); }
+.guide .sw input:checked { background: var(--accent); }
+.guide .sw input:checked::after { translate: 14px 0; background: #0b0b0b; }
+.guide .touch { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+.guide .x { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 8px; background: none; color: var(--muted); cursor: pointer; }
+.guide .x:hover { color: var(--fg); }
+.guide .x svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+
 /* ---------- wider screens ---------- */
 @media (min-width: 900px) {
-  /* each service is a row: the names right-aligned on one axis, each beside its description */
+  /* each service is a row: the name, then its description beside it, both from the left */
   .svc { grid-template-columns: max-content minmax(0, 50ch); column-gap: clamp(28px, 3.4vw, 56px); row-gap: clamp(22px, 3.2svh, 34px); }
   .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: start; }
   .svc p { margin-top: 0; max-width: none; }
   .asks p { font-size: min(2.6rem, 5svh); }
-  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); text-align: right; }
+  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); }
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d { margin-top: 0; }
 }
@@ -245,10 +297,48 @@ button { font: inherit; color: inherit; }
 }
 @media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: min(1.75rem, 8.4vw); } .nm { font-size: min(2.5rem, 11vw); } }
 
+/* ---------- wide screens with a mouse: one page you scroll, each section a screen tall, the bar along the
+   bottom as on a phone. As there, the title is the roof and the bar the floor, and the content sits centred
+   between them; sizes follow the screen's height too, so nothing ever reaches the bar. ---------- */
+.desk, .desk body { height: auto; overflow: visible; }
+.desk { scroll-snap-type: y proximity; }
+.desk .stage { position: relative; inset: auto; min-height: 100svh; overflow: visible; visibility: visible; scroll-snap-align: start; user-select: text; -webkit-user-select: text; }
+.desk .title { font-size: min(6.4rem, 11.6vw, 11svh); }
+.desk .hero .title { font-size: min(12.5rem, 20.5vw, 17svh); }
+.desk .hero-in { flex: 1; display: flex; flex-direction: column; }
+.desk .say { font-size: min(4.6rem, 8.6vw, 8svh); }
+.desk .say.what { margin-top: auto; }
+.desk .say.where { margin-bottom: auto; }
+.desk .doing li { font-size: min(2.6rem, 5.4svh); }
+.desk .names { margin-block: auto; }
+.desk .nm { font-size: min(4.2rem, 7svh); }
+.desk .asks p { font-size: min(2.6rem, 4.4svh); }
+.desk .addr { font-size: min(4.2rem, 6svh); }
+
+/* services hold still while you scroll through them: the names stacked, the one you're on in the accent
+   with its text open under it */
+.desk #services { height: 330svh; padding-block: 0; }
+.desk .pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; padding: var(--top) 0 calc(var(--bar-b) + var(--bar-h) + 24px); }
+.desk .svc { display: block; margin-block: auto; }
+.desk .svc article { display: grid; grid-template-columns: none; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
+.desk .svc article.on { grid-template-rows: auto 1fr; }
+.desk .svc article + article { margin-top: clamp(6px, 1.4svh, 18px); }
+.desk .svc h3 { width: max-content; font-size: min(4rem, 4vw, 6.4svh); cursor: pointer; }
+/* once the section is in, the names dim and light at once, without the entrance's stagger */
+.desk .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
+.desk .in .svc article:not(.on) h3 { opacity: .3; }
+.desk .in .svc article:not(.on) h3:hover { opacity: .6; }
+.desk .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
+.desk .svc p { margin-top: 0; min-height: 0; overflow: hidden; max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
+.desk .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
+.desk .svc p .l:last-child { padding-bottom: 12px; }
+.desk .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
+
 @media (prefers-reduced-motion: reduce) {
   .hero.in .name { animation: none; }
   .js .l, .js .in .l { transform: none; filter: none; }
   .js .in .l { transition: opacity .4s ease; }
   .bar-row button, .bubble { transition: none; }
   .sky canvas { transition: none; }
+  .guide[open] { animation: none; }
 }
