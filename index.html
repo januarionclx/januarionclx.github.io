@@ -457,10 +457,38 @@
   }
   morphReset();
 
+  // A screen whose text would run under the bar (a short window, a phone on its side) makes its big text
+  // smaller until every part of it ends inside the screen's padding (24px above the bar), by the largest --fit
+  // that does, down to half size (past that it scrolls; small text stays 12px or more); one that fits keeps its sizes. Folded services are measured with their longest text open.
+  // The long page sizes things by the window's height instead.
+  function fitText(s) {
+    if (desk) return;
+    s.style.removeProperty('--fit');
+    var limit = s.clientHeight - parseFloat(getComputedStyle(s).paddingBottom) + 1;
+    var arts = fold ? [].slice.call(s.querySelectorAll('.svc article')) : [], was = null, most = null;
+    if (arts.length) {
+      s.classList.add('measure'); // no unfolding while it measures
+      arts.forEach(function (a) { if (a.classList.contains('on')) was = a; if (!most || a.querySelector('p').scrollHeight > most.querySelector('p').scrollHeight) most = a; });
+      arts.forEach(function (a) { a.classList.toggle('on', a === most); });
+    }
+    function fits() { return [].every.call(s.children, function (k) { return !k.offsetHeight || k.offsetTop + k.offsetHeight <= limit; }); }
+    if (!fits()) {
+      for (var n = 0, lo = 0.5, hi = 1; n < 7; n++) {
+        var mid = (lo + hi) / 2; s.style.setProperty('--fit', mid.toFixed(3));
+        if (fits()) lo = mid; else hi = mid;
+      }
+      s.style.setProperty('--fit', lo.toFixed(3));
+    }
+    if (arts.length) { arts.forEach(function (a) { a.classList.toggle('on', a === was); }); void s.offsetHeight; s.classList.remove('measure'); }
+  }
+  addEventListener('resize', function () { if (started && !desk) { fitText(stages[cur]); if (cur === 0 && nameFx) nameFx.build(); } });
+
   function show() {
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
     if (!started) return;
-    var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
+    var s = stages[cur]; s.scrollTop = 0; fitText(s);
+    if (cur === 0 && nameFx) nameFx.build(); // the name's smoke follows its new size
+    void s.offsetWidth; s.classList.add('in');
     if (svcShow) svcShow(s.id === 'services');
     if (cur === 0) morphStart(); else morphReset();
     if (nameFx) nameFx.show(cur === 0);

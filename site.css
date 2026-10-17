@@ -57,7 +57,7 @@ button { font: inherit; color: inherit; }
 .veil { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .25), transparent 35%, rgba(0, 0, 0, .6)); }
 
 /* ---------- type ---------- */
-.title { margin: 0; font-size: min(clamp(2.6rem, 11.6vw, 6.4rem), calc(var(--bar-w) / 7)); font-weight: 900; line-height: .98; letter-spacing: -.055em; }
+.title { margin: 0; font-size: calc(min(clamp(2.6rem, 11.6vw, 6.4rem), calc(var(--bar-w) / 7)) * var(--fit, 1)); font-weight: 900; line-height: .98; letter-spacing: -.055em; }
 /* a section's title runs on until the bar ends, and only then breaks between its parts. The size above keeps the
    widest line ('What I’m doing', 6.8em) inside the bar with a little room, so no part ever breaks inside */
 .stage:not(.hero) .title { max-width: var(--bar-w); }
@@ -65,7 +65,7 @@ button { font: inherit; color: inherit; }
 .title .l { display: block; }
 .title .acc { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.025em; padding-left: .06em; color: var(--title-acc, var(--accent)); }
 
-.hero .title { font-size: clamp(4.4rem, min(20.5vw, 19svh), 12.5rem); }
+.hero .title { font-size: calc(clamp(4.4rem, min(20.5vw, 19svh), 12.5rem) * var(--fit, 1)); }
 /* the name shines now and then, like light passing over metal; only while the intro is on screen */
 .hero .name {
   background: linear-gradient(100deg, var(--name) 40%, #fff 50%, var(--name) 60%) 100% 0 / 250% 100% no-repeat;
@@ -80,7 +80,7 @@ button { font: inherit; color: inherit; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
 /* two big lines under the name: what I do (turning from one thing to the next) and where; last words in white */
-.say { margin: 0; font-size: clamp(1.6rem, 8.6vw, 4.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.045em; color: var(--muted); white-space: nowrap; }
+.say { margin: 0; font-size: calc(clamp(1.6rem, 8.6vw, 4.6rem) * var(--fit, 1)); font-weight: 700; line-height: 1.1; letter-spacing: -.045em; color: var(--muted); white-space: nowrap; }
 .say.what { margin-top: clamp(28px, 6svh, 72px); }
 .say.where { margin-top: clamp(4px, 1.2svh, 14px); }
 .say .k { color: var(--fg); }
@@ -92,8 +92,8 @@ button { font: inherit; color: inherit; }
 
 .svc { display: grid; gap: clamp(22px, 3.4svh, 38px); margin-top: clamp(20px, 3svh, 36px); }
 /* service names read like the portfolio names: big, light and white, with the grey description under them */
-.svc h3 { margin: 0; font-size: clamp(1.9rem, 9vw, 3.2rem); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
-.svc p { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
+.svc h3 { margin: 0; font-size: calc(clamp(1.9rem, 9vw, 3.2rem) * var(--fit, 1)); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
+.svc p { margin: .4em 0 0; max-width: 34ch; font-size: max(12px, calc(clamp(1rem, 1.25vw, 1.2rem) * var(--fit, 1))); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
 .svc p { margin-top: .6em; }
 .svc p .l { display: block; }
 .svc p .l, .nm-d { text-wrap: balance; }
@@ -102,24 +102,24 @@ button { font: inherit; color: inherit; }
 .js .doing { margin-block: auto; } /* centred in the room under the title */
 .js #contact .asks { margin-top: auto; }
 .js #contact .mail { margin-bottom: auto; }
-.doing li { font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
+.doing li { font-size: calc(clamp(1.55rem, 7vw, 2.6rem) * var(--fit, 1)); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
 
 .names { list-style: none; margin: clamp(20px, 3svh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 2.2svh, 26px); }
-.nm { display: block; font-size: clamp(2.7rem, 12.5vw, 4.2rem); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
-.nm-d { display: block; margin-top: .5em; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; letter-spacing: -.01em; color: var(--muted); }
+.nm { display: block; font-size: calc(clamp(2.7rem, 12.5vw, 4.2rem) * var(--fit, 1)); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
+.nm-d { display: block; margin-top: .5em; font-size: max(12px, calc(clamp(1rem, 1.25vw, 1.2rem) * var(--fit, 1))); font-weight: 500; letter-spacing: -.01em; color: var(--muted); }
 /* the last line of a list, 'and more.', in the serif like a title's italic word */
 .more .nm, .doing .more .l { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
 
 /* contact opens with two questions in the 'doing now' size, in white */
 /* contact: five lines in one size and one grey, so the email is the bright thing */
 .asks { margin: clamp(20px, 3svh, 36px) 0 0; }
-.asks p { margin: 0; font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
+.asks p { margin: 0; font-size: calc(clamp(1.55rem, 7vw, 2.6rem) * var(--fit, 1)); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
 .asks p + p { margin-top: .3em; }
 .asks .dim { color: var(--muted); }
 .asks .m { display: none; } /* phone-only line breaks */
 .mail { display: flex; align-items: flex-end; gap: 4px; margin-top: clamp(22px, 3.4svh, 40px); }
 /* the address reads like the portfolio names: big and light */
-.addr { font-size: clamp(2.2rem, 9.4vw, 4.2rem); font-weight: 500; line-height: 1; letter-spacing: -.055em; text-decoration: none; color: var(--fg); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
+.addr { font-size: calc(clamp(2.2rem, 9.4vw, 4.2rem) * var(--fit, 1)); font-weight: 500; line-height: 1; letter-spacing: -.055em; text-decoration: none; color: var(--fg); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
 .addr .hi { color: var(--accent); }
 .copy { position: relative; flex: none; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), color .2s ease; }
 .copy svg { grid-area: 1 / 1; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: opacity .2s ease, transform .3s var(--reel), filter .2s ease; }
@@ -141,7 +141,7 @@ button { font: inherit; color: inherit; }
 .stage { position: relative; z-index: 2; padding: 16svh var(--pad) 6svh; }
 .look { display: none; }
 
-/* ---------- one fixed screen ---------- */
+/* ---------- one fixed screen (a cramped one shrinks its big text to fit: --fit, set by the script) ---------- */
 .js, .js body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 .js .stage {
   position: fixed; inset: 0; margin: 0; display: flex; flex-direction: column;
@@ -258,8 +258,8 @@ button { font: inherit; color: inherit; }
   .svc { grid-template-columns: max-content minmax(0, 50ch); column-gap: clamp(28px, 3.4vw, 56px); row-gap: clamp(22px, 3.2svh, 34px); }
   .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: start; }
   .svc p { margin-top: 0; max-width: none; }
-  .asks p { font-size: min(2.6rem, 5svh); }
-  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); }
+  .asks p { font-size: calc(min(2.6rem, 5svh) * var(--fit, 1)); }
+  .svc h3 { font-size: calc(clamp(2.2rem, 3.4vw, 3.2rem) * var(--fit, 1)); }
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d { margin-top: 0; }
 }
@@ -276,24 +276,25 @@ button { font: inherit; color: inherit; }
   /* the intro in three places: the name at the top, what I do big in the middle (it moves, so it leads),
      Porto just above the bar. What I do always breaks before its last word */
   .js .hero-in { flex: 1; display: flex; flex-direction: column; }
-  .say.what { margin-block: auto; padding-block: clamp(20px, 3svh, 36px); font-size: clamp(1.6rem, 14.5vw, 4.6rem); line-height: 1; white-space: normal; }
+  .say.what { margin-block: auto; padding-block: clamp(20px, 3svh, 36px); font-size: calc(clamp(1.6rem, 14.5vw, 4.6rem) * var(--fit, 1)); line-height: 1; white-space: normal; }
   .say .morph { display: block; }
   .say .cut { display: inline; }
-  .say.where { margin-top: 0; font-size: clamp(1.4rem, 10vw, 4rem); }
+  .say.where { margin-top: 0; font-size: calc(clamp(1.4rem, 10vw, 4rem) * var(--fit, 1)); }
   /* bigger lists: long lines may take two */
-  .doing li { font-size: clamp(1.55rem, 9.5vw, 3rem); line-height: 1.04; text-wrap: balance; }
+  .doing li { font-size: calc(clamp(1.55rem, 9.5vw, 3rem) * var(--fit, 1)); line-height: 1.04; text-wrap: balance; }
   .doing { gap: clamp(14px, 3.6svh, 40px); }
-  .asks p { font-size: clamp(1.55rem, 8.2vw, 2.6rem); line-height: 1.06; }
+  .asks p { font-size: calc(clamp(1.55rem, 8.2vw, 2.6rem) * var(--fit, 1)); line-height: 1.06; }
   .asks .m { display: inline; }
   .mail { margin-top: clamp(22px, 5svh, 56px); }
   .js #contact .asks { padding-top: clamp(16px, 2.6svh, 30px); }
-  /* services and contact sit a little above the middle, nearer their heading than the bar */
-  .js #services, .js #contact { padding-bottom: calc(var(--bar-b) + var(--bar-h) + 24px + clamp(0px, 14svh - 60px, 120px)); }
+  /* services and contact sit a little above the middle, nearer their heading than the bar: a spacer under them
+     that gives way when the text needs the room */
+  :root:not(.desk) #services::after, :root:not(.desk) #contact::after { content: ''; flex: 0 1 clamp(0px, 14svh - 60px, 120px); }
   .svc { gap: clamp(18px, 3.6svh, 48px); }
 }
 /* tall phones: services get a little more presence and air */
 @media (max-aspect-ratio: 3/4) and (min-height: 800px) {
-  .svc p { font-size: 1.06rem; line-height: 1.42; }
+  .svc p { font-size: max(12px, calc(1.06rem * var(--fit, 1))); line-height: 1.42; }
   .svc { gap: clamp(22px, 5svh, 56px); }
 }
 @media (max-height: 720px) {
@@ -301,7 +302,7 @@ button { font: inherit; color: inherit; }
   .doing { gap: clamp(12px, 4svh, 28px); }
   .names { gap: 12px; }
 }
-@media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: min(1.75rem, 8.4vw); } .nm { font-size: min(2.5rem, 11vw); } }
+@media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: calc(min(1.75rem, 8.4vw) * var(--fit, 1)); } .nm { font-size: calc(min(2.5rem, 11vw) * var(--fit, 1)); } }
 
 /* ---------- wide screens with a mouse: one page you scroll, each section a screen tall, the bar along the
    bottom as on a phone. As there, the title is the roof and the bar the floor, and the content sits centred
@@ -329,6 +330,7 @@ button { font: inherit; color: inherit; }
 .desk .svc { margin-block: auto; }
 .desk .svc article, .fold .svc article { display: grid; grid-template-columns: none; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
 .desk .svc article.on, .fold .svc article.on { grid-template-rows: auto 1fr; }
+.fold .measure .svc article { transition: none; } /* while the script measures the longest text open */
 .desk .svc article + article, .fold .svc article + article { margin-top: clamp(6px, 1.4svh, 18px); }
 .desk .svc h3 { width: max-content; font-size: min(4rem, 4vw, 6.4svh); cursor: pointer; }
 .fold .svc h3 { width: fit-content; }
