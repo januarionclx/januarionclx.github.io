@@ -123,8 +123,8 @@
   var deskQ = matchMedia('(min-width: 1100px) and (hover: hover) and (pointer: fine)'), desk = deskQ.matches;
   if (desk) root.classList.add('desk');
   if (deskQ.addEventListener) deskQ.addEventListener('change', function () { location.reload(); });
-  // a phone or a narrow window folds the services the way the long page does (see the services below)
-  var foldQ = matchMedia('(max-width: 899px)'), fold = !desk && foldQ.matches;
+  // a phone, a narrow window or a short one folds the services the way the long page does (see the services below)
+  var foldQ = matchMedia('(max-width: 899px), (max-height: 500px)'), fold = !desk && foldQ.matches;
   if (fold) root.classList.add('fold');
   if (!desk && foldQ.addEventListener) foldQ.addEventListener('change', function () { location.reload(); });
   var stages = [].slice.call(document.querySelectorAll('.stage'));

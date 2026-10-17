@@ -264,6 +264,12 @@ button { font: inherit; color: inherit; }
   .nm-d { margin-top: 0; }
 }
 
+/* a wide, short window (a phone on its side) sets each name beside its line too */
+@media (min-width: 640px) and (max-width: 899px) and (min-aspect-ratio: 1/1) {
+  .names li { display: flex; align-items: baseline; gap: 22px; }
+  .nm-d { margin-top: 0; }
+}
+
 @media (max-width: 420px) {
   .bar { left: 12px; width: calc(100vw - 24px); gap: 4px; }
 }
