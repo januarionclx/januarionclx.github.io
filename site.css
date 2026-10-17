@@ -32,7 +32,7 @@
 :root { --line: color-mix(in srgb, var(--fg) 22%, transparent); --hi: var(--title-acc, var(--accent)); /* the colour of a lit item */ }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; } /* no browser flash on a tap: a lit item fades into its own colour instead */
 body {
   margin: 0; min-height: 100svh; background: var(--bg); color: var(--fg);
   font-family: var(--f-sans); font-size: 17px; line-height: 1.45;
