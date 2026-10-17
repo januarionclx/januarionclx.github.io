@@ -348,7 +348,7 @@ button { font: inherit; color: inherit; }
 .desk .in .svc article:not(.on) h3:hover, .fold .in .svc article:not(.on) h3:hover { opacity: .6; }
 .desk .svc article.on h3, .fold .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
 .desk .svc p, .fold .svc p { margin-top: 0; min-height: 0; overflow: hidden; }
-.desk .svc p { max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
+.desk .svc p { max-width: 60ch; font-size: min(1.4rem, 1.45vw, 2.6svh); } /* wide enough that each phrase keeps to its line */
 .desk .svc p .l:first-child, .fold .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
 .desk .svc p .l:last-child, .fold .svc p .l:last-child { padding-bottom: 12px; }
 .desk .svc article:not(.on) p .l, .fold .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
