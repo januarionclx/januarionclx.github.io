@@ -16,7 +16,7 @@
   <meta property="og:url" content="https://januariopinto.com/">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://januariopinto.com/">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Porto","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, agentic engineering, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Porto","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Agentic engineering","Software factories","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -55,6 +55,10 @@
       <article class="grp">
         <h3 class="l">Software development</h3>
         <p><span class="l">A working product, not a prototype.</span> <span class="l">Web platforms, internal tools and AI, built to last.</span></p>
+      </article>
+      <article class="grp">
+        <h3 class="l">Agentic engineering</h3>
+        <p><span class="l">Software factories, harnesses and automations.</span> <span class="l">Agents that build and ship, led by your engineers.</span></p>
       </article>
       <article class="grp">
         <h3 class="l">Consulting</h3>
@@ -124,6 +128,7 @@
   if (fold) root.classList.add('fold');
   if (!desk && foldQ.addEventListener) foldQ.addEventListener('change', function () { location.reload(); });
   var stages = [].slice.call(document.querySelectorAll('.stage'));
+  document.getElementById('services').style.setProperty('--n', document.querySelectorAll('#services article').length);
   var NAMES = ['Intro', 'Services', 'Now', 'Portfolio', 'Contact'];
   var LOOKS = ['teal', 'ink', 'gold', 'violet', 'ember'];
   var lookBtn = document.getElementById('lookBtn');

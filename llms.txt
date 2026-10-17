@@ -3,7 +3,8 @@
 > Software developer and consultant in Porto. Designs and consults companies as living systems and creates software. Founder of The Unit Organization, an incubator and studio.
 
 ## Services
-- Software development: web platforms, internal tools, AI features and automation. A working product, not a prototype.
+- Software development: web platforms, internal tools and AI features. A working product, not a prototype.
+- Agentic engineering: software factories, harnesses and automations. Agents that build and ship, led by your engineers.
 - Consulting: strategy, technology and organization. Fractional CTO without the cost of a full-time hire. Distributed systems that don't rely on the founder. Self-managing teams (Teal, Holacracy).
 - Ventures: companies built from the ground up, incubated and funded through The Unit Organization.
 
