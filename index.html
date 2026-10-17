@@ -356,8 +356,8 @@
   svcMode();
 
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
-  // k go down and up through the items of the section you're in (never to another section: that's left and
-  // right), and c changes the colour. On the long page a quick second press counts from where the first was
+  // k or the up and down arrows go down and up through the items of the section you're in (never to another
+  // section: that's left and right), and c changes the colour. On the long page a quick second press counts from where the first was
   // going, not from where the scroll has got to. Single-letter keys can get in the way of speech and switch
   // control, so the guide can turn them off (the arrows always work).
   var keyTo = 0, keyAt = 0, letters = true;
@@ -368,9 +368,11 @@
     if (!letters && e.key.length === 1) return;
     if (e.key === '?') { e.preventDefault(); openGuide(); return; }
     if (e.key === 'c') { e.preventDefault(); lookBtn.click(); return; }
-    if (e.key === 'j' || e.key === 'k') {
+    var down = { j: 1, ArrowDown: 1, k: -1, ArrowUp: -1 }[e.key];
+    if (down) {
       var L = lights[Math.max(0, cur)];
-      if (L && L.step(e.key === 'j' ? 1 : -1)) e.preventDefault();
+      if (!L) return; // nothing to step through here: the arrows scroll as usual
+      e.preventDefault(); L.step(down); // at either end they stop, rather than scroll on to the next section
       return;
     }
     var by = { h: -1, ArrowLeft: -1, l: 1, ArrowRight: 1 }[e.key];
@@ -398,7 +400,7 @@
         '<h2 id="guide-title">Keys</h2>' +
         '<dl>' +
           '<div><dt>' + k('&larr;', 'Left arrow') + k('&rarr;', 'Right arrow') + '<span>or</span>' + k('h') + k('l') + '</dt><dd>Previous or next section</dd></div>' +
-          '<div><dt>' + k('j') + k('k') + '</dt><dd>Down or up, item by item</dd></div>' +
+          '<div><dt>' + k('&darr;', 'Down arrow') + k('&uarr;', 'Up arrow') + '<span>or</span>' + k('j') + k('k') + '</dt><dd>Down or up, item by item</dd></div>' +
           '<div><dt>' + k('c') + '</dt><dd>Change the colour</dd></div>' +
           '<div><dt>' + k('?') + '</dt><dd>Show these keys</dd></div>' +
           '<div><dt>' + k('Esc') + '</dt><dd>Close</dd></div>' +
