@@ -202,10 +202,10 @@ button { font: inherit; color: inherit; }
 .js .doing li, .js .names li, .js:not(.desk) .svc article { cursor: pointer; }
 .doing .lit, .names .lit, .svc .lit { color: var(--hi); }
 .js .in .doing .l, .js .in .names .nm, .js .in .svc h3 { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .4s ease; }
-.doing > li, .names > li, .js:not(.desk) .svc > article { transition: opacity .4s ease, translate .5s var(--move); }
-.doing:has(.lit) > li:not(:has(.lit)), .names:has(.lit) > li:not(:has(.lit)), .js:not(.desk) .svc:has(.lit) > article:not(:has(.lit)) { opacity: .3; }
+.doing > li, .names > li, .js:not(.desk):not(.fold) .svc > article { transition: opacity .4s ease, translate .5s var(--move); }
+.doing:has(.lit) > li:not(:has(.lit)), .names:has(.lit) > li:not(:has(.lit)), .js:not(.desk):not(.fold) .svc:has(.lit) > article:not(:has(.lit)) { opacity: .3; }
 @media (prefers-reduced-motion: no-preference) {
-  .doing > li:has(.lit), .names > li:has(.lit), .js:not(.desk) .svc > article:has(.lit) { translate: 10px 0; }
+  .doing > li:has(.lit), .names > li:has(.lit), .js:not(.desk):not(.fold) .svc > article:has(.lit) { translate: 10px 0; }
 }
 .glow { opacity: 0; transition: opacity .45s ease; }
 .glow.on { opacity: 1; }
@@ -321,23 +321,26 @@ button { font: inherit; color: inherit; }
 .desk .addr { font-size: min(4.2rem, 6svh); }
 
 /* services hold still while you scroll through them: the names stacked, the one you're on in the accent
-   with its text open under it */
+   with its text open under it. Phones fold them the same way, a tap opening one (.fold) */
 .desk #services { height: 330svh; padding-block: 0; }
 .desk .pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; padding: var(--top) 0 calc(var(--bar-b) + var(--bar-h) + 24px); }
-.desk .svc { display: block; margin-block: auto; }
-.desk .svc article { display: grid; grid-template-columns: none; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
-.desk .svc article.on { grid-template-rows: auto 1fr; }
-.desk .svc article + article { margin-top: clamp(6px, 1.4svh, 18px); }
+.desk .svc, .fold .svc { display: block; }
+.desk .svc { margin-block: auto; }
+.desk .svc article, .fold .svc article { display: grid; grid-template-columns: none; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
+.desk .svc article.on, .fold .svc article.on { grid-template-rows: auto 1fr; }
+.desk .svc article + article, .fold .svc article + article { margin-top: clamp(6px, 1.4svh, 18px); }
 .desk .svc h3 { width: max-content; font-size: min(4rem, 4vw, 6.4svh); cursor: pointer; }
+.fold .svc h3 { width: fit-content; }
 /* once the section is in, the names dim and light at once, without the entrance's stagger */
-.desk .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
-.desk .in .svc article:not(.on) h3 { opacity: .3; }
-.desk .in .svc article:not(.on) h3:hover { opacity: .6; }
-.desk .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
-.desk .svc p { margin-top: 0; min-height: 0; overflow: hidden; max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
-.desk .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
-.desk .svc p .l:last-child { padding-bottom: 12px; }
-.desk .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
+.desk .in .svc h3, .fold .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
+.desk .in .svc article:not(.on) h3, .fold .in .svc article:not(.on) h3 { opacity: .3; }
+.desk .in .svc article:not(.on) h3:hover, .fold .in .svc article:not(.on) h3:hover { opacity: .6; }
+.desk .svc article.on h3, .fold .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
+.desk .svc p, .fold .svc p { margin-top: 0; min-height: 0; overflow: hidden; }
+.desk .svc p { max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
+.desk .svc p .l:first-child, .fold .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
+.desk .svc p .l:last-child, .fold .svc p .l:last-child { padding-bottom: 12px; }
+.desk .svc article:not(.on) p .l, .fold .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
 
 @media (prefers-reduced-motion: reduce) {
   .hero.in .name { animation: none; }

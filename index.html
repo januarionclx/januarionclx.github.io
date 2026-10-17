@@ -119,6 +119,10 @@
   var deskQ = matchMedia('(min-width: 1100px) and (hover: hover) and (pointer: fine)'), desk = deskQ.matches;
   if (desk) root.classList.add('desk');
   if (deskQ.addEventListener) deskQ.addEventListener('change', function () { location.reload(); });
+  // a phone or a narrow window folds the services the way the long page does (see the services below)
+  var foldQ = matchMedia('(max-width: 899px)'), fold = !desk && foldQ.matches;
+  if (fold) root.classList.add('fold');
+  if (!desk && foldQ.addEventListener) foldQ.addEventListener('change', function () { location.reload(); });
   var stages = [].slice.call(document.querySelectorAll('.stage'));
   var NAMES = ['Intro', 'Services', 'Now', 'Portfolio', 'Contact'];
   var LOOKS = ['teal', 'ink', 'gold', 'violet', 'ember'];
@@ -308,10 +312,30 @@
   }
   var lights = stages.map(function (s) {
     var list = s.querySelector('.doing, .names, .svc');
-    if (!list || (desk && s.id === 'services')) return null; // the long page lights services itself (deskStart)
+    if (!list || ((desk || fold) && s.id === 'services')) return null; // folded services light themselves (below, deskStart)
     var items = [].slice.call(list.children);
     return Lights(list, items, items.map(function (it) { return it.querySelector('.l'); })); // an item's first line is what lights
   });
+
+  // On a phone the services fold as they do on the long page: the names stacked and one open at a time, in the
+  // accent and lit like the name. Once the names are in, the last one opened (the first, to begin with)
+  // unfolds; a tap, or j and k, opens another. svcShow tells it the screen is arriving or leaving.
+  var svcShow = null;
+  if (fold) (function () {
+    var svc = document.getElementById('services'), si = stages.indexOf(svc), arts = [].slice.call(svc.querySelectorAll('article'));
+    var names = arts.map(function (a) { return a.querySelector('h3'); }), at = 0, t = 0;
+    var first = parseFloat(names[0].style.getPropertyValue('--d')) || 0;
+    names.forEach(function (n, j) { n.style.setProperty('--d', (first + LINE * j).toFixed(2) + 's'); }); // the names rise as one list
+    arts.forEach(function (art) { // and a text unfolds line by line whenever it opens
+      [].forEach.call(art.querySelectorAll('p .l'), function (l, j) { l.style.setProperty('--d', (0.06 + 0.12 * j).toFixed(2) + 's'); });
+    });
+    function open(k) { at = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); lights[si].set(k); }
+    lights[si] = Lights(svc.querySelector('.svc'), arts, names, function (k) { clearTimeout(t); open(k); });
+    svcShow = function (on) {
+      clearTimeout(t); arts.forEach(function (a) { a.classList.remove('on'); });
+      if (on) t = setTimeout(function () { open(at); }, (first + LINE * (names.length - 1) + 0.2) * 1000);
+    };
+  })();
 
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
   // k go down and up through the items of the section you're in (never to another section: that's left and
@@ -432,6 +456,7 @@
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
     if (!started) return;
     var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
+    if (svcShow) svcShow(s.id === 'services');
     if (cur === 0) morphStart(); else morphReset();
     if (nameFx) nameFx.show(cur === 0);
   }
