@@ -192,6 +192,7 @@ button { font: inherit; color: inherit; }
    WebGL the smoke runs through its letters (a canvas that fades in over them) ---------- */
 .doing li, .nm, .svc h3 { position: relative; }
 .doing li, .names li { width: fit-content; }
+.js .doing li, .js .names li, .js:not(.desk) .svc article { cursor: pointer; }
 .doing .lit, .names .lit, .svc .lit { color: var(--hi); }
 .js .in .doing .l, .js .in .names .nm, .js .in .svc h3 { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .4s ease; }
 .glow { opacity: 0; transition: opacity .45s ease; }
