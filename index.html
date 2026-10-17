@@ -324,9 +324,15 @@
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
   // k go down and up (on the long page they also stop at each service), and c changes the colour. A quick
   // second press counts from where the first was going, not from where the scroll has got to.
-  var keyTo = 0, keyY = 0, keyAt = 0, stops = null;
+  // Single-letter keys can get in the way of speech and switch control, so the guide can turn them off
+  // (the arrows always work).
+  var keyTo = 0, keyY = 0, keyAt = 0, stops = null, letters = true;
+  try { letters = localStorage.getItem('letters') !== 'off'; } catch (e) {}
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (guide && guide.open) { if (e.key === '?') { e.preventDefault(); guide.close(); } return; }
+    if (!letters && e.key.length === 1) return;
+    if (e.key === '?') { e.preventDefault(); openGuide(); return; }
     if (e.key === 'c') { e.preventDefault(); lookBtn.click(); return; }
     var by = { h: -1, ArrowLeft: -1, k: -1, l: 1, ArrowRight: 1, j: 1 }[e.key];
     if (!by) return;
@@ -344,6 +350,43 @@
     if (i < 0 || i >= stages.length) return;
     e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i);
   });
+
+  // The guide to the keys: ? opens it, and so does the ? at the end of the bar (on screens with a mouse).
+  // A native dialog, so it takes focus, Esc closes it and focus goes back; built the first time it opens.
+  var guide = null, helpBtn = document.createElement('button');
+  helpBtn.type = 'button'; helpBtn.className = 'help'; helpBtn.textContent = '?';
+  helpBtn.setAttribute('aria-label', 'Keyboard keys'); helpBtn.setAttribute('aria-keyshortcuts', 'Shift+?');
+  helpBtn.addEventListener('click', function () { openGuide(); });
+  bar.appendChild(helpBtn);
+  lookBtn.setAttribute('aria-keyshortcuts', 'C');
+  function openGuide() {
+    if (!guide) {
+      guide = document.createElement('dialog'); guide.className = 'guide'; guide.setAttribute('aria-labelledby', 'guide-title');
+      var k = function (x, label) { return '<kbd' + (label ? ' aria-label="' + label + '"' : '') + '>' + x + '</kbd>'; };
+      guide.innerHTML =
+        '<form method="dialog"><button class="x" aria-label="Close">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></form>' +
+        '<h2 id="guide-title">Keys</h2>' +
+        '<dl>' +
+          '<div><dt>' + k('&larr;', 'Left arrow') + k('&rarr;', 'Right arrow') + '<span>or</span>' + k('h') + k('l') + '</dt><dd>Previous or next section</dd></div>' +
+          '<div><dt>' + k('j') + k('k') + '</dt><dd>Down or up, one item at a time</dd></div>' +
+          '<div><dt>' + k('c') + '</dt><dd>Change the colour</dd></div>' +
+          '<div><dt>' + k('?') + '</dt><dd>Show these keys</dd></div>' +
+          '<div><dt>' + k('Esc') + '</dt><dd>Close</dd></div>' +
+        '</dl>' +
+        '<label class="sw"><input type="checkbox" role="switch"> <span>Single-letter keys</span></label>' +
+        '<p class="touch">On a phone, swipe left or right.</p>';
+      document.body.appendChild(guide);
+      var sw = guide.querySelector('input');
+      sw.checked = letters;
+      sw.addEventListener('change', function () {
+        letters = sw.checked;
+        try { localStorage.setItem('letters', letters ? 'on' : 'off'); } catch (e) {}
+      });
+      guide.addEventListener('click', function (e) { if (e.target === guide) guide.close(); }); // a click outside closes it
+    }
+    if (!guide.open) guide.showModal();
+  }
 
   // The intro's first line turns from one thing I do into the next while the intro is on screen (Porto stays).
   // Words both phrases share stay, sliding into place if they must; the others lift away and the new ones rise in.
