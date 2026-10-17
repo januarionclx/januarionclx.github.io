@@ -13,6 +13,7 @@
   --top: calc(env(safe-area-inset-top, 0px) + clamp(64px, 11svh, 140px)); /* titles sit high; the content gets the room */
   --bar-b: calc(env(safe-area-inset-bottom, 0px) + clamp(24px, 7svh, 72px));
   --bar-h: 44px;
+  --bar-w: min(590px, calc(100vw - 2 * var(--pad))); /* the bar's width; titles end where it ends */
   color-scheme: dark;
 }
 @media (min-width: 640px) { :root { --pad: 40px; } }
@@ -56,11 +57,15 @@ button { font: inherit; color: inherit; }
 .veil { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .25), transparent 35%, rgba(0, 0, 0, .6)); }
 
 /* ---------- type ---------- */
-.title { margin: 0; font-size: clamp(2.6rem, 11.6vw, 6.4rem); font-weight: 900; line-height: .98; letter-spacing: -.055em; }
+.title { margin: 0; font-size: calc(min(clamp(2.6rem, 11.6vw, 6.4rem), calc(var(--bar-w) / 7)) * var(--fit, 1)); font-weight: 900; line-height: .98; letter-spacing: -.055em; }
+/* a section's title runs on until the bar ends, and only then breaks between its parts. The size above keeps the
+   widest line ('What I’m doing', 6.8em) inside the bar with a little room, so no part ever breaks inside */
+.stage:not(.hero) .title { max-width: var(--bar-w); }
+.stage:not(.hero) .title .l { white-space: nowrap; }
 .title .l { display: block; }
 .title .acc { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.025em; padding-left: .06em; color: var(--title-acc, var(--accent)); }
 
-.hero .title { font-size: clamp(4.4rem, min(20.5vw, 19svh), 12.5rem); }
+.hero .title { font-size: calc(clamp(4.4rem, min(20.5vw, 19svh), 12.5rem) * var(--fit, 1)); }
 /* the name shines now and then, like light passing over metal; only while the intro is on screen */
 .hero .name {
   background: linear-gradient(100deg, var(--name) 40%, #fff 50%, var(--name) 60%) 100% 0 / 250% 100% no-repeat;
@@ -75,7 +80,7 @@ button { font: inherit; color: inherit; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
 /* two big lines under the name: what I do (turning from one thing to the next) and where; last words in white */
-.say { margin: 0; font-size: clamp(1.6rem, 8.6vw, 4.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.045em; color: var(--muted); white-space: nowrap; }
+.say { margin: 0; font-size: calc(clamp(1.6rem, 8.6vw, 4.6rem) * var(--fit, 1)); font-weight: 700; line-height: 1.1; letter-spacing: -.045em; color: var(--muted); white-space: nowrap; }
 .say.what { margin-top: clamp(28px, 6svh, 72px); }
 .say.where { margin-top: clamp(4px, 1.2svh, 14px); }
 .say .k { color: var(--fg); }
@@ -87,8 +92,8 @@ button { font: inherit; color: inherit; }
 
 .svc { display: grid; gap: clamp(22px, 3.4svh, 38px); margin-top: clamp(20px, 3svh, 36px); }
 /* service names read like the portfolio names: big, light and white, with the grey description under them */
-.svc h3 { margin: 0; font-size: clamp(1.9rem, 9vw, 3.2rem); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
-.svc p { margin: .4em 0 0; max-width: 34ch; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
+.svc h3 { margin: 0; font-size: calc(clamp(1.9rem, 9vw, 3.2rem) * var(--fit, 1)); font-weight: 500; line-height: 1; letter-spacing: -.05em; color: var(--fg); }
+.svc p { margin: .4em 0 0; max-width: 34ch; font-size: max(12px, calc(clamp(1rem, 1.25vw, 1.2rem) * var(--fit, 1))); font-weight: 500; line-height: 1.38; letter-spacing: -.01em; color: var(--muted); text-wrap: pretty; }
 .svc p { margin-top: .6em; }
 .svc p .l { display: block; }
 .svc p .l, .nm-d { text-wrap: balance; }
@@ -97,23 +102,24 @@ button { font: inherit; color: inherit; }
 .js .doing { margin-block: auto; } /* centred in the room under the title */
 .js #contact .asks { margin-top: auto; }
 .js #contact .mail { margin-bottom: auto; }
-.doing li { font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
+.doing li { font-size: calc(clamp(1.55rem, 7vw, 2.6rem) * var(--fit, 1)); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
 
 .names { list-style: none; margin: clamp(20px, 3svh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 2.2svh, 26px); }
-.nm { display: block; font-size: clamp(2.7rem, 12.5vw, 4.2rem); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
-.nm-d { display: block; margin-top: .5em; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; letter-spacing: -.01em; color: var(--muted); }
-.more .nm { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
+.nm { display: block; font-size: calc(clamp(2.7rem, 12.5vw, 4.2rem) * var(--fit, 1)); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
+.nm-d { display: block; margin-top: .5em; font-size: max(12px, calc(clamp(1rem, 1.25vw, 1.2rem) * var(--fit, 1))); font-weight: 500; letter-spacing: -.01em; color: var(--muted); }
+/* the last line of a list, 'and more.', in the serif like a title's italic word */
+.more .nm, .doing .more .l { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
 
 /* contact opens with two questions in the 'doing now' size, in white */
 /* contact: five lines in one size and one grey, so the email is the bright thing */
 .asks { margin: clamp(20px, 3svh, 36px) 0 0; }
-.asks p { margin: 0; font-size: clamp(1.55rem, 7vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
+.asks p { margin: 0; font-size: calc(clamp(1.55rem, 7vw, 2.6rem) * var(--fit, 1)); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--muted); }
 .asks p + p { margin-top: .3em; }
 .asks .dim { color: var(--muted); }
 .asks .m { display: none; } /* phone-only line breaks */
 .mail { display: flex; align-items: flex-end; gap: 4px; margin-top: clamp(22px, 3.4svh, 40px); }
 /* the address reads like the portfolio names: big and light */
-.addr { font-size: clamp(2.2rem, 9.4vw, 4.2rem); font-weight: 500; line-height: 1; letter-spacing: -.055em; text-decoration: none; color: var(--fg); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
+.addr { font-size: calc(clamp(2.2rem, 9.4vw, 4.2rem) * var(--fit, 1)); font-weight: 500; line-height: 1; letter-spacing: -.055em; text-decoration: none; color: var(--fg); user-select: text; -webkit-user-select: text; transition: color .25s ease; }
 .addr .hi { color: var(--accent); }
 .copy { position: relative; flex: none; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), color .2s ease; }
 .copy svg { grid-area: 1 / 1; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: opacity .2s ease, transform .3s var(--reel), filter .2s ease; }
@@ -135,7 +141,7 @@ button { font: inherit; color: inherit; }
 .stage { position: relative; z-index: 2; padding: 16svh var(--pad) 6svh; }
 .look { display: none; }
 
-/* ---------- one fixed screen ---------- */
+/* ---------- one fixed screen (a cramped one shrinks its big text to fit: --fit, set by the script) ---------- */
 .js, .js body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 .js .stage {
   position: fixed; inset: 0; margin: 0; display: flex; flex-direction: column;
@@ -146,9 +152,9 @@ button { font: inherit; color: inherit; }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
 .js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
-/* on screens (phones), a short title takes one line; 'now' keeps its own. On the long page, 'My services' does too */
-:root:not(.desk) .title.one, .desk #services .title { min-height: 0; margin-bottom: clamp(14px, 3.4svh, 36px); }
-:root:not(.desk) .title.one .l, .desk #services .title .l { display: inline-block; }
+/* a short title takes one line; 'now' keeps its own */
+.js .stage .title.one { min-height: auto; margin-bottom: clamp(14px, 3.4svh, 36px); } /* auto, not 0: a flex item at 0 can be squeezed under the text after it */
+.title.one .l { display: inline-block; }
 .js .foot { display: none; }
 
 /* lines rise out of a soft blur, one after another; on leaving they all fade at once */
@@ -158,7 +164,7 @@ button { font: inherit; color: inherit; }
 /* ---------- section buttons: one row, and everything in it moves with transforms and opacity only.
    The bubble slides to the current button and fades into the section's colour while its label crossfades;
    on a phone (compact) the other sections are letter circles that slide aside to make room. ---------- */
-.bar { position: fixed; z-index: 5; left: var(--pad); bottom: var(--bar-b); width: min(590px, calc(100vw - 2 * var(--pad))); display: flex; gap: 6px; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .6s var(--reel) 1s, transform .6s var(--reel) 1s; }
+.bar { position: fixed; z-index: 5; left: var(--pad); bottom: var(--bar-b); width: var(--bar-w); display: flex; gap: 6px; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .6s var(--reel) 1s, transform .6s var(--reel) 1s; }
 .ready .bar { opacity: 1; transform: none; pointer-events: auto; }
 .bar-row { position: relative; flex: 1; min-width: 0; height: var(--bar-h); touch-action: none; }
 .bar-row button {
@@ -197,10 +203,10 @@ button { font: inherit; color: inherit; }
 .js .doing li, .js .names li, .js:not(.desk) .svc article { cursor: pointer; }
 .doing .lit, .names .lit, .svc .lit { color: var(--hi); }
 .js .in .doing .l, .js .in .names .nm, .js .in .svc h3 { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .4s ease; }
-.doing > li, .names > li, .js:not(.desk) .svc > article { transition: opacity .4s ease, translate .5s var(--move); }
-.doing:has(.lit) > li:not(:has(.lit)), .names:has(.lit) > li:not(:has(.lit)), .js:not(.desk) .svc:has(.lit) > article:not(:has(.lit)) { opacity: .3; }
+.doing > li, .names > li, .js:not(.desk):not(.fold) .svc > article { transition: opacity .4s ease, translate .5s var(--move); }
+.doing:has(.lit) > li:not(:has(.lit)), .names:has(.lit) > li:not(:has(.lit)), .js:not(.desk):not(.fold) .svc:has(.lit) > article:not(:has(.lit)) { opacity: .3; }
 @media (prefers-reduced-motion: no-preference) {
-  .doing > li:has(.lit), .names > li:has(.lit), .js:not(.desk) .svc > article:has(.lit) { translate: 10px 0; }
+  .doing > li:has(.lit), .names > li:has(.lit), .js:not(.desk):not(.fold) .svc > article:has(.lit) { translate: 10px 0; }
 }
 .glow { opacity: 0; transition: opacity .45s ease; }
 .glow.on { opacity: 1; }
@@ -252,8 +258,14 @@ button { font: inherit; color: inherit; }
   .svc { grid-template-columns: max-content minmax(0, 50ch); column-gap: clamp(28px, 3.4vw, 56px); row-gap: clamp(22px, 3.2svh, 34px); }
   .svc article { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: start; }
   .svc p { margin-top: 0; max-width: none; }
-  .asks p { font-size: min(2.6rem, 5svh); }
-  .svc h3 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); }
+  .asks p { font-size: calc(min(2.6rem, 5svh) * var(--fit, 1)); }
+  .svc h3 { font-size: calc(clamp(2.2rem, 3.4vw, 3.2rem) * var(--fit, 1)); }
+  .names li { display: flex; align-items: baseline; gap: 22px; }
+  .nm-d { margin-top: 0; }
+}
+
+/* a wide, short window (a phone on its side) sets each name beside its line too */
+@media (min-width: 640px) and (max-width: 899px) and (min-aspect-ratio: 1/1) {
   .names li { display: flex; align-items: baseline; gap: 22px; }
   .nm-d { margin-top: 0; }
 }
@@ -270,24 +282,25 @@ button { font: inherit; color: inherit; }
   /* the intro in three places: the name at the top, what I do big in the middle (it moves, so it leads),
      Porto just above the bar. What I do always breaks before its last word */
   .js .hero-in { flex: 1; display: flex; flex-direction: column; }
-  .say.what { margin-block: auto; padding-block: clamp(20px, 3svh, 36px); font-size: clamp(1.6rem, 14.5vw, 4.6rem); line-height: 1; white-space: normal; }
+  .say.what { margin-block: auto; padding-block: clamp(20px, 3svh, 36px); font-size: calc(clamp(1.6rem, 14.5vw, 4.6rem) * var(--fit, 1)); line-height: 1; white-space: normal; }
   .say .morph { display: block; }
   .say .cut { display: inline; }
-  .say.where { margin-top: 0; font-size: clamp(1.4rem, 10vw, 4rem); }
+  .say.where { margin-top: 0; font-size: calc(clamp(1.4rem, 10vw, 4rem) * var(--fit, 1)); }
   /* bigger lists: long lines may take two */
-  .doing li { font-size: clamp(1.55rem, 9.5vw, 3rem); line-height: 1.04; text-wrap: balance; }
+  .doing li { font-size: calc(clamp(1.55rem, 9.5vw, 3rem) * var(--fit, 1)); line-height: 1.04; text-wrap: balance; }
   .doing { gap: clamp(14px, 3.6svh, 40px); }
-  .asks p { font-size: clamp(1.55rem, 8.2vw, 2.6rem); line-height: 1.06; }
+  .asks p { font-size: calc(clamp(1.55rem, 8.2vw, 2.6rem) * var(--fit, 1)); line-height: 1.06; }
   .asks .m { display: inline; }
   .mail { margin-top: clamp(22px, 5svh, 56px); }
   .js #contact .asks { padding-top: clamp(16px, 2.6svh, 30px); }
-  /* services and contact sit a little above the middle, nearer their heading than the bar */
-  .js #services, .js #contact { padding-bottom: calc(var(--bar-b) + var(--bar-h) + 24px + clamp(0px, 14svh - 60px, 120px)); }
+  /* services and contact sit a little above the middle, nearer their heading than the bar: a spacer under them
+     that gives way when the text needs the room */
+  :root:not(.desk) #services::after, :root:not(.desk) #contact::after { content: ''; flex: 0 1 clamp(0px, 14svh - 60px, 120px); }
   .svc { gap: clamp(18px, 3.6svh, 48px); }
 }
 /* tall phones: services get a little more presence and air */
 @media (max-aspect-ratio: 3/4) and (min-height: 800px) {
-  .svc p { font-size: 1.06rem; line-height: 1.42; }
+  .svc p { font-size: max(12px, calc(1.06rem * var(--fit, 1))); line-height: 1.42; }
   .svc { gap: clamp(22px, 5svh, 56px); }
 }
 @media (max-height: 720px) {
@@ -295,15 +308,16 @@ button { font: inherit; color: inherit; }
   .doing { gap: clamp(12px, 4svh, 28px); }
   .names { gap: 12px; }
 }
-@media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: min(1.75rem, 8.4vw); } .nm { font-size: min(2.5rem, 11vw); } }
+@media (max-height: 720px) and (max-width: 899px) { .svc h3 { font-size: calc(min(1.75rem, 8.4vw) * var(--fit, 1)); } .nm { font-size: calc(min(2.5rem, 11vw) * var(--fit, 1)); } }
 
 /* ---------- wide screens with a mouse: one page you scroll, each section a screen tall, the bar along the
    bottom as on a phone. As there, the title is the roof and the bar the floor, and the content sits centred
    between them; sizes follow the screen's height too, so nothing ever reaches the bar. ---------- */
 .desk, .desk body { height: auto; overflow: visible; }
 .desk { scroll-snap-type: y proximity; }
+.desk.gliding { scroll-snap-type: none; } /* the script's glide sets the scroll every frame */
 .desk .stage { position: relative; inset: auto; min-height: 100svh; overflow: visible; visibility: visible; scroll-snap-align: start; user-select: text; -webkit-user-select: text; }
-.desk .title { font-size: min(6.4rem, 11.6vw, 11svh); }
+.desk .title { font-size: min(6.4rem, 11.6vw, 11svh, calc(var(--bar-w) / 7)); }
 .desk .hero .title { font-size: min(12.5rem, 20.5vw, 17svh); }
 .desk .hero-in { flex: 1; display: flex; flex-direction: column; }
 .desk .say { font-size: min(4.6rem, 8.6vw, 8svh); }
@@ -316,23 +330,29 @@ button { font: inherit; color: inherit; }
 .desk .addr { font-size: min(4.2rem, 6svh); }
 
 /* services hold still while you scroll through them: the names stacked, the one you're on in the accent
-   with its text open under it */
-.desk #services { height: 330svh; padding-block: 0; }
+   with its text open under it. Phones fold them the same way, a tap opening one (.fold) */
+.desk #services { height: calc(110svh * var(--n, 3)); padding-block: 0; } /* --n: how many services (set by the script) */
+/* the pin only holds the services still on the long page; elsewhere its title and list are the screen's own */
+.pin { display: contents; }
 .desk .pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; padding: var(--top) 0 calc(var(--bar-b) + var(--bar-h) + 24px); }
-.desk .svc { display: block; margin-block: auto; }
-.desk .svc article { display: grid; grid-template-columns: none; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
-.desk .svc article.on { grid-template-rows: auto 1fr; }
-.desk .svc article + article { margin-top: clamp(6px, 1.4svh, 18px); }
+.desk .svc, .fold .svc { display: block; }
+.desk .svc { margin-block: auto; }
+.desk .svc article, .fold .svc article { display: grid; grid-template-columns: none; grid-template-rows: auto 0fr; transition: grid-template-rows .6s var(--move); }
+.desk .svc article.on, .fold .svc article.on { grid-template-rows: auto 1fr; }
+.fold .measure .svc article { transition: none; } /* while the script measures the longest text open */
+.desk .svc article + article, .fold .svc article + article { margin-top: clamp(6px, 1.4svh, 18px); }
 .desk .svc h3 { width: max-content; font-size: min(4rem, 4vw, 6.4svh); cursor: pointer; }
+.fold .svc h3 { width: fit-content; }
 /* once the section is in, the names dim and light at once, without the entrance's stagger */
-.desk .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
-.desk .in .svc article:not(.on) h3 { opacity: .3; }
-.desk .in .svc article:not(.on) h3:hover { opacity: .6; }
-.desk .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
-.desk .svc p { margin-top: 0; min-height: 0; overflow: hidden; max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
-.desk .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
-.desk .svc p .l:last-child { padding-bottom: 12px; }
-.desk .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
+.desk .in .svc h3, .fold .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
+.desk .in .svc article:not(.on) h3, .fold .in .svc article:not(.on) h3 { opacity: .3; }
+.desk .in .svc article:not(.on) h3:hover, .fold .in .svc article:not(.on) h3:hover { opacity: .6; }
+.desk .svc article.on h3, .fold .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
+.desk .svc p, .fold .svc p { margin-top: 0; min-height: 0; overflow: hidden; }
+.desk .svc p { max-width: 60ch; font-size: min(1.4rem, 1.45vw, 2.6svh); } /* wide enough that each phrase keeps to its line */
+.desk .svc p .l:first-child, .fold .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
+.desk .svc p .l:last-child, .fold .svc p .l:last-child { padding-bottom: 12px; }
+.desk .svc article:not(.on) p .l, .fold .svc article:not(.on) p .l { opacity: 0; transform: translateY(.3em); filter: blur(min(.21em, 10px)); }
 
 @media (prefers-reduced-motion: reduce) {
   .hero.in .name { animation: none; }

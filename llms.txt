@@ -3,8 +3,9 @@
 > Software developer and consultant in Porto. Designs and consults companies as living systems and creates software. Founder of The Unit Organization, an incubator and studio.
 
 ## Services
-- Software development: web platforms, internal tools, AI features and automation. A working product, not a prototype.
-- Consulting: strategy, technology and organization. Fractional CTO without the cost of a full-time hire. Distributed systems that don't rely on the founder. Self-managing teams (Teal, Holacracy).
+- Software development: web platforms, internal tools and AI features. A working product, not a prototype.
+- Agentic engineering: software factories, harnesses and automations. Agents that build and ship, led by your engineers.
+- Consulting: strategy, technology and organization. A fractional CTO on your side, as involved as you need. A self-managing company that keeps going when you step back. Teams that decide and deliver on their own (Teal, Holacracy).
 - Ventures: companies built from the ground up, incubated and funded through The Unit Organization.
 
 ## Public portfolio
@@ -14,10 +15,10 @@
 - And more in the works. Open to investors and buyers: contact@januariopinto.com
 
 ## What I'm doing now
-- Automating systems for restaurants, shops and services.
-- Creating harnesses for doctors, clinics and teams.
 - Building software factories.
 - Working with private clients.
+- Creating products.
+- And more.
 
 ## Contact
 - Email: contact@januariopinto.com

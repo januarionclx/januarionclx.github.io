@@ -16,7 +16,7 @@
   <meta property="og:url" content="https://januariopinto.com/">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://januariopinto.com/">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Porto","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Januario Pinto","url":"https://januariopinto.com/","email":"contact@januariopinto.com","jobTitle":"Software developer and consultant","description":"Designs and consults companies as living systems and creates software. Software development, agentic engineering, fractional CTO and organizational consulting, ventures through The Unit Organization.","address":{"@type":"PostalAddress","addressLocality":"Porto","addressCountry":"PT"},"worksFor":{"@type":"Organization","name":"The Unit Organization","url":"https://theunitorganization.com"},"sameAs":["https://x.com/januario_xyz","https://github.com/januarionclx","https://theunitorganization.com"],"knowsAbout":["Software architecture","AI products","Agentic engineering","Software factories","Fractional CTO","Holacracy","Self-managing organizations","Teal organizations"]}</script>
   <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -57,8 +57,12 @@
         <p><span class="l">A working product, not a prototype.</span> <span class="l">Web platforms, internal tools and AI, built to last.</span></p>
       </article>
       <article class="grp">
+        <h3 class="l">Agentic engineering</h3>
+        <p><span class="l">Software factories, harnesses and automations.</span> <span class="l">Agents that build and ship, led by your engineers.</span></p>
+      </article>
+      <article class="grp">
         <h3 class="l">Consulting</h3>
-        <p><span class="l">A fractional CTO, as involved as you need.</span> <span class="l">Distributed systems that don&rsquo;t rely on you.</span> <span class="l">Self-managing teams that run on their own.</span></p>
+        <p><span class="l">A fractional CTO on your side, as involved as you need.</span> <span class="l">A self-managing company that keeps going when you step back.</span> <span class="l">Teams that decide and deliver on their own.</span></p>
       </article>
       <article class="grp">
         <h3 class="l">Ventures</h3>
@@ -70,10 +74,10 @@
   <section class="stage" id="now" data-look="gold" aria-labelledby="now-title">
     <h2 class="title" id="now-title"><span class="l">What I&rsquo;m doing</span> <span class="l acc">now</span></h2>
     <ul class="doing grp">
-      <li><span class="l">Automating systems</span></li>
-      <li><span class="l">Creating harnesses</span></li>
       <li><span class="l">Building software factories</span></li>
       <li><span class="l">Working with private clients</span></li>
+      <li><span class="l">Creating products</span></li>
+      <li class="more"><span class="l">and more.</span></li>
     </ul>
   </section>
 
@@ -115,11 +119,13 @@
 (function () {
   var root = document.documentElement;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // a wide screen with a mouse gets one long page instead of screens (see deskStart)
+  // A wide screen with a mouse gets one long page instead of screens; a phone, a narrow window or a short one
+  // folds the services the way the long page does. Resizing across the line changes the page in place (setMode).
   var deskQ = matchMedia('(min-width: 1100px) and (hover: hover) and (pointer: fine)'), desk = deskQ.matches;
-  if (desk) root.classList.add('desk');
-  if (deskQ.addEventListener) deskQ.addEventListener('change', function () { location.reload(); });
+  var foldQ = matchMedia('(max-width: 899px), (max-height: 500px)'), fold = !desk && foldQ.matches;
+  root.classList.toggle('desk', desk); root.classList.toggle('fold', fold);
   var stages = [].slice.call(document.querySelectorAll('.stage'));
+  document.getElementById('services').style.setProperty('--n', document.querySelectorAll('#services article').length);
   var NAMES = ['Intro', 'Services', 'Now', 'Portfolio', 'Contact'];
   var LOOKS = ['teal', 'ink', 'gold', 'violet', 'ember'];
   var lookBtn = document.getElementById('lookBtn');
@@ -140,7 +146,7 @@
         if (group !== prev && group.dataset.rest) step += parseFloat(group.dataset.rest);
         t += step * pace;
       }
-      l.style.setProperty('--d', t.toFixed(2) + 's');
+      l.style.setProperty('--d', l.dataset.d = t.toFixed(2) + 's');
       prev = group;
     });
   });
@@ -276,10 +282,10 @@
   // Items you can light: point at one, tap it, or step to it with j and k, and it takes its section's colour
   // with the smoke running through its letters, like the name, while the others step back. A second tap puts
   // it out. pick, when given, decides instead (the services on the long page are lit by the scroll, so a click
-  // scrolls there).
+  // scrolls there). One that's switched off (use) ignores the pointer.
   var glows = null, glowing = null;
   function Lights(list, items, targets, pick) {
-    var at = -1, aim = -1, aimAt = 0, type = '';
+    var at = -1, aim = -1, aimAt = 0, type = '', on = true;
     function set(k) {
       if (k === at) return;
       var was = at; at = k;
@@ -288,12 +294,13 @@
     }
     items.forEach(function (it, k) {
       it.addEventListener('pointerdown', function (e) { type = e.pointerType; });
-      it.addEventListener('click', function () { if (pick) pick(k); else set(type !== 'mouse' && k === at ? -1 : k); });
-      if (!pick) it.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') set(k); });
+      it.addEventListener('click', function () { if (!on) return; if (pick) pick(k); else set(type !== 'mouse' && k === at ? -1 : k); });
+      if (!pick) it.addEventListener('pointerenter', function (e) { if (on && e.pointerType === 'mouse') set(k); });
     });
-    if (!pick) list.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') set(-1); });
+    if (!pick) list.addEventListener('pointerleave', function (e) { if (on && e.pointerType === 'mouse') set(-1); });
     return {
       set: set,
+      use: function (v) { on = v; if (!v) set(-1); },
       // j and k: down and up through the items (from the end if none is lit), stopping at either end. When the
       // scroll lights them, a quick second press counts from where the first was going.
       step: function (by) {
@@ -308,16 +315,51 @@
   }
   var lights = stages.map(function (s) {
     var list = s.querySelector('.doing, .names, .svc');
-    if (!list || (desk && s.id === 'services')) return null; // the long page lights services itself (deskStart)
+    if (!list || s.id === 'services') return null; // services light themselves (below)
     var items = [].slice.call(list.children);
     return Lights(list, items, items.map(function (it) { return it.querySelector('.l'); })); // an item's first line is what lights
   });
 
+  // Services. On the long page they hold still in a pin while you scroll through them: the names stacked, the
+  // one you're on in the accent and lit like the name, with its text open under it. Phones fold them the same
+  // way: once the names are in, the last one opened (the first, to begin with) unfolds, and a tap, or j and k,
+  // opens another. Anywhere else they're rows you point at, like the other lists. Each way has its own lights,
+  // made once; svcMode switches to the one the page is in. The pin only has a box on the long page.
+  var svc = document.getElementById('services'), si = stages.indexOf(svc), svcList = svc.querySelector('.svc');
+  var arts = [].slice.call(svcList.children), names = arts.map(function (a) { return a.querySelector('h3'); });
+  var pin = document.createElement('div'), svcAt = 0, svcT = 0, step = -1;
+  pin.className = 'pin'; pin.appendChild(svc.querySelector('.title')); pin.appendChild(svcList); svc.appendChild(pin);
+  function open(k) { svcAt = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); lights[si].set(k); }
+  function svcStep(k) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); if (cur === si) lights[si].set(k); }
+  var svcLights = {
+    rows: Lights(svcList, arts, names),
+    fold: Lights(svcList, arts, names, function (k) { clearTimeout(svcT); open(k); }),
+    desk: Lights(svcList, names, names, function (k) { // a click or j and k open that service at once and glide to it
+      svcStep(k); glide(svc.offsetTop + (svc.offsetHeight - innerHeight) * (k + 0.5) / arts.length);
+    })
+  };
+  // the services screen arriving (true) or leaving (false), on a phone
+  function svcShow(on) {
+    clearTimeout(svcT); arts.forEach(function (a) { a.classList.remove('on'); });
+    if (on && fold) svcT = setTimeout(function () { open(svcAt); }, (parseFloat(names[names.length - 1].style.getPropertyValue('--d')) + 0.2) * 1000);
+  }
+  // folded, the names rise as one list; folded or pinned, a text unfolds line by line whenever it opens
+  function svcMode() {
+    var m = desk ? 'desk' : fold ? 'fold' : 'rows', first = parseFloat(names[0].dataset.d);
+    names.forEach(function (n, j) { n.style.setProperty('--d', m === 'fold' ? (first + LINE * j).toFixed(2) + 's' : n.dataset.d); });
+    arts.forEach(function (art) {
+      [].forEach.call(art.querySelectorAll('p .l'), function (l, j) { l.style.setProperty('--d', m === 'rows' ? l.dataset.d : (0.06 + 0.12 * j).toFixed(2) + 's'); });
+    });
+    for (var k in svcLights) svcLights[k].use(k === m);
+    lights[si] = svcLights[m]; step = -1; svcShow(false);
+  }
+  svcMode();
+
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
-  // k go down and up through the items of the section you're in (never to another section: that's left and
-  // right), and c changes the colour. On the long page a quick second press counts from where the first was
-  // going, not from where the scroll has got to. Single-letter keys can get in the way of speech and switch
-  // control, so the guide can turn them off (the arrows always work).
+  // k or the up and down arrows go down and up through the items of the section you're in (never to another
+  // section: that's left and right), and c changes the colour. They go one step at a time (see travel).
+  // Single-letter keys can get in the way of speech and switch control, so the guide can turn them off (the
+  // arrows always work).
   var keyTo = 0, keyAt = 0, letters = true;
   try { letters = localStorage.getItem('letters') !== 'off'; } catch (e) {}
   document.addEventListener('keydown', function (e) {
@@ -326,16 +368,18 @@
     if (!letters && e.key.length === 1) return;
     if (e.key === '?') { e.preventDefault(); openGuide(); return; }
     if (e.key === 'c') { e.preventDefault(); lookBtn.click(); return; }
-    if (e.key === 'j' || e.key === 'k') {
+    var down = { j: 1, ArrowDown: 1, k: -1, ArrowUp: -1 }[e.key];
+    if (down) {
       var L = lights[Math.max(0, cur)];
-      if (L && L.step(e.key === 'j' ? 1 : -1)) e.preventDefault();
+      if (!L) return; // nothing to step through here: the arrows scroll as usual
+      e.preventDefault(); // at either end they stop, rather than scroll on to the next section
+      if (KEYS === 'step' && desk && cur === si && busy()) return; // a service still on its way: one at a time
+      L.step(down);
       return;
     }
     var by = { h: -1, ArrowLeft: -1, l: 1, ArrowRight: 1 }[e.key];
     if (!by) return;
-    var i = (desk && performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
-    if (i < 0 || i >= stages.length) return;
-    e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i);
+    e.preventDefault(); travel(by);
   });
 
   // The guide to the keys: ? opens it, and so does the ? at the end of the bar (on screens with a mouse).
@@ -356,7 +400,7 @@
         '<h2 id="guide-title">Keys</h2>' +
         '<dl>' +
           '<div><dt>' + k('&larr;', 'Left arrow') + k('&rarr;', 'Right arrow') + '<span>or</span>' + k('h') + k('l') + '</dt><dd>Previous or next section</dd></div>' +
-          '<div><dt>' + k('j') + k('k') + '</dt><dd>Down or up, item by item</dd></div>' +
+          '<div><dt>' + k('&darr;', 'Down arrow') + k('&uarr;', 'Up arrow') + '<span>or</span>' + k('j') + k('k') + '</dt><dd>Down or up, item by item</dd></div>' +
           '<div><dt>' + k('c') + '</dt><dd>Change the colour</dd></div>' +
           '<div><dt>' + k('?') + '</dt><dd>Show these keys</dd></div>' +
           '<div><dt>' + k('Esc') + '</dt><dd>Close</dd></div>' +
@@ -428,10 +472,41 @@
   }
   morphReset();
 
+  // A screen whose text would run under the bar (a short window, a phone on its side) makes its big text
+  // smaller until every part of it ends inside the screen's padding (24px above the bar), by the largest --fit
+  // that does, down to half size (past that it scrolls; small text stays 12px or more); one that fits keeps its
+  // sizes. Folded services are measured with their longest text open. The long page sizes things by the
+  // window's height instead.
+  function fitText(s) {
+    if (desk) return;
+    s.style.removeProperty('--fit');
+    var limit = s.clientHeight - parseFloat(getComputedStyle(s).paddingBottom) + 1;
+    var arts = fold ? [].slice.call(s.querySelectorAll('.svc article')) : [], was = null, most = null;
+    if (arts.length) {
+      s.classList.add('measure'); // no unfolding while it measures
+      arts.forEach(function (a) { if (a.classList.contains('on')) was = a; if (!most || a.querySelector('p').scrollHeight > most.querySelector('p').scrollHeight) most = a; });
+      arts.forEach(function (a) { a.classList.toggle('on', a === most); });
+    }
+    var parts = [].concat.apply([], [].map.call(s.children, function (k) { return k === pin ? [].slice.call(pin.children) : [k]; }));
+    function fits() { return parts.every(function (k) { return !k.offsetHeight || k.offsetTop + k.offsetHeight <= limit; }); }
+    if (!fits()) {
+      for (var n = 0, lo = 0.5, hi = 1; n < 7; n++) {
+        var mid = (lo + hi) / 2; s.style.setProperty('--fit', mid.toFixed(3));
+        if (fits()) lo = mid; else hi = mid;
+      }
+      s.style.setProperty('--fit', lo.toFixed(3));
+    }
+    if (arts.length) { arts.forEach(function (a) { a.classList.toggle('on', a === was); }); void s.offsetHeight; s.classList.remove('measure'); }
+  }
+  addEventListener('resize', function () { if (started && !desk) { fitText(stages[cur]); if (cur === 0 && nameFx) nameFx.build(); } });
+
   function show() {
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
     if (!started) return;
-    var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
+    var s = stages[cur]; s.scrollTop = 0; fitText(s);
+    if (cur === 0 && nameFx) nameFx.build(); // the name's smoke follows its new size
+    void s.offsetWidth; s.classList.add('in');
+    svcShow(s.id === 'services');
     if (cur === 0) morphStart(); else morphReset();
     if (nameFx) nameFx.show(cur === 0);
   }
@@ -445,14 +520,36 @@
     place(); if (!now) shine(1600);
     try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
   }
-  // Leaving fades everything at once; the next screen starts as soon as the old one is gone.
-  // On the long page it scrolls there instead, and the bubble goes straight to it rather than through
-  // every section on the way.
-  var travelTo = -1, travelEnd = 0;
+  // The long page glides where a key or a button sends it: one movement that a quick second press redirects
+  // instead of starting over (a critically damped spring: no overshoot, under a second however far), stopped by
+  // the wheel or a finger. While it glides the services hold still rather than flick through each on the way.
+  var glideY = 0, glideV = 0, glideTo = 0, glideRaf = 0, glideLast = 0, legFrom = 0, legTo = 0;
+  function glide(y) {
+    glideTo = Math.max(0, Math.min(y, root.scrollHeight - innerHeight));
+    legFrom = glideRaf ? glideY : scrollY; legTo = glideTo; // this leg of the trip, for travel's 'nearly there'
+    if (reduce) { stopGlide(); scrollTo(0, glideTo); return; }
+    if (!glideRaf) { glideY = scrollY; glideV = 0; glideLast = performance.now(); root.classList.add('gliding'); glideRaf = requestAnimationFrame(glideStep); }
+  }
+  function glideStep(now) {
+    var left = Math.min(0.25, (now - glideLast) / 1000), w = 10; glideLast = now;
+    for (; left > 0; left -= 0.008) { var dt = Math.min(0.008, left); glideV += (w * w * (glideTo - glideY) - 2 * w * glideV) * dt; glideY += glideV * dt; } // in small steps, so it keeps time at any frame rate
+    if (Math.abs(glideTo - glideY) < 0.5 && Math.abs(glideV) < 30) { scrollTo(0, glideTo); stopGlide(); onScroll(); return; }
+    scrollTo(0, glideY); glideRaf = requestAnimationFrame(glideStep);
+  }
+  function stopGlide() { cancelAnimationFrame(glideRaf); glideRaf = 0; root.classList.remove('gliding'); }
+  ['wheel', 'touchstart'].forEach(function (t) { addEventListener(t, function () { if (glideRaf) { stopGlide(); onScroll(); } }, { passive: true }); });
+
+  // Leaving fades everything at once; the next screen starts as soon as the old one is gone. On the long page
+  // it glides there instead, and the bubble goes straight to it rather than through every section on the way;
+  // arriving at the services opens the first.
+  var travelTo = -1, travelEnd = 0, keyT = 0;
   function go(i, now) {
+    clearTimeout(keyT);
     if (desk) {
-      mark(i, now); travelTo = i; travelEnd = performance.now() + 1200;
-      stages[i].scrollIntoView({ behavior: now || reduce ? 'auto' : 'smooth' });
+      mark(i, now); travelTo = i; travelEnd = performance.now() + 1500;
+      if (i === si) svcStep(0);
+      var y = stages[i].getBoundingClientRect().top + scrollY;
+      if (now) { stopGlide(); scrollTo(0, y); } else glide(y);
       return;
     }
     if (i === cur && !now) return;
@@ -461,6 +558,39 @@
     from.classList.remove('in'); morphStop();
     clearTimeout(timer);
     if (now || reduce) show(); else timer = setTimeout(show, 170);
+  }
+  // How the keys travel. 'step' (the default) goes one section per press: a press while it's still on its way is
+  // ignored, unless it's nearly there (85% of the way), when it carries straight on to the next without stopping.
+  // 'jump' (try ?keys=jump) lets quick presses add up into one trip: the movement starts at once, and the section
+  // (its colours, the bubble, the new screen) changes once the presses stop coming.
+  var KEYS = /[?&]keys=jump\b/.test(location.search) ? 'jump' : 'step', stepAt = 0;
+  function busy() {
+    if (desk) return !!glideRaf && Math.abs(legTo - glideY) > 0.15 * Math.abs(legTo - legFrom);
+    return performance.now() - stepAt < 400; // a screen takes about that long to come in (a fast double press is quicker)
+  }
+  function travel(by) {
+    if (KEYS === 'jump') {
+      var j = (performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
+      if (j < 0 || j >= stages.length) return;
+      keyTo = j; keyAt = performance.now(); clearTimeout(keyT);
+      if (desk) {
+        travelTo = j; travelEnd = performance.now() + 1500;
+        glide(stages[j].getBoundingClientRect().top + scrollY);
+        keyT = setTimeout(function () { mark(j); if (j === si) svcStep(0); }, 260);
+      } else {
+        stages[cur].classList.remove('in'); morphStop(); clearTimeout(timer);
+        keyT = setTimeout(function () { mark(j); show(); }, 260);
+      }
+      return;
+    }
+    if (busy()) return;
+    var i = (desk && glideRaf && travelTo >= 0 ? travelTo : Math.max(0, cur)) + by; // nearly there: on from where it's going
+    if (i < 0 || i >= stages.length) return;
+    stepAt = performance.now();
+    if (!desk) { go(i); return; }
+    mark(i); travelTo = i; travelEnd = performance.now() + 1500;
+    if (i === si) svcStep(0);
+    glide(stages[i].getBoundingClientRect().top + scrollY);
   }
   function fromHash() { for (var i = 0; i < stages.length; i++) if (location.hash === '#' + stages[i].id) return i; return -1; }
   fit();
@@ -472,55 +602,66 @@
     if (started) return;
     started = true; root.classList.add('ready');
     if (nameFx) nameFx.build();
-    if (desk) deskStart(); else show();
+    if (desk) enterDesk(); else show();
     setTimeout(function () { shine(0); }, 1700); // a first glint once the bar has arrived
   }
-  // On a wide screen with a mouse the screens become one page you scroll, each section a screen tall, and
-  // the bar follows along. Services hold still while you scroll through them: the names stay stacked, and
-  // the one you're on turns gold, lit like the name, and opens its text under it.
-  function deskStart() {
-    var svc = document.getElementById('services'), pin = document.createElement('div'), list = svc.querySelector('.svc');
-    var arts = [].slice.call(list.querySelectorAll('article')), step = -1;
-    pin.className = 'pin'; pin.appendChild(svc.querySelector('.title')); pin.appendChild(list); svc.appendChild(pin);
-    arts.forEach(function (art) {
-      [].forEach.call(art.querySelectorAll('p .l'), function (l, j) { l.style.setProperty('--d', (0.06 + 0.12 * j).toFixed(2) + 's'); });
-    });
-    var names = arts.map(function (a) { return a.querySelector('h3'); }), si = stages.indexOf(svc);
-    lights[si] = Lights(list, names, names, function (k) { // a click or j and k scroll to that service
-      var span = svc.offsetHeight - innerHeight;
-      scrollTo({ top: svc.offsetTop + span * (k + 0.5) / arts.length, behavior: reduce ? 'auto' : 'smooth' });
-    });
-    stages.forEach(function (s) { s.classList.add('cur'); s.inert = false; });
 
-    // the section across the middle of the window is the one you're on
-    function here() {
-      var m = innerHeight / 2;
-      for (var j = 0; j < stages.length; j++) { var r = stages[j].getBoundingClientRect(); if (r.top <= m && r.bottom > m) return j; }
-      return cur;
-    }
-    var morphOn = false, ticking = false;
-    function onScroll() {
-      ticking = false;
-      var i = here();
-      if (travelTo >= 0 && (i === travelTo || performance.now() > travelEnd)) travelTo = -1;
-      if (travelTo < 0 && i !== cur) mark(i);
-      if ((i === 0) !== morphOn) { morphOn = i === 0; if (morphOn) morphStart(); else morphStop(); }
-      // how far the scroll is through the (tall) services decides which one is open
-      var span = svc.offsetHeight - innerHeight, p = span > 0 ? -svc.getBoundingClientRect().top / span : 0;
-      var k = Math.floor(Math.min(0.999, Math.max(0, p)) * arts.length);
-      if (k !== step) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); }
-      if (cur === si) lights[si].set(k);
-    }
-    addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-    addEventListener('resize', onScroll);
-
-    var arrive = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); arrive.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -18% 0px' });
-    stages.forEach(function (s) { arrive.observe(s); });
+  // On a wide screen with a mouse the screens become one page you scroll, each section a screen tall, and the
+  // bar follows along; the section across the middle of the window is the one you're on, and how far the scroll
+  // is through the (tall) services decides which one is open.
+  function here() {
+    var m = innerHeight / 2;
+    for (var j = 0; j < stages.length; j++) { var r = stages[j].getBoundingClientRect(); if (r.top <= m && r.bottom > m) return j; }
+    return cur;
+  }
+  var morphOn = false, ticking = false, anchor = null;
+  function onScroll() {
+    ticking = false;
+    if (!desk) return;
+    var i = here(), r = stages[i].getBoundingClientRect();
+    anchor = { i: i, f: (innerHeight / 2 - r.top) / Math.max(1, r.height) }; // where the middle of the window is
+    if (travelTo >= 0 && (i === travelTo || performance.now() > travelEnd)) travelTo = -1;
+    if (travelTo < 0 && i !== cur) mark(i);
+    if ((i === 0) !== morphOn) { morphOn = i === 0; if (morphOn) morphStart(); else morphStop(); }
+    if (glideRaf) return; // gliding: the services hold still until it lands
+    var span = svc.offsetHeight - innerHeight, p = span > 0 ? -svc.getBoundingClientRect().top / span : 0;
+    var k = Math.floor(Math.min(0.999, Math.max(0, p)) * arts.length);
+    if (k !== step) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); }
+    if (cur === si) lights[si].set(k);
+  }
+  addEventListener('scroll', function () { if (desk && !ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  // a resize keeps your place: the point in the middle of the window stays where it was in its section (and if
+  // the resize ends the long page, the section you were on is the one the screens open on)
+  addEventListener('resize', function () {
+    if (!desk) return;
+    if (anchor) { var a = stages[anchor.i]; scrollTo(0, a.offsetTop + anchor.f * a.offsetHeight - innerHeight / 2); }
+    requestAnimationFrame(onScroll);
+  });
+  // each section rises in as it comes into view
+  var arrive = window.IntersectionObserver ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (desk && e.isIntersecting) { e.target.classList.add('in'); arrive.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -18% 0px' }) : null;
+  function enterDesk() {
+    stages.forEach(function (s) { s.classList.add('cur'); s.inert = false; if (arrive) { arrive.unobserve(s); arrive.observe(s); } else s.classList.add('in'); });
     if (nameFx) nameFx.show(true);
+    stages[cur].scrollIntoView({ behavior: 'auto' });
     onScroll();
   }
+
+  // Resizing across the line between the long page and the screens, or into folded services, changes the page
+  // in place instead of reloading it: you stay on the section you're on, and it rises in again in its new shape.
+  function setMode() {
+    var d = deskQ.matches, f = !d && foldQ.matches;
+    if (d === desk && f === fold) return;
+    desk = d; fold = f;
+    root.classList.toggle('desk', desk); root.classList.toggle('fold', fold);
+    clearTimeout(timer); morphStop(); morphOn = false; travelTo = -1; stopGlide();
+    stages.forEach(function (s) { s.classList.remove('in'); s.style.removeProperty('--fit'); });
+    svcMode();
+    if (!started) return;
+    if (desk) enterDesk(); else { scrollTo(0, 0); show(); }
+  }
+  [deskQ, foldQ].forEach(function (q) { if (q.addEventListener) q.addEventListener('change', setMode); else if (q.addListener) q.addListener(setMode); });
 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { requestAnimationFrame(begin); });
   setTimeout(begin, 1000);
@@ -610,8 +751,10 @@
     var d = 1;
     function size() {
       d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
-      canvas.width = Math.max(1, Math.round(canvas.clientWidth * d)); canvas.height = Math.max(1, Math.round(canvas.clientHeight * d));
-      gl.viewport(0, 0, canvas.width, canvas.height);
+      var w = Math.max(1, Math.round(canvas.clientWidth * d)), h = Math.max(1, Math.round(canvas.clientHeight * d));
+      if (w === canvas.width && h === canvas.height) return false; // a new size wipes the canvas, so only when it changes
+      canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h);
+      return true;
     }
     var seed = Math.random() * 40, t0 = performance.now(), last = 0, raf = 0;
     function draw(now) {
@@ -637,12 +780,14 @@
       raf = requestAnimationFrame(frame);
     }
     function kick() { if (reduce) { draw(performance.now()); return; } if (!raf) raf = requestAnimationFrame(frame); }
-    addEventListener('resize', function () { size(); kick(); });
+    // a wiped canvas is drawn again at once, so resizing the window never shows a black frame
+    addEventListener('resize', function () { if (size()) api.now(); kick(); });
     document.addEventListener('visibilitychange', kick);
     canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); canvas.classList.remove('on'); });
     size(); kick();
     api.tint = function (instant) { pal.set(instant); kick(); };
     api.kick = kick;
+    api.now = function () { if (!document.hidden) draw(performance.now()); }; // draw this instant, letters and all
     return api;
   }
 
@@ -696,7 +841,7 @@
       }
       gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
-      ok = true; sky.kick();
+      ok = true; sky.now(); sky.kick(); // drawn at once: a new size wiped the canvas
     }
     sky.hooks.push(function (now, t, mouse, act, rw, rh, bgd) {
       if (!ok || !on) return;
