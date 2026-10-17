@@ -188,6 +188,21 @@ button { font: inherit; color: inherit; }
 .bar.dragging .bar-row button:active { scale: none; }
 .bar.still .bar-row button, .bar.still .bubble { transition: none; }
 
+/* ---------- list markers: a pill like the bar's bubble, in the section's colour, behind the item you're on ---------- */
+.marks { position: relative; }
+.marks > :not(.mark), .marks .nm { position: relative; z-index: 1; }
+.marks li, .marks .nm { width: fit-content; }
+.mark {
+  position: absolute; z-index: 0; top: 0; left: 0; width: 0; height: 0; border-radius: 999px; pointer-events: none;
+  background: var(--title-acc, var(--accent)); opacity: 0;
+  transition: translate .42s var(--move), width .42s var(--move), height .42s var(--move), border-radius .42s var(--move), opacity .2s ease, background-color var(--fade);
+}
+.mark.still { transition: opacity .2s ease, background-color var(--fade); }
+.marked > .mark { opacity: 1; }
+.js .in .marks .l, .js .in .marks .nm { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .25s ease .1s; }
+.marks .on, .marks .on.l { color: #0b0b0b; text-shadow: none; cursor: default; }
+@media (hover: hover) and (pointer: fine) { .doing li, .nm { cursor: default; } }
+
 /* ---------- colour button: one emblem per look ---------- */
 /* ---------- the emblem ends the row: it changes shape and colour with the section, and tapping it plays through the looks ---------- */
 .js .look { flex: none; width: var(--bar-h); height: var(--bar-h); display: grid; place-items: center; padding: 0; border: 1px solid rgba(255, 255, 255, .17); border-radius: 999px; background: rgba(0, 0, 0, .24); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); color: var(--accent); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: transform .15s var(--press), box-shadow .15s var(--press), color .42s var(--move); }
@@ -279,7 +294,7 @@ button { font: inherit; color: inherit; }
 .desk .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
 .desk .in .svc article:not(.on) h3 { opacity: .3; }
 .desk .in .svc article:not(.on) h3:hover { opacity: .6; }
-.desk .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
+.desk .svc article.on h3 { opacity: 1; color: #0b0b0b; text-shadow: none; }
 .desk .svc p { margin-top: 0; min-height: 0; overflow: hidden; max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
 .desk .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
 .desk .svc p .l:last-child { padding-bottom: 12px; }

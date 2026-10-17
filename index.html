@@ -272,6 +272,55 @@
   }, { passive: true });
   document.addEventListener('touchcancel', function () { swipe = null; }, { passive: true });
 
+  // Lists get a marker like the bar's bubble: a pill in the section's colour that slides to the item you
+  // point at, tap, or step to with j and k, and the item's text turns dark on it.
+  function Marker(list, targets, opts) {
+    var pill = document.createElement('i'), at = -1, raf = 0, hover = !opts || opts.hover !== false;
+    pill.className = 'mark'; pill.setAttribute('aria-hidden', 'true');
+    list.classList.add('marks'); list.insertBefore(pill, list.firstChild);
+    function put(instant) {
+      if (at < 0) return;
+      // across: the text itself, so a line that wraps is hugged by its widest line; down: the layout, which
+      // ignores the lines' rise as they come in (it moves them down for a moment)
+      var t = targets[at], fs = parseFloat(getComputedStyle(t).fontSize), rg = document.createRange();
+      rg.selectNodeContents(t);
+      var r = rg.getBoundingClientRect(), x = r.left - list.getBoundingClientRect().left, y = 0, h = t.offsetHeight;
+      for (var el = t; el && el !== list; el = el.offsetParent) y += el.offsetTop;
+      var px = fs * 0.24, py = fs * 0.1;
+      if (instant) pill.classList.add('still');
+      pill.style.translate = (x - px).toFixed(1) + 'px ' + (y - py).toFixed(1) + 'px';
+      pill.style.width = (r.width + 2 * px).toFixed(1) + 'px'; pill.style.height = (h + 2 * py).toFixed(1) + 'px';
+      pill.style.borderRadius = h > fs * 1.6 ? (fs * 0.3).toFixed(1) + 'px' : '999px'; // an item on two lines gets rounded corners
+      if (instant) { void pill.offsetWidth; pill.classList.remove('still'); }
+    }
+    function set(k) {
+      if (k === at) return;
+      var was = at; at = k;
+      targets.forEach(function (t, j) { t.classList.toggle('on', j === k); });
+      list.classList.toggle('marked', k >= 0);
+      put(was < 0); // it appears where it's needed instead of sliding in from the last place it was
+    }
+    targets.forEach(function (t, k) {
+      if (!hover) return;
+      t.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') set(k); });
+      t.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') set(k); });
+    });
+    if (hover) list.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') set(-1); });
+    addEventListener('resize', function () { put(true); });
+    return {
+      set: set,
+      // keeps up with the layout while it moves (services unfolding)
+      follow: function (ms) { var end = performance.now() + ms; cancelAnimationFrame(raf); (function f() { put(); if (performance.now() < end) raf = requestAnimationFrame(f); })(); },
+      // j and k: through the items, and false once past either end, so the key moves on to the next section
+      step: function (by) { var k = at < 0 ? (by > 0 ? 0 : -1) : at + by; if (k < 0 || k >= targets.length) { set(-1); return false; } set(k); return true; }
+    };
+  }
+  var markers = stages.map(function (s) {
+    if (s.id === 'now') return Marker(s.querySelector('.doing'), [].slice.call(s.querySelectorAll('.doing li')));
+    if (s.id === 'portfolio') return Marker(s.querySelector('.names'), [].slice.call(s.querySelectorAll('.nm')));
+    return null;
+  });
+
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
   // k go down and up (on the long page they also stop at each service), and c changes the colour. A quick
   // second press counts from where the first was going, not from where the scroll has got to.
@@ -281,6 +330,7 @@
     if (e.key === 'c') { e.preventDefault(); lookBtn.click(); return; }
     var by = { h: -1, ArrowLeft: -1, k: -1, l: 1, ArrowRight: 1, j: 1 }[e.key];
     if (!by) return;
+    if ((e.key === 'j' || e.key === 'k') && markers[cur] && markers[cur].step(by)) { e.preventDefault(); return; }
     var quick = performance.now() - keyAt < 900;
     if (stops && (e.key === 'j' || e.key === 'k')) {
       var from = quick ? keyY : scrollY, ys = stops();
@@ -358,6 +408,7 @@
   // the bar, the colour and the address follow the section you're on
   function mark(i, now) {
     cur = shown = i; movedAt = performance.now();
+    markers.forEach(function (m, j) { if (m && j !== i) m.set(-1); });
     setLook(stages[i].dataset.look, now);
     tint(root.dataset.look, false, now);
     btns.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
@@ -400,6 +451,7 @@
   function deskStart() {
     var svc = document.getElementById('services'), pin = document.createElement('div'), list = svc.querySelector('.svc');
     var arts = [].slice.call(list.querySelectorAll('article')), step = -1;
+    var svcMark = Marker(list, arts.map(function (a) { return a.querySelector('h3'); }), { hover: false });
     pin.className = 'pin'; pin.appendChild(svc.querySelector('.title')); pin.appendChild(list); svc.appendChild(pin);
     arts.forEach(function (art, k) {
       [].forEach.call(art.querySelectorAll('p .l'), function (l, j) { l.style.setProperty('--d', (0.06 + 0.12 * j).toFixed(2) + 's'); });
@@ -435,7 +487,7 @@
       // how far the scroll is through the (tall) services decides which one is open
       var span = svc.offsetHeight - innerHeight, p = span > 0 ? -svc.getBoundingClientRect().top / span : 0;
       var k = Math.floor(Math.min(0.999, Math.max(0, p)) * arts.length);
-      if (k !== step) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); }
+      if (k !== step) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); svcMark.set(k); svcMark.follow(700); }
       if (nameFx) nameFx.locate(); // the name's smoke has to know where the name is now that it scrolls
     }
     addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
