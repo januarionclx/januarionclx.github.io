@@ -107,7 +107,8 @@ button { font: inherit; color: inherit; }
 .names { list-style: none; margin: clamp(20px, 3svh, 36px) 0 0; padding: 0; display: grid; gap: clamp(14px, 2.2svh, 26px); }
 .nm { display: block; font-size: clamp(2.7rem, 12.5vw, 4.2rem); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
 .nm-d { display: block; margin-top: .5em; font-size: clamp(1rem, 1.25vw, 1.2rem); font-weight: 500; letter-spacing: -.01em; color: var(--muted); }
-.more .nm { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
+/* the last line of a list, 'and more.', in the serif like a title's italic word */
+.more .nm, .doing .more .l { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.03em; color: var(--accent); }
 
 /* contact opens with two questions in the 'doing now' size, in white */
 /* contact: five lines in one size and one grey, so the email is the bright thing */
