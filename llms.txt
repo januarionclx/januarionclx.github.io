@@ -5,7 +5,7 @@
 ## Services
 - Software development: web platforms, internal tools and AI features. A working product, not a prototype.
 - Agentic engineering: software factories, harnesses and automations. Agents that build and ship, led by your engineers.
-- Consulting: strategy, technology and organization. Fractional CTO without the cost of a full-time hire. Distributed systems that don't rely on the founder. Self-managing teams (Teal, Holacracy).
+- Consulting: strategy, technology and organization. A CTO on your side (fractional CTO), as involved as you need. A company that keeps going when you step back. Teams that decide and deliver on their own (self-management, Teal, Holacracy).
 - Ventures: companies built from the ground up, incubated and funded through The Unit Organization.
 
 ## Public portfolio
