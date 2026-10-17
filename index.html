@@ -153,6 +153,7 @@
     if (themeColor) themeColor.content = getComputedStyle(root).getPropertyValue('--bg').trim();
     if (sky) sky.tint(instant);
     if (nameFx) nameFx.tint(instant);
+    if (glows) glows.forEach(function (g) { g.L.tint(instant); });
     tint(name, false, instant);
   }
   lookBtn.addEventListener('click', function () { setLook(LOOKS[(LOOKS.indexOf(root.dataset.look) + 1) % LOOKS.length]); });
@@ -272,61 +273,51 @@
   }, { passive: true });
   document.addEventListener('touchcancel', function () { swipe = null; }, { passive: true });
 
-  // Lists get a marker like the bar's bubble: a pill in the section's colour that slides to the item you
-  // point at, tap, or step to with j and k, and the item's text turns dark on it.
-  function Marker(list, targets, opts) {
-    var pill = document.createElement('i'), at = -1, raf = 0, hover = !opts || opts.hover !== false;
-    pill.className = 'mark'; pill.setAttribute('aria-hidden', 'true');
-    list.classList.add('marks'); list.insertBefore(pill, list.firstChild);
-    function put(instant) {
-      if (at < 0) return;
-      // across: the text itself, so a line that wraps is hugged by its widest line; down: the layout, which
-      // ignores the lines' rise as they come in (it moves them down for a moment)
-      var t = targets[at], fs = parseFloat(getComputedStyle(t).fontSize), rg = document.createRange();
-      rg.selectNodeContents(t);
-      var r = rg.getBoundingClientRect(), x = r.left - list.getBoundingClientRect().left, y = 0, h = t.offsetHeight;
-      for (var el = t; el && el !== list; el = el.offsetParent) y += el.offsetTop;
-      var px = fs * 0.24, py = fs * 0.1;
-      if (instant) pill.classList.add('still');
-      pill.style.translate = (x - px).toFixed(1) + 'px ' + (y - py).toFixed(1) + 'px';
-      pill.style.width = (r.width + 2 * px).toFixed(1) + 'px'; pill.style.height = (h + 2 * py).toFixed(1) + 'px';
-      pill.style.borderRadius = h > fs * 1.6 ? (fs * 0.3).toFixed(1) + 'px' : '999px'; // an item on two lines gets rounded corners
-      if (instant) { void pill.offsetWidth; pill.classList.remove('still'); }
-    }
+  // Items you can light: point at one, tap it, or step to it with j and k, and it takes its section's colour
+  // with the smoke running through its letters, like the name. A second tap puts it out. pick, when given,
+  // decides instead (the services on the long page are lit by the scroll, so a click scrolls there).
+  var glows = null, glowing = null;
+  function Lights(list, items, targets, pick) {
+    var at = -1, aim = -1, aimAt = 0, type = '';
     function set(k) {
       if (k === at) return;
       var was = at; at = k;
-      targets.forEach(function (t, j) { t.classList.toggle('on', j === k); });
-      list.classList.toggle('marked', k >= 0);
-      put(was < 0); // it appears where it's needed instead of sliding in from the last place it was
+      if (was >= 0) targets[was].classList.remove('lit');
+      if (k >= 0) { targets[k].classList.add('lit'); glow(targets[k]); } else if (glowing === targets[was]) glow(null);
     }
-    targets.forEach(function (t, k) {
-      if (!hover) return;
-      t.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') set(k); });
-      t.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') set(k); });
+    items.forEach(function (it, k) {
+      it.addEventListener('pointerdown', function (e) { type = e.pointerType; });
+      it.addEventListener('click', function () { if (pick) pick(k); else set(type !== 'mouse' && k === at ? -1 : k); });
+      if (!pick) it.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') set(k); });
     });
-    if (hover) list.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') set(-1); });
-    addEventListener('resize', function () { put(true); });
+    if (!pick) list.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') set(-1); });
     return {
       set: set,
-      // keeps up with the layout while it moves (services unfolding)
-      follow: function (ms) { var end = performance.now() + ms; cancelAnimationFrame(raf); (function f() { put(); if (performance.now() < end) raf = requestAnimationFrame(f); })(); },
-      // j and k: through the items, and false once past either end, so the key moves on to the next section
-      step: function (by) { var k = at < 0 ? (by > 0 ? 0 : -1) : at + by; if (k < 0 || k >= targets.length) { set(-1); return false; } set(k); return true; }
+      // j and k: down and up through the items (from the end if none is lit), stopping at either end. When the
+      // scroll lights them, a quick second press counts from where the first was going.
+      step: function (by) {
+        var from = pick && performance.now() - aimAt < 900 ? aim : at;
+        var k = from < 0 ? (by > 0 ? 0 : items.length - 1) : from + by;
+        if (k < 0 || k >= items.length) return false;
+        aim = k; aimAt = performance.now();
+        if (pick) pick(k); else set(k);
+        return true;
+      }
     };
   }
-  var markers = stages.map(function (s) {
-    if (s.id === 'now') return Marker(s.querySelector('.doing'), [].slice.call(s.querySelectorAll('.doing li')));
-    if (s.id === 'portfolio') return Marker(s.querySelector('.names'), [].slice.call(s.querySelectorAll('.nm')));
-    return null;
+  var lights = stages.map(function (s) {
+    var list = s.querySelector('.doing, .names, .svc');
+    if (!list || (desk && s.id === 'services')) return null; // the long page lights services itself (deskStart)
+    var items = [].slice.call(list.children);
+    return Lights(list, items, s.id === 'now' ? items : items.map(function (it) { return it.querySelector('.nm, h3'); }));
   });
 
   // The keyboard does the same: h and l (as in vim) or the left and right arrows go a section across, j and
-  // k go down and up (on the long page they also stop at each service), and c changes the colour. A quick
-  // second press counts from where the first was going, not from where the scroll has got to.
-  // Single-letter keys can get in the way of speech and switch control, so the guide can turn them off
-  // (the arrows always work).
-  var keyTo = 0, keyY = 0, keyAt = 0, stops = null, letters = true;
+  // k go down and up through the items of the section you're in (never to another section: that's left and
+  // right), and c changes the colour. On the long page a quick second press counts from where the first was
+  // going, not from where the scroll has got to. Single-letter keys can get in the way of speech and switch
+  // control, so the guide can turn them off (the arrows always work).
+  var keyTo = 0, keyAt = 0, letters = true;
   try { letters = localStorage.getItem('letters') !== 'off'; } catch (e) {}
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
@@ -334,19 +325,14 @@
     if (!letters && e.key.length === 1) return;
     if (e.key === '?') { e.preventDefault(); openGuide(); return; }
     if (e.key === 'c') { e.preventDefault(); lookBtn.click(); return; }
-    var by = { h: -1, ArrowLeft: -1, k: -1, l: 1, ArrowRight: 1, j: 1 }[e.key];
-    if (!by) return;
-    if ((e.key === 'j' || e.key === 'k') && markers[cur] && markers[cur].step(by)) { e.preventDefault(); return; }
-    var quick = performance.now() - keyAt < 900;
-    if (stops && (e.key === 'j' || e.key === 'k')) {
-      var from = quick ? keyY : scrollY, ys = stops();
-      var y = by > 0 ? ys.filter(function (v) { return v > from + 4; })[0] : ys.filter(function (v) { return v < from - 4; }).pop();
-      if (y === undefined) return;
-      e.preventDefault(); keyY = y; keyAt = performance.now();
-      scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    if (e.key === 'j' || e.key === 'k') {
+      var L = lights[Math.max(0, cur)];
+      if (L && L.step(e.key === 'j' ? 1 : -1)) e.preventDefault();
       return;
     }
-    var i = (desk && quick ? keyTo : Math.max(0, cur)) + by;
+    var by = { h: -1, ArrowLeft: -1, l: 1, ArrowRight: 1 }[e.key];
+    if (!by) return;
+    var i = (desk && performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
     if (i < 0 || i >= stages.length) return;
     e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i);
   });
@@ -446,12 +432,12 @@
     if (!started) return;
     var s = stages[cur]; s.scrollTop = 0; void s.offsetWidth; s.classList.add('in');
     if (cur === 0) morphStart(); else morphReset();
-    if (nameFx) { nameFx.show(cur === 0); if (cur === 0) setTimeout(nameFx.locate, 950); }
+    if (nameFx) nameFx.show(cur === 0);
   }
   // the bar, the colour and the address follow the section you're on
   function mark(i, now) {
     cur = shown = i; movedAt = performance.now();
-    markers.forEach(function (m, j) { if (m && j !== i) m.set(-1); });
+    lights.forEach(function (L, j) { if (L && j !== i) L.set(-1); });
     setLook(stages[i].dataset.look, now);
     tint(root.dataset.look, false, now);
     btns.forEach(function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
@@ -490,29 +476,20 @@
   }
   // On a wide screen with a mouse the screens become one page you scroll, each section a screen tall, and
   // the bar follows along. Services hold still while you scroll through them: the names stay stacked, and
-  // the one you're on turns the accent and opens its text under it.
+  // the one you're on turns gold, lit like the name, and opens its text under it.
   function deskStart() {
     var svc = document.getElementById('services'), pin = document.createElement('div'), list = svc.querySelector('.svc');
     var arts = [].slice.call(list.querySelectorAll('article')), step = -1;
-    var svcMark = Marker(list, arts.map(function (a) { return a.querySelector('h3'); }), { hover: false });
     pin.className = 'pin'; pin.appendChild(svc.querySelector('.title')); pin.appendChild(list); svc.appendChild(pin);
-    arts.forEach(function (art, k) {
+    arts.forEach(function (art) {
       [].forEach.call(art.querySelectorAll('p .l'), function (l, j) { l.style.setProperty('--d', (0.06 + 0.12 * j).toFixed(2) + 's'); });
-      art.querySelector('h3').addEventListener('click', function () {
-        var span = svc.offsetHeight - innerHeight;
-        scrollTo({ top: svc.offsetTop + span * (k + 0.5) / arts.length, behavior: reduce ? 'auto' : 'smooth' });
-      });
+    });
+    var names = arts.map(function (a) { return a.querySelector('h3'); }), si = stages.indexOf(svc);
+    lights[si] = Lights(list, names, names, function (k) { // a click or j and k scroll to that service
+      var span = svc.offsetHeight - innerHeight;
+      scrollTo({ top: svc.offsetTop + span * (k + 0.5) / arts.length, behavior: reduce ? 'auto' : 'smooth' });
     });
     stages.forEach(function (s) { s.classList.add('cur'); s.inert = false; });
-    // where j and k stop: the top of each section, and each service on the way through services
-    stops = function () {
-      var ys = [], span = svc.offsetHeight - innerHeight;
-      stages.forEach(function (s) {
-        if (s !== svc) ys.push(s.offsetTop);
-        else arts.forEach(function (a, k) { ys.push(svc.offsetTop + span * k / arts.length + (k ? 2 : 0)); });
-      });
-      return ys;
-    };
 
     // the section across the middle of the window is the one you're on
     function here() {
@@ -530,8 +507,8 @@
       // how far the scroll is through the (tall) services decides which one is open
       var span = svc.offsetHeight - innerHeight, p = span > 0 ? -svc.getBoundingClientRect().top / span : 0;
       var k = Math.floor(Math.min(0.999, Math.max(0, p)) * arts.length);
-      if (k !== step) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); svcMark.set(k); svcMark.follow(700); }
-      if (nameFx) nameFx.locate(); // the name's smoke has to know where the name is now that it scrolls
+      if (k !== step) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); }
+      if (cur === si) lights[si].set(k);
     }
     addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
     addEventListener('resize', onScroll);
@@ -540,7 +517,7 @@
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); arrive.unobserve(e.target); } });
     }, { rootMargin: '0px 0px -18% 0px' });
     stages.forEach(function (s) { arrive.observe(s); });
-    if (nameFx) { nameFx.show(true); setTimeout(nameFx.locate, 950); }
+    if (nameFx) nameFx.show(true);
     onScroll();
   }
 
@@ -609,7 +586,7 @@
     if (!gl) return null;
     var U = program(gl, smokeShader('', 'gl_FragColor=vec4(smoke(gl_FragCoord.xy),1.);'), []);
     if (!U) return null;
-    var pal = Palette(['--s1', '--s2', '--s3']), api = { after: null };
+    var pal = Palette(['--s1', '--s2', '--s3']), api = { hooks: [] };
 
     var mouse = [0.5, 0.5], aim = [0.5, 0.5], act = 0, actAim = 0, moved = 0;
     function point(e) {
@@ -643,7 +620,7 @@
       gl.uniform2f(U.u_mouse, mouse[0], mouse[1]); gl.uniform1f(U.u_act, act); gl.uniform2f(U.u_band, 0.365, 0.915);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       if (!canvas.classList.contains('on')) canvas.classList.add('on');
-      if (api.after) api.after(now, t, mouse, act, canvas.width, canvas.height, d);
+      api.hooks.forEach(function (f) { f(now, t, mouse, act, canvas.width, canvas.height, d); });
     }
     // 30 frames a second while calm (colour blends included), every frame while the smoke follows a pointer
     function frame(now) {
@@ -668,22 +645,24 @@
     return api;
   }
 
-  // "Januario." filled with the same smoke in a lighter teal and white: a small canvas inside the name draws
-  // the smoke only through the letters, at the same time and place as the background, so it runs on through
-  // them. Without WebGL the silver shine stays.
-  function NameFx(el) {
-    if (!el || !sky) return null;
-    var canvas = document.createElement('canvas'); canvas.className = 'name-fx'; canvas.setAttribute('aria-hidden', 'true');
+  // Letters filled with the smoke: a small canvas inside an element draws the same smoke as the background,
+  // at the same time and place, only through the element's letters, so it runs on through them. look sets
+  // how dark its dark end goes (deep), how far its light end goes toward white (lift), how wide a stretch of
+  // smoke it shows, as a share of the window (span: drawn finer about the middle, so a short word gets as many
+  // swirls as the name; 0 shows just the smoke behind it) and which part of the smoke shows (band). drawn runs after every frame it draws, lost if WebGL gives out.
+  function Letters(keys, look, drawn, lost) {
+    if (!sky) return null;
+    var canvas = document.createElement('canvas'); canvas.className = 'letters'; canvas.setAttribute('aria-hidden', 'true');
     var gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
     if (!gl) return null;
-    var U = program(gl, smokeShader('uniform sampler2D u_mask;uniform vec2 u_size,u_org;uniform float u_dpr,u_bgd;',
+    var U = program(gl, smokeShader('uniform sampler2D u_mask;uniform vec2 u_size,u_org,u_mid;uniform float u_dpr,u_bgd,u_zoom;',
       'float a=texture2D(u_mask,gl_FragCoord.xy/u_size).a;if(a<.004){gl_FragColor=vec4(0.);return;}' +
-      'vec3 c=smoke((gl_FragCoord.xy/u_dpr+u_org)*u_bgd);gl_FragColor=vec4(min(c,1.)*a,a);'), ['u_mask', 'u_size', 'u_org', 'u_dpr', 'u_bgd']);
+      'vec2 q=gl_FragCoord.xy/u_dpr+u_org;q=u_mid+(q-u_mid)*u_zoom;' +
+      'vec3 c=smoke(q*u_bgd);gl_FragColor=vec4(min(c,1.)*a,a);'), ['u_mask', 'u_size', 'u_org', 'u_mid', 'u_dpr', 'u_bgd', 'u_zoom']);
     if (!U) return null;
-    el.appendChild(canvas);
-    var pal = Palette(['--fg', '#ffffff', '--name']);
+    var pal = Palette(keys);
     var tex = gl.createTexture(), mask = document.createElement('canvas'), mx = mask.getContext('2d');
-    var dpr = Math.min(devicePixelRatio || 1, 2), w = 1, h = 1, org = [0, 0], ok = false, on = false;
+    var dpr = Math.min(devicePixelRatio || 1, 2), w = 1, h = 1, org = [0, 0], el = null, ok = false, on = false;
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -691,11 +670,12 @@
     // the letters, drawn exactly where the page set them, become the mask (once their own font is in, so
     // the mask never uses a fallback face)
     function build() {
+      if (!el) return;
       var cs = getComputedStyle(el), face = cs.fontStyle + ' ' + cs.fontWeight + ' 100px ' + cs.fontFamily;
-      if (document.fonts && document.fonts.load) document.fonts.load(face).then(draw, draw); else draw();
+      if (document.fonts && document.fonts.load) document.fonts.load(face).then(paint, paint); else paint();
     }
-    function draw() {
-      var text = el.firstChild; if (!text || text.nodeType !== 3) return;
+    function paint() {
+      var text = el && el.firstChild; if (!text || text.nodeType !== 3) return;
       var cs = getComputedStyle(el), fs = parseFloat(cs.fontSize), box = el.getBoundingClientRect();
       var rg = document.createRange(); rg.setStart(text, 0); rg.setEnd(text, text.length);
       var tr = rg.getBoundingClientRect(), pad = fs * 0.1, left = tr.left - box.left - pad, top = -fs * 0.3;
@@ -715,25 +695,84 @@
       }
       gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
-      locate(); ok = true; sky.kick();
+      ok = true; sky.kick();
     }
-    // where the canvas sits on the screen (bottom-left origin), so its smoke lines up with the background
-    function locate() { var r = canvas.getBoundingClientRect(); org = [r.left, innerHeight - r.bottom]; }
-    sky.after = function (now, t, mouse, act, rw, rh, bgd) {
+    sky.hooks.push(function (now, t, mouse, act, rw, rh, bgd) {
       if (!ok || !on) return;
-      var c = pal.step(now), deep = c[2].map(function (v) { return v * 0.74; });
-      gl.uniform2f(U.u_res, rw, rh); gl.uniform1f(U.u_time, t); gl.uniform2f(U.u_band, 0.22, 0.74);
-      gl.uniform3fv(U.u_c1, c[0]); gl.uniform3fv(U.u_c2, c[1]); gl.uniform3fv(U.u_c3, deep);
+      // where the canvas sits on the screen (bottom-left origin) right now, so its smoke lines up with the
+      // background while the page scrolls and lines rise in
+      var r = canvas.getBoundingClientRect(); org = [r.left, innerHeight - r.bottom];
+      var c = pal.step(now), deep = c[2].map(function (v) { return v * look.deep; }), light = c[0].map(function (v) { return v + (1 - v) * look.lift; });
+      gl.uniform2f(U.u_res, rw, rh); gl.uniform1f(U.u_time, t); gl.uniform2f(U.u_band, look.band[0], look.band[1]);
+      gl.uniform2f(U.u_mid, r.left + r.width / 2, innerHeight - r.bottom + r.height / 2);
+      gl.uniform1f(U.u_zoom, look.span ? Math.min(4, Math.max(1.5, look.span * innerWidth / Math.max(1, r.width))) : 1);
+      gl.uniform3fv(U.u_c1, light); gl.uniform3fv(U.u_c2, c[1]); gl.uniform3fv(U.u_c3, deep);
       gl.uniform2f(U.u_mouse, mouse[0], mouse[1]); gl.uniform1f(U.u_act, act);
       gl.uniform1i(U.u_mask, 0); gl.uniform2f(U.u_size, w, h); gl.uniform2f(U.u_org, org[0], org[1]);
       gl.uniform1f(U.u_dpr, dpr); gl.uniform1f(U.u_bgd, bgd);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      if (!root.classList.contains('namefx')) root.classList.add('namefx');
-    };
-    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); ok = false; root.classList.remove('namefx'); });
+      if (drawn) drawn();
+    });
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); ok = false; if (lost) lost(); });
     addEventListener('resize', function () { if (ok) build(); });
     if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', function () { if (ok) build(); });
-    return { build: build, locate: locate, tint: function (instant) { pal.set(instant); }, show: function (v) { on = v; if (v) sky.kick(); } };
+    return {
+      canvas: canvas,
+      el: function () { return el; },
+      // moves into an element and takes its letters
+      attach: function (target) { if (target !== el) { el = target; ok = false; target.appendChild(canvas); } build(); },
+      detach: function () { el = null; ok = false; if (canvas.parentNode) canvas.parentNode.removeChild(canvas); },
+      show: function (v) { on = v; if (v) sky.kick(); },
+      tint: function (instant) { pal.set(instant); }
+    };
+  }
+
+  // "Januario." in a lighter teal and white, for good (without WebGL its silver shine stays)
+  function NameFx(el) {
+    var L = el && Letters(['--fg', '#ffffff', '--name'], { deep: 0.74, lift: 0, span: 0, band: [0.22, 0.74] },
+      function () { if (!root.classList.contains('namefx')) root.classList.add('namefx'); },
+      function () { root.classList.remove('namefx'); });
+    if (!L) return null;
+    return { build: function () { L.attach(el); }, show: L.show, tint: L.tint };
+  }
+
+  // The item you're on: its section's colour, lighter where the smoke is (never darker than the plain colour,
+  // so it always reads stronger than the items around it), with the smoke drawn finer to suit a short word.
+  // Two canvases take turns, so the last item's smoke fades out
+  // while the new one's fades in; they're made the first time something lights up.
+  function Glow() {
+    var pending = null, timer = 0, gen = 0, state = 'idle';
+    var L = Letters(['--hi', '#ffffff', '--hi'], { deep: 1, lift: 0.55, span: 0.62, band: [0.18, 0.7] }, function () { if (pending) { var f = pending; pending = null; f(); } });
+    if (!L) return null;
+    L.canvas.classList.add('glow');
+    return {
+      L: L,
+      state: function () { return state; },
+      // shows once its first frame of the new letters is drawn, so it never flashes the old ones
+      fadeIn: function (el) {
+        var my = ++gen; clearTimeout(timer); state = 'in';
+        if (L.el() !== el) L.canvas.classList.remove('on');
+        L.attach(el); L.show(true);
+        pending = function () { if (my === gen) L.canvas.classList.add('on'); };
+      },
+      fadeOut: function () {
+        var my = ++gen; state = 'out'; pending = null;
+        L.canvas.classList.remove('on');
+        timer = setTimeout(function () { if (my === gen) { state = 'idle'; L.show(false); L.detach(); } }, 500);
+      }
+    };
+  }
+  function glow(el) {
+    if (el === glowing) return;
+    if (!glows) { var a = Glow(), b = a && Glow(); glows = a && b ? [a, b] : []; }
+    var was = null;
+    glows.forEach(function (g) { if (g.state() === 'in') { was = g; g.fadeOut(); } });
+    if (el && glows.length) {
+      var same = glows.filter(function (g) { return g.L.el() === el; })[0]; // back to one still fading: it fades back in
+      var idle = glows.filter(function (g) { return g.state() === 'idle'; })[0];
+      (same || idle || glows.filter(function (g) { return g !== was; })[0]).fadeIn(el);
+    }
+    glowing = el;
   }
 })();
 </script>

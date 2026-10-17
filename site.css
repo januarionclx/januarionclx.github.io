@@ -28,7 +28,7 @@
 :root[data-look="gold"] { --bg: #120d05; --fg: #f7f0e1; --muted: #b8b4ab; --accent: var(--a-gold); --s1: #5c471a; --s2: #e6c27a; --s3: #120d05; }
 :root[data-look="violet"] { --bg: #0b0716; --fg: #f3eeff; --muted: #b4b2bb; --accent: var(--a-violet); --s1: #3b2a7a; --s2: #c3a8ff; --s3: #0b0716; }
 :root[data-look="ember"] { --bg: #140705; --fg: #fff1e6; --muted: #bcb4af; --accent: var(--a-ember); --s1: #7a2a12; --s2: #ffb070; --s3: #140705; }
-:root { --line: color-mix(in srgb, var(--fg) 22%, transparent); }
+:root { --line: color-mix(in srgb, var(--fg) 22%, transparent); --hi: var(--title-acc, var(--accent)); /* the colour of a lit item */ }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -70,7 +70,7 @@ button { font: inherit; color: inherit; }
 @keyframes sheen { 0% { background-position: 100% 0; } 34%, 100% { background-position: 0% 0; } }
 /* with WebGL the letters are windows onto a lighter copy of the smoke (the shine above is the fallback) */
 .hero .name { position: relative; }
-.name-fx { position: absolute; display: block; pointer-events: none; }
+.letters { position: absolute; display: block; pointer-events: none; }
 .namefx .hero .name, .namefx .hero.in .name { background: none; color: transparent; -webkit-text-fill-color: transparent; animation: none; }
 /* three lines: the sentence balanced over two, then 'from Lisbon.' */
 /* three statements, each on one line at the largest size that allows; the last word of each in white */
@@ -188,20 +188,14 @@ button { font: inherit; color: inherit; }
 .bar.dragging .bar-row button:active { scale: none; }
 .bar.still .bar-row button, .bar.still .bubble { transition: none; }
 
-/* ---------- list markers: a pill like the bar's bubble, in the section's colour, behind the item you're on ---------- */
-.marks { position: relative; }
-.marks > :not(.mark), .marks .nm { position: relative; z-index: 1; }
-.marks li, .marks .nm { width: fit-content; }
-.mark {
-  position: absolute; z-index: 0; top: 0; left: 0; width: 0; height: 0; border-radius: 999px; pointer-events: none;
-  background: var(--title-acc, var(--accent)); opacity: 0;
-  transition: translate .42s var(--move), width .42s var(--move), height .42s var(--move), border-radius .42s var(--move), opacity .2s ease, background-color var(--fade);
-}
-.mark.still { transition: opacity .2s ease, background-color var(--fade); }
-.marked > .mark { opacity: 1; }
-.js .in .marks .l, .js .in .marks .nm { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .25s ease .1s; }
-.marks .on, .marks .on.l { color: #0b0b0b; text-shadow: none; cursor: default; }
-@media (hover: hover) and (pointer: fine) { .doing li, .nm { cursor: default; } }
+/* ---------- lit items: the one you point at, tap or reach with j and k takes the section's colour, and with
+   WebGL the smoke runs through its letters (a canvas that fades in over them) ---------- */
+.doing li, .nm, .svc h3 { position: relative; }
+.doing li, .names li { width: fit-content; }
+.doing .lit, .names .lit, .svc .lit { color: var(--hi); }
+.js .in .doing .l, .js .in .names .nm, .js .in .svc h3 { transition: opacity .7s var(--reel) var(--d, 0s), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s), color .4s ease; }
+.glow { opacity: 0; transition: opacity .45s ease; }
+.glow.on { opacity: 1; }
 
 /* ---------- colour button: one emblem per look ---------- */
 /* ---------- the emblem ends the row: it changes shape and colour with the section, and tapping it plays through the looks ---------- */
@@ -326,7 +320,7 @@ button { font: inherit; color: inherit; }
 .desk .in .svc h3 { transition: opacity .5s var(--move), color .5s var(--move), transform .7s var(--reel) var(--d, 0s), filter .7s var(--reel) var(--d, 0s); }
 .desk .in .svc article:not(.on) h3 { opacity: .3; }
 .desk .in .svc article:not(.on) h3:hover { opacity: .6; }
-.desk .svc article.on h3 { opacity: 1; color: #0b0b0b; text-shadow: none; }
+.desk .svc article.on h3 { opacity: 1; color: var(--title-acc, var(--accent)); }
 .desk .svc p { margin-top: 0; min-height: 0; overflow: hidden; max-width: 46ch; font-size: min(1.4rem, 1.45vw, 2.6svh); }
 .desk .svc p .l:first-child { padding-top: 14px; color: var(--fg); }
 .desk .svc p .l:last-child { padding-bottom: 12px; }
