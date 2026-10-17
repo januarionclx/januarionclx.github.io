@@ -330,12 +330,12 @@
   var pin = document.createElement('div'), svcAt = 0, svcT = 0, step = -1;
   pin.className = 'pin'; pin.appendChild(svc.querySelector('.title')); pin.appendChild(svcList); svc.appendChild(pin);
   function open(k) { svcAt = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); lights[si].set(k); }
+  function svcStep(k) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); if (cur === si) lights[si].set(k); }
   var svcLights = {
     rows: Lights(svcList, arts, names),
     fold: Lights(svcList, arts, names, function (k) { clearTimeout(svcT); open(k); }),
-    desk: Lights(svcList, names, names, function (k) { // a click or j and k scroll to that service
-      var span = svc.offsetHeight - innerHeight;
-      scrollTo({ top: svc.offsetTop + span * (k + 0.5) / arts.length, behavior: reduce ? 'auto' : 'smooth' });
+    desk: Lights(svcList, names, names, function (k) { // a click or j and k open that service at once and glide to it
+      svcStep(k); glide(svc.offsetTop + (svc.offsetHeight - innerHeight) * (k + 0.5) / arts.length);
     })
   };
   // the services screen arriving (true) or leaving (false), on a phone
@@ -377,7 +377,7 @@
     if (!by) return;
     var i = (desk && performance.now() - keyAt < 900 ? keyTo : Math.max(0, cur)) + by;
     if (i < 0 || i >= stages.length) return;
-    e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i);
+    e.preventDefault(); keyTo = i; keyAt = performance.now(); go(i, false, 260); // a quick second press lands straight on its screen
   });
 
   // The guide to the keys: ? opens it, and so does the ? at the end of the bar (on screens with a mouse).
@@ -518,14 +518,34 @@
     place(); if (!now) shine(1600);
     try { history.replaceState(null, '', i ? '#' + stages[i].id : location.pathname + location.search); } catch (e) {}
   }
-  // Leaving fades everything at once; the next screen starts as soon as the old one is gone.
-  // On the long page it scrolls there instead, and the bubble goes straight to it rather than through
-  // every section on the way.
+  // The long page glides where a key or a button sends it: one movement that a quick second press redirects
+  // instead of starting over (a critically damped spring: no overshoot, under a second however far), stopped by
+  // the wheel or a finger. While it glides the services hold still rather than flick through each on the way.
+  var glideY = 0, glideV = 0, glideTo = 0, glideRaf = 0, glideLast = 0;
+  function glide(y) {
+    glideTo = Math.max(0, Math.min(y, root.scrollHeight - innerHeight));
+    if (reduce) { stopGlide(); scrollTo(0, glideTo); return; }
+    if (!glideRaf) { glideY = scrollY; glideV = 0; glideLast = performance.now(); root.classList.add('gliding'); glideRaf = requestAnimationFrame(glideStep); }
+  }
+  function glideStep(now) {
+    var left = Math.min(0.25, (now - glideLast) / 1000), w = 10; glideLast = now;
+    for (; left > 0; left -= 0.008) { var dt = Math.min(0.008, left); glideV += (w * w * (glideTo - glideY) - 2 * w * glideV) * dt; glideY += glideV * dt; } // in small steps, so it keeps time at any frame rate
+    if (Math.abs(glideTo - glideY) < 0.5 && Math.abs(glideV) < 30) { scrollTo(0, glideTo); stopGlide(); onScroll(); return; }
+    scrollTo(0, glideY); glideRaf = requestAnimationFrame(glideStep);
+  }
+  function stopGlide() { cancelAnimationFrame(glideRaf); glideRaf = 0; root.classList.remove('gliding'); }
+  ['wheel', 'touchstart'].forEach(function (t) { addEventListener(t, function () { if (glideRaf) { stopGlide(); onScroll(); } }, { passive: true }); });
+
+  // Leaving fades everything at once; the next screen starts as soon as the old one is gone (wait, from the
+  // keys, gives a quick second press time to count). On the long page it glides there instead, and the bubble
+  // goes straight to it rather than through every section on the way; arriving at the services opens the first.
   var travelTo = -1, travelEnd = 0;
-  function go(i, now) {
+  function go(i, now, wait) {
     if (desk) {
-      mark(i, now); travelTo = i; travelEnd = performance.now() + 1200;
-      stages[i].scrollIntoView({ behavior: now || reduce ? 'auto' : 'smooth' });
+      mark(i, now); travelTo = i; travelEnd = performance.now() + 1500;
+      if (i === si) svcStep(0);
+      var y = stages[i].getBoundingClientRect().top + scrollY;
+      if (now) { stopGlide(); scrollTo(0, y); } else glide(y);
       return;
     }
     if (i === cur && !now) return;
@@ -533,7 +553,7 @@
     mark(i, now);
     from.classList.remove('in'); morphStop();
     clearTimeout(timer);
-    if (now || reduce) show(); else timer = setTimeout(show, 170);
+    if (now || reduce) show(); else timer = setTimeout(show, wait || 170);
   }
   function fromHash() { for (var i = 0; i < stages.length; i++) if (location.hash === '#' + stages[i].id) return i; return -1; }
   fit();
@@ -566,6 +586,7 @@
     if (travelTo >= 0 && (i === travelTo || performance.now() > travelEnd)) travelTo = -1;
     if (travelTo < 0 && i !== cur) mark(i);
     if ((i === 0) !== morphOn) { morphOn = i === 0; if (morphOn) morphStart(); else morphStop(); }
+    if (glideRaf) return; // gliding: the services hold still until it lands
     var span = svc.offsetHeight - innerHeight, p = span > 0 ? -svc.getBoundingClientRect().top / span : 0;
     var k = Math.floor(Math.min(0.999, Math.max(0, p)) * arts.length);
     if (k !== step) { step = k; arts.forEach(function (a, j) { a.classList.toggle('on', j === k); }); }
@@ -597,7 +618,7 @@
     if (d === desk && f === fold) return;
     desk = d; fold = f;
     root.classList.toggle('desk', desk); root.classList.toggle('fold', fold);
-    clearTimeout(timer); morphStop(); morphOn = false; travelTo = -1;
+    clearTimeout(timer); morphStop(); morphOn = false; travelTo = -1; stopGlide();
     stages.forEach(function (s) { s.classList.remove('in'); s.style.removeProperty('--fit'); });
     svcMode();
     if (!started) return;

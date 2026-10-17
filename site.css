@@ -315,6 +315,7 @@ button { font: inherit; color: inherit; }
    between them; sizes follow the screen's height too, so nothing ever reaches the bar. ---------- */
 .desk, .desk body { height: auto; overflow: visible; }
 .desk { scroll-snap-type: y proximity; }
+.desk.gliding { scroll-snap-type: none; } /* the script's glide sets the scroll every frame */
 .desk .stage { position: relative; inset: auto; min-height: 100svh; overflow: visible; visibility: visible; scroll-snap-align: start; user-select: text; -webkit-user-select: text; }
 .desk .title { font-size: min(6.4rem, 11.6vw, 11svh, calc(var(--bar-w) / 7)); }
 .desk .hero .title { font-size: min(12.5rem, 20.5vw, 17svh); }
