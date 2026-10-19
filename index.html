@@ -426,12 +426,13 @@
   function wordEl(w) { var s = document.createElement('span'); s.className = 'w'; s.textContent = w; return s; }
   // on a phone the last word always takes the second line, so every phrase has the same shape
   function gap(last) { var f = document.createDocumentFragment(); f.appendChild(document.createTextNode(' ')); if (last) { var br = document.createElement('br'); br.className = 'cut'; f.appendChild(br); } return f; }
-  function markKey() { var ws = line.querySelectorAll('.w:not(.ghost)'); [].forEach.call(ws, function (w, i) { w.classList.toggle('k', i === ws.length - 1); }); }
+  // the lit words: the last one, or the whole thing when it takes two
+  function markKey(text) { var n = /software factories\.$/.test(text) ? 2 : 1, ws = line.querySelectorAll('.w:not(.ghost)'); [].forEach.call(ws, function (w, i) { w.classList.toggle('k', i >= ws.length - n); }); }
   function setLine(text) {
     line.textContent = '';
     var ws = text.split(' ');
     ws.forEach(function (w, i) { if (i) line.appendChild(gap(i === ws.length - 1)); line.appendChild(wordEl(w)); });
-    markKey();
+    markKey(text);
   }
   function morphTo(text) {
     var base = line.getBoundingClientRect(), olds = [].slice.call(line.querySelectorAll('.w:not(.ghost)'));
@@ -450,7 +451,7 @@
     [].slice.call(line.childNodes).forEach(function (n) { if (!(n.classList && n.classList.contains('ghost'))) line.removeChild(n); });
     var els = next.map(function (w, i) { return kept[i] || wordEl(w); });
     els.forEach(function (el, i) { if (i) line.appendChild(gap(i === els.length - 1)); line.appendChild(el); });
-    markKey();
+    markKey(text);
     var n = 0;
     els.forEach(function (el, i) {
       if (kept[i]) {
