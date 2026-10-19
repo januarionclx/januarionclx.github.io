@@ -23,7 +23,6 @@
   <script>document.documentElement.classList.add('js'); document.documentElement.dataset.look = 'teal';</script>
   <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/newsreader-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="site.css">
 </head>
 <body>
@@ -504,6 +503,10 @@
   function show() {
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
     if (!started) return;
+    // every screen after the intro has the serif in it, and rises once that's in (at most a second), as the first waits for the fonts
+    if (cur && !serifIn) serifIn = !document.fonts || document.fonts.check('italic 400 1em Newsreader');
+    if (cur && !serifIn) { var my = ++waiting, on = function () { serifIn = true; if (my === waiting) show(); }; serif().then(on); setTimeout(on, 1000); return; }
+    waiting++;
     var s = stages[cur]; s.scrollTop = 0; fitText(s);
     if (cur === 0 && nameFx) nameFx.build(); // the name's smoke follows its new size
     void s.offsetWidth; s.classList.add('in');
@@ -605,7 +608,14 @@
     if (nameFx) nameFx.build();
     if (desk) enterDesk(); else show();
     setTimeout(function () { shine(0); }, 1700); // a first glint once the bar has arrived
+    var ls = stages[0].querySelectorAll('.l');
+    setTimeout(serif, (parseFloat(ls[ls.length - 1].dataset.d) + 1) * 1000);
   }
+  // The serif only shows on the other screens, which a phone doesn't lay out until it opens one, so it comes in
+  // once the intro has risen, or at the first tap or key if that's sooner. The long page needs it at once.
+  var serifIn = false, waiting = 0;
+  function serif() { return document.fonts && document.fonts.load ? document.fonts.load('italic 400 1em Newsreader').catch(function () {}) : Promise.resolve(); }
+  ['pointerdown', 'keydown'].forEach(function (t) { addEventListener(t, serif, { once: true, passive: true }); });
 
   // On a wide screen with a mouse the screens become one page you scroll, each section a screen tall, and the
   // bar follows along; the section across the middle of the window is the one you're on, and how far the scroll

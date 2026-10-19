@@ -160,6 +160,7 @@ button { font: inherit; color: inherit; }
 }
 .js .stage::-webkit-scrollbar { display: none; }
 .js .stage.cur { visibility: visible; }
+.js:not(.desk) .stage:not(.cur) { content-visibility: hidden; } /* a screen out of view isn't even laid out, so a phone starts with the intro alone */
 .js .stage:not(.hero) .title { min-height: 2.02em; } /* every title takes two lines, so the content below starts at the same height */
 /* a short title takes one line; 'now' keeps its own */
 .js .stage .title.one { min-height: auto; margin-bottom: clamp(14px, 3.4svh, 36px); } /* auto, not 0: a flex item at 0 can be squeezed under the text after it */
