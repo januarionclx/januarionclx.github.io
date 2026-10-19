@@ -52,7 +52,7 @@ button { font: inherit; color: inherit; }
     radial-gradient(90% 80% at 30% 55%, color-mix(in srgb, var(--s1) 40%, transparent), transparent 76%),
     linear-gradient(180deg, var(--s1), var(--s3));
 }
-.sky canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity .7s ease; }
+.sky canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; opacity: 0; transition: opacity .7s ease; } /* a canvas pixel per block of smoke, so its edges stay hard */
 .sky canvas.on { opacity: 1; }
 .veil { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .25), transparent 35%, rgba(0, 0, 0, .6)); }
 

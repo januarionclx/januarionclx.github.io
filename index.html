@@ -748,10 +748,12 @@
       addEventListener('blur', away);
     }
 
-    // touch screens draw at 1.5x (the smoke is soft, the phone stays cool); big retina screens are capped near 2.4 million pixels
+    // The smoke comes in blocks, 1/900 of the window's diagonal (px in the shader), so one canvas pixel per block
+    // draws the same picture for a fraction of the work, and the CSS scales it up with hard edges. Only a window
+    // small enough for a block to be under a pixel reaches the caps: 1.5x on touch screens, 2x elsewhere.
     var d = 1;
     function size() {
-      d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
+      d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, 900 / Math.max(1, Math.hypot(canvas.clientWidth, canvas.clientHeight)));
       var w = Math.max(1, Math.round(canvas.clientWidth * d)), h = Math.max(1, Math.round(canvas.clientHeight * d));
       if (w === canvas.width && h === canvas.height) return false; // a new size wipes the canvas, so only when it changes
       canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h);
