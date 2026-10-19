@@ -21,9 +21,8 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script>document.documentElement.classList.add('js'); document.documentElement.dataset.look = 'teal';</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap">
+  <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="site.css">
 </head>
 <body>
@@ -504,6 +503,10 @@
   function show() {
     stages.forEach(function (s, j) { var on = j === cur; s.classList.toggle('cur', on); s.inert = !on; if (!on) s.classList.remove('in'); });
     if (!started) return;
+    // every screen after the intro has the serif in it, and rises once that's in (at most a second), as the first waits for the fonts
+    if (cur && !serifIn) serifIn = !document.fonts || document.fonts.check('italic 400 1em Newsreader');
+    if (cur && !serifIn) { var my = ++waiting, on = function () { serifIn = true; if (my === waiting) show(); }; serif().then(on); setTimeout(on, 1000); return; }
+    waiting++;
     var s = stages[cur]; s.scrollTop = 0; fitText(s);
     if (cur === 0 && nameFx) nameFx.build(); // the name's smoke follows its new size
     void s.offsetWidth; s.classList.add('in');
@@ -605,7 +608,14 @@
     if (nameFx) nameFx.build();
     if (desk) enterDesk(); else show();
     setTimeout(function () { shine(0); }, 1700); // a first glint once the bar has arrived
+    var ls = stages[0].querySelectorAll('.l');
+    setTimeout(serif, (parseFloat(ls[ls.length - 1].dataset.d) + 1) * 1000);
   }
+  // The serif only shows on the other screens, which a phone doesn't lay out until it opens one, so it comes in
+  // once the intro has risen, or at the first tap or key if that's sooner. The long page needs it at once.
+  var serifIn = false, waiting = 0;
+  function serif() { return document.fonts && document.fonts.load ? document.fonts.load('italic 400 1em Newsreader').catch(function () {}) : Promise.resolve(); }
+  ['pointerdown', 'keydown'].forEach(function (t) { addEventListener(t, serif, { once: true, passive: true }); });
 
   // On a wide screen with a mouse the screens become one page you scroll, each section a screen tall, and the
   // bar follows along; the section across the middle of the window is the one you're on, and how far the scroll
@@ -707,6 +717,12 @@
     var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_mouse', 'u_act', 'u_band'].concat(names).forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
     return U;
   }
+  // Without a graphics card the browser draws WebGL on the processor, where a single frame of smoke holds up the
+  // page for a tenth of a second; there the page keeps what it has without WebGL: the gradient and the silver name.
+  function software(gl) {
+    var r = gl.getParameter(gl.RENDERER), x = /webkit/i.test(r) && gl.getExtension('WEBGL_debug_renderer_info');
+    return /swiftshader|llvmpipe|lavapipe|softpipe|software|basic render/i.test(x ? gl.getParameter(x.UNMASKED_RENDERER_WEBGL) : r);
+  }
   function hex(v) { var n = parseInt(v.trim().slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
   // three colours read from CSS (or given), blended over 1.4s when the look changes
   function Palette(keys) {
@@ -727,6 +743,7 @@
   function Sky(canvas) {
     var gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
     if (!gl) return null;
+    if (software(gl)) { var lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); return null; }
     var U = program(gl, smokeShader('', 'gl_FragColor=vec4(smoke(gl_FragCoord.xy),1.);'), []);
     if (!U) return null;
     var pal = Palette(['--s1', '--s2', '--s3']), api = { hooks: [] };
@@ -748,10 +765,12 @@
       addEventListener('blur', away);
     }
 
-    // touch screens draw at 1.5x (the smoke is soft, the phone stays cool); big retina screens are capped near 2.4 million pixels
+    // The smoke comes in blocks, 1/900 of the window's diagonal (px in the shader), so one canvas pixel per block
+    // draws the same picture for a fraction of the work, and the CSS scales it up with hard edges. Only a window
+    // small enough for a block to be under a pixel reaches the caps: 1.5x on touch screens, 2x elsewhere.
     var d = 1;
     function size() {
-      d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, Math.sqrt(2.4e6 / Math.max(1, canvas.clientWidth * canvas.clientHeight)));
+      d = Math.min(devicePixelRatio || 1, matchMedia('(pointer: coarse)').matches ? 1.5 : 2, 900 / Math.max(1, Math.hypot(canvas.clientWidth, canvas.clientHeight)));
       var w = Math.max(1, Math.round(canvas.clientWidth * d)), h = Math.max(1, Math.round(canvas.clientHeight * d));
       if (w === canvas.width && h === canvas.height) return false; // a new size wipes the canvas, so only when it changes
       canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h);

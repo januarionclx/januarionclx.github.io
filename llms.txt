@@ -12,7 +12,7 @@
 - People: the CRM for clients and patients, in one place.
 - Flows: build the chat bots a business runs on, step by step.
 - Artist OS: site, bookings and numbers for artists.
-- And more in the works. Open to investors and buyers: contact@januariopinto.com
+- And more in the works. Open to investors and buyers: [contact@januariopinto.com](mailto:contact@januariopinto.com)
 
 ## What I'm doing now
 - Building software factories.
@@ -21,8 +21,8 @@
 - And more.
 
 ## Contact
-- Email: contact@januariopinto.com
-- Site: https://januariopinto.com
-- The Unit Organization: https://theunitorganization.com
-- X: https://x.com/januario_xyz
-- GitHub: https://github.com/januarionclx
+- [Email](mailto:contact@januariopinto.com): contact@januariopinto.com
+- [Site](https://januariopinto.com/): this page, the services, the portfolio and how to get in touch
+- [The Unit Organization](https://theunitorganization.com): the incubator and studio
+- [X](https://x.com/januario_xyz): @januario_xyz
+- [GitHub](https://github.com/januarionclx): januarionclx
