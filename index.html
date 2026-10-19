@@ -707,6 +707,12 @@
     var U = {}; ['u_res', 'u_time', 'u_c1', 'u_c2', 'u_c3', 'u_mouse', 'u_act', 'u_band'].concat(names).forEach(function (k) { U[k] = gl.getUniformLocation(pr, k); });
     return U;
   }
+  // Without a graphics card the browser draws WebGL on the processor, where a single frame of smoke holds up the
+  // page for a tenth of a second; there the page keeps what it has without WebGL: the gradient and the silver name.
+  function software(gl) {
+    var r = gl.getParameter(gl.RENDERER), x = /webkit/i.test(r) && gl.getExtension('WEBGL_debug_renderer_info');
+    return /swiftshader|llvmpipe|lavapipe|softpipe|software|basic render/i.test(x ? gl.getParameter(x.UNMASKED_RENDERER_WEBGL) : r);
+  }
   function hex(v) { var n = parseInt(v.trim().slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
   // three colours read from CSS (or given), blended over 1.4s when the look changes
   function Palette(keys) {
@@ -727,6 +733,7 @@
   function Sky(canvas) {
     var gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' });
     if (!gl) return null;
+    if (software(gl)) { var lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); return null; }
     var U = program(gl, smokeShader('', 'gl_FragColor=vec4(smoke(gl_FragCoord.xy),1.);'), []);
     if (!U) return null;
     var pal = Palette(['--s1', '--s2', '--s3']), api = { hooks: [] };
